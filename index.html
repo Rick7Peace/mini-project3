@@ -1,14 +1,89 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎮 Tetris Deluxe v7 — 8-Bit Edition</title>
+  <link rel="stylesheet" href="./assets/style.css" />
 </head>
+<body class="dark">
+  <header>
+    <h1>🎮 Tetris Deluxe v7</h1>
+    <button id="theme-toggle">🌙 Dark Mode</button>
+  </header>
 
-<body>
-    <h1>Thanks for playing!</h1>
+  <div class="game-container">
+    <div id="grid"></div>
+
+    <aside class="info">
+      <h2>Score: <span id="score">0</span></h2>
+      <p id="player-badge">👤 Player: —</p>
+      <h3>🏆 High Score: <span id="high-score">0</span></h3>
+
+      <h3>🎚️ Level: <span id="level">1</span></h3>
+      <h3>👀 Vistors: <span id="visit-counter"></span></h3>
+
+<div id="next-wrapper">
+  <h4>Next</h4>
+  <div id="next-grid" aria-label="Next piece preview"></div>
+</div>
     
-    <script> src="./script.js"</script>
+
+<div id="audio-controls">
+  <h4>Audio</h4>
+  <label><input type="checkbox" id="music-mute"> Mute Music</label>
+  <label><input type="checkbox" id="sfx-mute"> Mute SFX</label>
+  <div class="vol">
+    <label for="music-volume">Music</label>
+    <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.8">
+  </div>
+  <div class="vol">
+    <label for="sfx-volume">SFX</label>
+    <input id="sfx-volume" type="range" min="0" max="1" step="0.01" value="1">
+  </div>
+</div>
+
+
+      <div id="leaderboard">
+        <h4>Top 10 Players</h4>
+        <ol id="leaderboard-list"></ol>
+      </div>
+
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty">
+        <option value="1">1 – Easy</option>
+        <option value="2">2 – Medium</option>
+        <option value="3">3 – Hard</option>
+      </select>
+
+      <div class="buttons">
+        <button id="start-button">▶️ Start</button>
+        <button id="pause-button">⏸️ Pause</button>
+        <button id="quit-button">❌ Quit</button>
+        <button id="reset-scores">🔁 Reset Scores</button>
+      </div>
+
+      <button id="music-button">🎵 Play Music</button>
+
+      <!-- 🎶 Audio Assets -->
+      <audio id="bg-music" loop>
+        <source src="https://ia800905.us.archive.org/22/items/TetrisThemeMusic/Tetris.mp3" type="audio/mpeg" />
+      </audio>
+<!-- Replace these lines in your HTML -->
+<audio id="level-up-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg" /></audio>
+<audio id="land-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg" /></audio>
+<audio id="clear-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg" /></audio>
+<audio id="pulse-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" /></audio>    </aside>
+  </div>
+
+  <div id="mobile-controls">
+    <button id="left-btn">⬅️</button>
+    <button id="rotate-btn">🔄</button>
+    <button id="right-btn">➡️</button>
+    <button id="down-btn">⬇️</button>
+  </div>
+
+  <footer>Built with 💙 — 8-Bit Arcade Sound & Neon Clears</footer>
+  <script src="./assets/script.js"></script>
 </body>
 </html>

@@ -1,0 +1,179 @@
+:root {
+  --bg: #f3f4f6;
+  --text: #111827;
+  --grid-bg: #e5e7eb;
+  --border: #9ca3af;
+  --neon: #60a5fa;
+}
+body.dark {
+  --bg: #0f172a;
+  --text: #e5e7eb;
+  --grid-bg: #111827;
+  --border: #374151;
+  --neon: #38bdf8;
+}
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0; padding: 1.2rem;
+  transition: background .3s, color .3s;
+  text-align: center;
+}
+
+header { display:flex; justify-content:space-between; flex-wrap:wrap; }
+button, select {
+  border:2px solid var(--border); border-radius:8px;
+  background:none; color:var(--text);
+  padding:.5rem 1rem; cursor:pointer; margin:.25rem;
+}
+#start-button,#pause-button,#quit-button,#music-button,#reset-scores{
+  background:#2563eb;color:#fff;border:none;
+}
+#start-button:hover,#pause-button:hover,#quit-button:hover,
+#music-button:hover,#reset-scores:hover{background:#1d4ed8;}
+
+.game-container{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;}
+#grid{
+  width:200px;height:400px;
+  background:var(--grid-bg);
+  display:grid;grid-template:repeat(20,1fr)/repeat(10,1fr);
+  border:2px solid var(--border);box-shadow:0 0 20px #0003;
+}
+
+.square{border:1px solid var(--border);transition:background .1s,transform .1s;}
+
+/* 🎨 All colored blocks get neon glow + white outline (in grid AND next preview) */
+.color-l{
+  background:#f59e0b;
+  box-shadow: 0 0 8px 2px #f59e0b inset, 0 0 6px #f59e0b, 0 0 2px 1px #fff;
+  outline: 1px solid rgba(255, 255, 255, 0.6);
+}
+.color-z{
+  background:#ef4444;
+  box-shadow: 0 0 8px 2px #ef4444 inset, 0 0 6px #ef4444, 0 0 2px 1px #fff;
+  outline: 1px solid rgba(255, 255, 255, 0.6);
+}
+.color-t{
+  background:#a855f7;
+  box-shadow: 0 0 8px 2px #a855f7 inset, 0 0 6px #a855f7, 0 0 2px 1px #fff;
+  outline: 1px solid rgba(255, 255, 255, 0.6);
+}
+.color-o{
+  background:#facc15;
+  box-shadow: 0 0 8px 2px #facc15 inset, 0 0 6px #facc15, 0 0 2px 1px #fff;
+  outline: 1px solid rgba(255, 255, 255, 0.6);
+}
+.color-i{
+  background:#0ea5e9;
+  box-shadow: 0 0 8px 2px #0ea5e9 inset, 0 0 6px #0ea5e9, 0 0 2px 1px #fff;
+  outline: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+#player-badge{margin:.25rem 0 .75rem;opacity:.9;}
+#leaderboard{border-top:1px solid var(--border);padding-top:.5rem;}
+#leaderboard-list{list-style:decimal;padding-left:1rem;max-height:140px;overflow:auto;}
+
+#mobile-controls{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:1.2rem;}
+#mobile-controls button{
+  font-size:1.4rem;padding:1rem;border-radius:10px;
+  background:#2563eb;color:white;border:none;
+}
+#mobile-controls button:hover{background:#1d4ed8;}
+
+footer{margin-top:1.5rem;opacity:.7;font-size:.9rem;}
+
+/* 💎 Neon shrink line clear */
+@keyframes glowShrink{
+  0%{box-shadow:0 0 0 var(--neon);transform:scale(1);}
+  40%{box-shadow:0 0 12px var(--neon);transform:scale(.97);}
+  100%{opacity:.5;transform:scale(.9);}
+}
+.clear-anim{animation:glowShrink .3s ease-in forwards;}
+
+/* 🌟 Full-grid pulse (0.5 s white glow) */
+@keyframes gridFlash{
+  0%{box-shadow:0 0 0 white;}
+  50%{box-shadow:0 0 60px 20px white;}
+  100%{box-shadow:0 0 0 white;}
+}
+.grid-flash{animation:gridFlash .5s ease-out;}
+
+/* 💬 Neon Popup Message */
+#popup-msg {
+position: fixed;
+top: 20px;
+left: 50%;
+transform: translateX(-50%);
+background: var(--neon);
+color: #fff;
+padding: 0.6rem 1.2rem;
+border-radius: 10px;
+box-shadow: 0 0 25px var(--neon);
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s, transform 0.3s;
+font-weight: bold;
+z-index: 9999;
+}
+#popup-msg.show {
+opacity: 1;
+transform: translate(-50%, 0);
+}
+
+/* 🧭 Next piece mini-grid */
+#next-wrapper { margin: .5rem 0 1rem; }
+#next-grid {
+width: 120px; height: 120px;
+margin: 0 auto;
+background: var(--grid-bg);
+border: 2px solid var(--border);
+display: grid; grid-template: repeat(4,1fr)/repeat(4,1fr);
+}
+
+/* 🔊 Audio controls */
+#audio-controls h4 { margin-bottom: .25rem; }
+#audio-controls label { display:block; margin:.25rem 0; }
+#audio-controls .vol { display:flex; align-items:center; gap:.5rem; }
+#audio-controls input[type="range"] { width: 120px; }
+
+/* 👑 Active piece glow - ENHANCED for all pieces including I-piece */
+.tetromino.active {
+outline: 2px solid #fff4;
+}
+
+/* 🎨 Enhanced EXTRA glow for active falling pieces */
+.color-l.active {
+box-shadow: 0 0 12px 3px #f59e0b inset, 0 0 10px #f59e0b !important;
+}
+.color-z.active {
+box-shadow: 0 0 12px 3px #ef4444 inset, 0 0 10px #ef4444 !important;
+}
+.color-t.active {
+box-shadow: 0 0 12px 3px #a855f7 inset, 0 0 10px #a855f7 !important;
+}
+.color-o.active {
+box-shadow: 0 0 12px 3px #facc15 inset, 0 0 10px #facc15 !important;
+}
+.color-i.active {
+box-shadow: 0 0 12px 3px #0ea5e9 inset, 0 0 10px #0ea5e9 !important;
+}
+
+/* 🚀 Level-up pulse on body */
+@keyframes levelPulse {
+0% { box-shadow: 0 0 0 transparent; }
+50% { box-shadow: 0 0 80px 20px var(--neon); }
+100% { box-shadow: 0 0 0 transparent; }
+}
+body.level-up #grid { animation: levelPulse .6s ease-out; }
+
+#visit-counter {
+  opacity: 0;
+  transition: opacity 0.6s ease-in;
+  color: var(--text);
+  font-weight: bold;
+}
+#visit-counter.loaded {
+  opacity: 1;
+}
