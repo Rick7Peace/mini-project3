@@ -13,7 +13,14 @@
   </header>
 
   <div class="game-container">
-    <div id="grid"></div>
+    <div id="grid" ></div>
+
+    <div id="mobile-controls">
+      <button id="left-btn">⬅️</button>
+      <button id="rotate-btn">🔄</button>
+      <button id="right-btn">➡️</button>
+      <button id="down-btn">⬇️</button>
+    </div>
 
     <aside class="info">
       <h2>Score: <span id="score">0</span></h2>
@@ -21,7 +28,6 @@
       <h3>🏆 High Score: <span id="high-score">0</span></h3>
 
       <h3>🎚️ Level: <span id="level">1</span></h3>
-      <h3>👀 Vistors: <span id="visit-counter"></span></h3>
 
 <div id="next-wrapper">
   <h4>Next</h4>
@@ -76,14 +82,15 @@
 <audio id="pulse-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" /></audio>    </aside>
   </div>
 
-  <div id="mobile-controls">
-    <button id="left-btn">⬅️</button>
-    <button id="rotate-btn">🔄</button>
-    <button id="right-btn">➡️</button>
-    <button id="down-btn">⬇️</button>
-  </div>
-
-  <footer>Built with 💙 — 8-Bit Arcade Sound & Neon Clears</footer>
-  <script src="./assets/script.js"></script>
+  <footer>
+    <div class="footer-main">
+      Built with 💙 — 8-Bit Arcade Sound & Neon Clears —
+    </div>
+  
+    <div class="footer-visitors">
+      👀 Visitors: <span id="visit-counter"></span>
+    </div>
+  </footer>
+    <script src="./assets/script.js"></script>
 </body>
 </html>
