@@ -3,17 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎮 Tetris — 8-Bit Edition</title>
+  <title>🎮 Tetris Deluxe v10</title>
   <link rel="stylesheet" href="./assets/style.css" />
 </head>
+
 <body class="dark">
+
+  <!-- HEADER -->
   <header>
-    <h1>🎮 Tetris </h1>
-    <button id="theme-toggle">🌙 Dark Mode</button>
+    <h1>🎮 Tetris Deluxe</h1>
+
+    <div class="header-buttons">
+      <button id="theme-toggle">
+        <span class="lang-en">🌙 Dark Mode</span>
+        <span class="lang-es" hidden>🌙 Modo Oscuro</span>
+      </button>
+      <button id="info-btn" class="info-btn">
+        <span class="lang-en">ℹ️ Instructions</span>
+        <span class="lang-es" hidden>ℹ️ Instrucciones</span>
+      </button>
+      <button id="lang-toggle" class="lang-toggle">🌐 Español</button>
+    </div>
   </header>
 
+  <!-- MAIN GAME AREA -->
   <div class="game-container">
-    <div id="grid" ></div>
+    <div id="grid"></div>
 
     <div id="mobile-controls">
       <button id="left-btn">⬅️</button>
@@ -23,74 +38,254 @@
     </div>
 
     <aside class="info">
-      <h2>Score: <span id="score">0</span></h2>
-      <p id="player-badge">👤 Player: —</p>
-      <h3>🏆 High Score: <span id="high-score">0</span></h3>
 
-      <h3>🎚️ Level: <span id="level">1</span></h3>
+      <h2>
+        <span class="lang-en">Score: <span id="score">0</span></span>
+        <span class="lang-es" hidden>Puntuación: <span id="score-es">0</span></span>
+      </h2>
+      
+      <p id="player-badge">
+        <span class="lang-en">👤 Player: —</span>
+        <span class="lang-es" hidden>👤 Jugador: —</span>
+      </p>
+      
+      <h3>
+        <span class="lang-en">🏆 High Score: <span id="high-score">0</span></span>
+        <span class="lang-es" hidden>🏆 Puntuación Máxima: <span id="high-score-es">0</span></span>
+      </h3>
 
-<div id="next-wrapper">
-  <h4>Next</h4>
-  <div id="next-grid" aria-label="Next piece preview"></div>
-</div>
-    
+      <h3>
+        <span class="lang-en">🎚️ Level: <span id="level">1</span></span>
+        <span class="lang-es" hidden>🎚️ Nivel: <span id="level-es">1</span></span>
+      </h3>
 
-<div id="audio-controls">
-  <h4>Audio</h4>
-  <label><input type="checkbox" id="music-mute"> Mute Music</label>
-  <label><input type="checkbox" id="sfx-mute"> Mute SFX</label>
-  <div class="vol">
-    <label for="music-volume">Music</label>
-    <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.8">
-  </div>
-  <div class="vol">
-    <label for="sfx-volume">SFX</label>
-    <input id="sfx-volume" type="range" min="0" max="1" step="0.01" value="1">
-  </div>
-</div>
-
+      <div id="next-wrapper">
+        <h4>
+          <span class="lang-en">Next</span>
+          <span class="lang-es" hidden>Siguiente</span>
+        </h4>
+        <div id="next-grid"></div>
+      </div>
 
       <div id="leaderboard">
-        <h4>Top 10 Players</h4>
+        <h4>
+          <span class="lang-en">Top 10 Players</span>
+          <span class="lang-es" hidden>Top 10 Jugadores</span>
+        </h4>
         <ol id="leaderboard-list"></ol>
       </div>
 
-      <label for="difficulty">Difficulty:</label>
+      <label for="difficulty">
+        <span class="lang-en">Difficulty:</span>
+        <span class="lang-es" hidden>Dificultad:</span>
+      </label>
       <select id="difficulty">
-        <option value="1">1 – Easy</option>
-        <option value="2">2 – Medium</option>
-        <option value="3">3 – Hard</option>
+        <option value="1">
+          <span class="lang-en">1 – Easy</span>
+          <span class="lang-es" hidden>1 – Fácil</span>
+        </option>
+        <option value="2">
+          <span class="lang-en">2 – Medium</span>
+          <span class="lang-es" hidden>2 – Medio</span>
+        </option>
+        <option value="3">
+          <span class="lang-en">3 – Hard</span>
+          <span class="lang-es" hidden>3 – Difícil</span>
+        </option>
       </select>
 
       <div class="buttons">
-        <button id="start-button">▶️ Start</button>
-        <button id="pause-button">⏸️ Pause</button>
-        <button id="quit-button">❌ Quit</button>
-        <button id="reset-scores">🔁 Reset Scores</button>
+        <button id="start-button">
+          <span class="lang-en">▶️ Start</span>
+          <span class="lang-es" hidden>▶️ Iniciar</span>
+        </button>
+        <button id="pause-button">
+          <span class="lang-en">⏸️ Pause</span>
+          <span class="lang-es" hidden>⏸️ Pausar</span>
+        </button>
+        <button id="quit-button">
+          <span class="lang-en">❌ Quit</span>
+          <span class="lang-es" hidden>❌ Salir</span>
+        </button>
+        <button id="reset-scores">
+          <span class="lang-en">🔁 Reset Scores</span>
+          <span class="lang-es" hidden>🔁 Reiniciar Puntuaciones</span>
+        </button>
       </div>
 
-      <button id="music-button">🎵 Play Music</button>
+      <button id="music-button">
+        <span class="lang-en">🎵 Play Music</span>
+        <span class="lang-es" hidden>🎵 Reproducir Música</span>
+      </button>
 
-      <!-- 🎶 Audio Assets -->
+      <label for="audio-menu">
+        <span class="lang-en">Audio Settings:</span>
+        <span class="lang-es" hidden>Configuración de Audio:</span>
+      </label>
+      <select id="audio-menu">
+        <option value="">
+          <span class="lang-en">Select Audio Option</span>
+          <span class="lang-es" hidden>Seleccionar Opción de Audio</span>
+        </option>
+        <option value="mute-music">
+          <span class="lang-en">Mute Music</span>
+          <span class="lang-es" hidden>Silenciar Música</span>
+        </option>
+        <option value="mute-sfx">
+          <span class="lang-en">Mute SFX</span>
+          <span class="lang-es" hidden>Silenciar Efectos</span>
+        </option>
+        <option value="music-volume">
+          <span class="lang-en">Music Volume</span>
+          <span class="lang-es" hidden>Volumen de Música</span>
+        </option>
+        <option value="sfx-volume">
+          <span class="lang-en">SFX Volume</span>
+          <span class="lang-es" hidden>Volumen de Efectos</span>
+        </option>
+      </select>
+
+      <div id="audio-dropdown-panel" class="hidden">
+        <div class="audio-option" id="option-mute-music" hidden>
+          <label>
+            <input type="checkbox" id="music-mute" />
+            <span class="lang-en">Mute Music</span>
+            <span class="lang-es" hidden>Silenciar Música</span>
+          </label>
+        </div>
+        <div class="audio-option" id="option-mute-sfx" hidden>
+          <label>
+            <input type="checkbox" id="sfx-mute" />
+            <span class="lang-en">Mute SFX</span>
+            <span class="lang-es" hidden>Silenciar Efectos</span>
+          </label>
+        </div>
+        <div class="audio-option" id="option-music-volume" hidden>
+          <label for="music-volume">
+            <span class="lang-en">Music Volume</span>
+            <span class="lang-es" hidden>Volumen de Música</span>
+          </label>
+          <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.8" />
+        </div>
+        <div class="audio-option" id="option-sfx-volume" hidden>
+          <label for="sfx-volume">
+            <span class="lang-en">SFX Volume</span>
+            <span class="lang-es" hidden>Volumen de Efectos</span>
+          </label>
+          <input id="sfx-volume" type="range" min="0" max="1" step="0.01" value="1" />
+        </div>
+      </div>
+
+      <!-- AUDIO ASSETS -->
       <audio id="bg-music" loop>
         <source src="https://ia800905.us.archive.org/22/items/TetrisThemeMusic/Tetris.mp3" type="audio/mpeg" />
       </audio>
-<!-- Replace these lines in your HTML -->
-<audio id="level-up-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg" /></audio>
-<audio id="land-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg" /></audio>
-<audio id="clear-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg" /></audio>
-<audio id="pulse-sound"><source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" /></audio>    </aside>
+      <audio id="level-up-sound">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg" />
+      </audio>
+      <audio id="land-sound">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg" />
+      </audio>
+      <audio id="clear-sound">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg" />
+      </audio>
+      <audio id="pulse-sound">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" />
+      </audio>
+
+    </aside>
   </div>
 
+  <!-- FOOTER -->
   <footer>
     <div class="footer-main">
-      Built with 💙 — 8-Bit Arcade Sound & Neon Clears —
+      <span class="lang-en">Built with 💙 — 8-Bit Arcade Sound & Neon Clears —</span>
+      <span class="lang-es" hidden>Hecho con 💙 — Sonido Arcade 8-Bit y Limpiezas Neón —</span>
     </div>
-  
     <div class="footer-visitors">
-      👀 Visitors: <span id="visit-counter"></span>
+      <span class="lang-en">👀 Visitors:</span>
+      <span class="lang-es" hidden>👀 Visitantes:</span>
+      <span id="visit-counter"></span>
     </div>
   </footer>
-    <script src="./assets/script.js"></script>
+
+  <!-- BILINGUAL INSTRUCTIONS MODAL -->
+  <div id="info-modal" class="info-modal">
+    <div class="info-modal-content">
+
+      <!-- ENGLISH VERSION -->
+      <div id="instructions-en" class="instructions-content">
+        <h2>📘 How to Play Tetris Deluxe</h2>
+
+        <h3>🎮 Controls</h3>
+        <ul>
+          <li>⬅️ Left Arrow — Move Left</li>
+          <li>➡️ Right Arrow — Move Right</li>
+          <li>⬆️ Up Arrow — Rotate</li>
+          <li>⬇️ Down Arrow — Soft Drop</li>
+          <li>SPACE — Hard Drop</li>
+          <li>P — Pause</li>
+        </ul>
+
+        <h3>📦 Gameplay</h3>
+        <ul>
+          <li>Stack pieces without reaching the top.</li>
+          <li>Complete lines to score points.</li>
+          <li>Level increases speed.</li>
+        </ul>
+
+        <h3>📱 Mobile</h3>
+        <p>Use the touch buttons under the grid.</p>
+
+        <h3>⭐ Scoring</h3>
+        <ul>
+          <li>Single Line — 100 pts</li>
+          <li>Double Line — 300 pts</li>
+          <li>Triple Line — 500 pts</li>
+          <li>Four Lines (Tetris!) — 800 pts</li>
+        </ul>
+      </div>
+
+      <!-- SPANISH VERSION -->
+      <div id="instructions-es" class="instructions-content" hidden>
+        <h2>📘 Cómo Jugar Tetris Deluxe</h2>
+
+        <h3>🎮 Controles</h3>
+        <ul>
+          <li>⬅️ Flecha Izquierda — Mover a la Izquierda</li>
+          <li>➡️ Flecha Derecha — Mover a la Derecha</li>
+          <li>⬆️ Flecha Arriba — Rotar</li>
+          <li>⬇️ Flecha Abajo — Caída Suave</li>
+          <li>ESPACIO — Caída Rápida</li>
+          <li>P — Pausar</li>
+        </ul>
+
+        <h3>📦 Jugabilidad</h3>
+        <ul>
+          <li>Apila las piezas sin llegar a la parte superior.</li>
+          <li>Completa líneas para ganar puntos.</li>
+          <li>El nivel aumenta la velocidad.</li>
+        </ul>
+
+        <h3>📱 Móvil</h3>
+        <p>Usa los botones táctiles debajo de la cuadrícula.</p>
+
+        <h3>⭐ Puntuación</h3>
+        <ul>
+          <li>Una Línea — 100 pts</li>
+          <li>Dos Líneas — 300 pts</li>
+          <li>Tres Líneas — 500 pts</li>
+          <li>Cuatro Líneas (¡Tetris!) — 800 pts</li>
+        </ul>
+      </div>
+
+      <button id="close-info" class="close-info">
+        <span class="lang-en">Close</span>
+        <span class="lang-es" hidden>Cerrar</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="./assets/script.js"></script>
 </body>
 </html>
