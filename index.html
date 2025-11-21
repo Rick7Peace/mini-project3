@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🎮 Tetris Deluxe v10.2</title>
+    <title> Tetris Deluxe v10.2</title>
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
 
   <body class="dark">
     <!-- HEADER -->
     <header>
-      <h1>🎮 Tetris Deluxe</h1>
+      <h1> Tetris Deluxe</h1>
 
       <div class="header-buttons">
         <button id="theme-toggle">
@@ -259,6 +259,7 @@
         
           <p><strong>Ready to play? Press the ▶️ Start button and have fun!</strong></p>
         </div>
+
         <!-- SPANISH VERSION -->
         <div id="instructions-es" class="instructions-content" hidden>
           <h2>📘 Cómo Jugar Tetris Deluxe</h2>
@@ -339,7 +340,17 @@
         
           <p><strong>¿Listo para jugar? ¡Presiona el botón ▶️ Empezar y diviértete!</strong></p>
         </div>
-            <!-- FEEDBACK MODAL -->
+
+        <!-- CLOSE BUTTON FOR INSTRUCTIONS -->
+        <button id="close-info" class="close-info">
+          <span class="lang-en">Close</span>
+          <span class="lang-es" hidden>Cerrar</span>
+        </button>
+      </div>
+    </div>
+    <!-- END INSTRUCTIONS MODAL -->
+
+    <!-- ✨ NEW FEEDBACK MODAL WITH FORM -->
     <div id="feedback-modal" class="info-modal">
       <div class="info-modal-content feedback-content">
         <h2>
@@ -349,36 +360,72 @@
 
         <p class="feedback-intro">
           <span class="lang-en"
-            >I'd love to hear your thoughts on Tetris Deluxe! Please send your
-            feedback, bug reports, or suggestions to:</span
+            >I'd love to hear your thoughts on Tetris Deluxe! Share your feedback, 
+            bug reports, or suggestions below:</span
           >
           <span class="lang-es" hidden
-            >¡Me encantaría escuchar tus opiniones sobre Tetris Deluxe! Por
-            favor envía tus comentarios, reportes de errores o sugerencias
-            a:</span
+            >¡Me encantaría escuchar tus opiniones sobre Tetris Deluxe! Comparte 
+            tus comentarios, reportes de errores o sugerencias a continuación:</span
           >
         </p>
 
-        <div class="email-display">
-          <span class="email-icon">📧</span>
-          <a href="#" class="email-link" id="feedback-email">
-            Marmolejo.ricardo@gmail.com
-          </a>
+        <div id="feedback-form-container">
+          <!-- Name Input (Optional) -->
+          <div class="form-group">
+            <label for="feedback-name">
+              <span class="lang-en">Your Name (Optional)</span>
+              <span class="lang-es" hidden>Tu Nombre (Opcional)</span>
+            </label>
+            <input 
+              type="text" 
+              id="feedback-name" 
+              class="feedback-input"
+              maxlength="50"
+              placeholder="John Doe"
+            />
+          </div>
+
+          <!-- Email Input (Optional) -->
+          <div class="form-group">
+            <label for="feedback-email">
+              <span class="lang-en">Your Email (Optional - for replies)</span>
+              <span class="lang-es" hidden>Tu Correo (Opcional - para respuestas)</span>
+            </label>
+            <input 
+              type="email" 
+              id="feedback-email-input" 
+              class="feedback-input"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <!-- Message Textarea -->
+          <div class="form-group">
+            <label for="feedback-message">
+              <span class="lang-en">Your Message *</span>
+              <span class="lang-es" hidden>Tu Mensaje *</span>
+            </label>
+            <textarea 
+              id="feedback-message" 
+              class="feedback-textarea"
+              rows="6"
+              maxlength="1000"
+              required
+            ></textarea>
+            <div class="char-counter">
+              <span id="char-count">0</span> / 1000
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button id="submit-feedback" class="submit-feedback-btn">
+            <span class="lang-en">📤 Send Feedback</span>
+            <span class="lang-es" hidden>📤 Enviar Comentarios</span>
+          </button>
+
+          <!-- Status Message -->
+          <div id="feedback-status" class="feedback-status" style="display: none;"></div>
         </div>
-        <p class="feedback-note">
-          <span class="lang-en">
-            Click the email above to open your mail client, or copy it to send feedback later.
-            <strong>Note:</strong> If clicking doesn't work, use the Copy Email button below.
-          </span>
-          <span class="lang-es" hidden>
-            Haz clic en el correo electrónico arriba para abrir tu cliente de correo, o cópialo para enviar comentarios más tarde.
-            <strong>Nota:</strong> Si hacer clic no funciona, usa el botón Copiar Correo a continuación.
-          </span>
-        </p>
-        <button id="copy-email" class="copy-email-btn">
-          <span class="lang-en">📋 Copy Email</span>
-          <span class="lang-es" hidden>📋 Copiar Correo</span>
-        </button>
 
         <button id="close-feedback" class="close-info">
           <span class="lang-en">Close</span>
@@ -386,6 +433,7 @@
         </button>
       </div>
     </div>
+    <!-- END FEEDBACK MODAL -->
 
     <script src="./assets/script.js"></script>
   </body>
