@@ -1,5 +1,6 @@
-// 🎮 Tetris Deluxe v10.0 — PRODUCTION-READY Edition
+// 🎮 Tetris Deluxe v10.2 — PRODUCTION-READY Edition
 // ✅ 10/10 Metrics: Security, Error Handling, Accessibility, Performance
+// ✨ BILINGUAL SYSTEM FULLY CORRECTED + Email Feedback
 
 /* ==== Configuration Constants ==== */
 const CONFIG = {
@@ -46,14 +47,14 @@ const CONFIG = {
     MUSIC_VOLUME: "tetrisMusicVol",
     SFX_MUTE: "tetrisSfxMute",
     MUSIC_MUTE: "tetrisMusicMute",
-    LANGUAGE: "tetrisLanguage", // ✨ NEW: Language preference
+    LANGUAGE: "tetrisLanguage",
   },
 
   // API
   VISITOR_NAMESPACE: "tetris-deluxe-v10",
 
   // Version for save compatibility
-  VERSION: "10.0",
+  VERSION: "10.2",
 };
 
 /* ==== Global Error Handler ==== */
@@ -66,7 +67,7 @@ class GameErrorHandler {
 
   setupHandlers() {
     window.addEventListener("error", (e) => {
-      e.preventDefault(); // Prevent console spam
+      e.preventDefault();
       this.handleError(e.error, "Global error");
     });
 
@@ -79,7 +80,6 @@ class GameErrorHandler {
   handleError(error, context) {
     console.error(`[${context}]`, error);
 
-    // Store error with timestamp
     this.errors.push({
       error: error?.message || String(error),
       context,
@@ -91,7 +91,6 @@ class GameErrorHandler {
       this.errors.shift();
     }
 
-    // Show user-friendly message
     if (window.game?.showPopup) {
       window.game.showPopup(
         "⚠️ An error occurred. Attempting recovery...",
@@ -99,7 +98,6 @@ class GameErrorHandler {
       );
     }
 
-    // Attempt recovery
     if (window.game?.handleCriticalError) {
       window.game.handleCriticalError();
     }
@@ -120,7 +118,7 @@ const errorHandler = new GameErrorHandler();
 class SafeStorage {
   constructor() {
     this.available = this.checkAvailability();
-    this.memoryCache = new Map(); // Fallback for when storage unavailable
+    this.memoryCache = new Map();
   }
 
   checkAvailability() {
@@ -136,10 +134,9 @@ class SafeStorage {
   }
 
   setItem(key, value) {
-    // Always update memory cache
     this.memoryCache.set(key, value);
 
-    if (!this.available) return true; // Silently succeed with cache
+    if (!this.available) return true;
 
     try {
       localStorage.setItem(key, value);
@@ -153,16 +150,15 @@ class SafeStorage {
           return true;
         } catch {
           console.error("Storage quota still exceeded after cleanup");
-          return true; // Still have memory cache
+          return true;
         }
       }
       console.error("Storage error:", e);
-      return true; // Memory cache is still valid
+      return true;
     }
   }
 
   getItem(key) {
-    // Try memory cache first for performance
     if (this.memoryCache.has(key)) {
       return this.memoryCache.get(key);
     }
@@ -209,10 +205,6 @@ const storage = new SafeStorage();
 
 /* ==== Utility Functions ==== */
 const Utils = {
-  /**
-   * Sanitize user input to prevent XSS attacks
-   * CRITICAL SECURITY FUNCTION
-   */
   sanitizeName(input) {
     if (!input || typeof input !== "string") return "Anonymous";
 
@@ -220,30 +212,20 @@ const Utils = {
       input
         .trim()
         .slice(0, CONFIG.MAX_PLAYER_NAME_LENGTH)
-        // Remove HTML special chars
         .replace(/[<>"'&]/g, "")
-        // Remove script-related content
         .replace(/javascript:/gi, "")
         .replace(/on\w+=/gi, "")
-        // Only alphanumeric, space, hyphen, underscore
         .replace(/[^\w\s-]/g, "")
-        // Normalize whitespace
         .replace(/\s+/g, " ") || "Anonymous"
     );
   },
 
-  /**
-   * Escape HTML to prevent XSS when using innerHTML
-   */
   escapeHtml(text) {
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   },
 
-  /**
-   * Debounce function calls
-   */
   debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -256,9 +238,6 @@ const Utils = {
     };
   },
 
-  /**
-   * Fetch with retry logic and timeout
-   */
   async fetchWithRetry(url, options = {}, retries = CONFIG.API_RETRY_ATTEMPTS) {
     for (let i = 0; i <= retries; i++) {
       try {
@@ -286,23 +265,14 @@ const Utils = {
     }
   },
 
-  /**
-   * Check if user prefers reduced motion
-   */
   prefersReducedMotion() {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   },
 
-  /**
-   * Check if device is touch-enabled
-   */
   isTouchDevice() {
     return "ontouchstart" in window || navigator.maxTouchPoints > 0;
   },
 
-  /**
-   * Validate number in range
-   */
   clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   },
@@ -334,13 +304,11 @@ class AccessibilityManager {
 
     try {
       this.announcer.setAttribute("aria-live", priority);
-      // Clear then set to ensure announcement
       this.announcer.textContent = "";
       setTimeout(() => {
         this.announcer.textContent = String(message);
       }, 100);
 
-      // Clear after announcement
       setTimeout(() => {
         this.announcer.textContent = "";
       }, 2000);
@@ -362,7 +330,6 @@ class AccessibilityManager {
   }
 
   setupFocusTrap() {
-    // Store last focused element before modal
     this.lastFocusedElement = null;
   }
 
@@ -417,7 +384,6 @@ document.addEventListener("DOMContentLoaded", () => {
   class TetrisGame {
     constructor() {
       try {
-        // Track cleanup handlers - MUST BE FIRST
         this.cleanupHandlers = [];
 
         this.initializeDOM();
@@ -427,13 +393,12 @@ document.addEventListener("DOMContentLoaded", () => {
         this.setupEventListeners();
         this.setupPopup();
         this.restoreTheme();
-        this.restoreLanguage(); // ✨ NEW: Restore language preference
+        this.restoreLanguage();
         this.tryRestore();
         this.renderLeaderboard();
         this.updateBadge();
         this.drawPreview();
 
-        // Expose for error handler
         window.game = this;
       } catch (err) {
         errorHandler.handleError(err, "Game initialization");
@@ -442,7 +407,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ==== Initialization ==== */
     initializeDOM() {
-      // Main game elements
       this.grid = document.querySelector("#grid");
       this.scoreEl = document.querySelector("#score");
       this.highScoreEl = document.querySelector("#high-score");
@@ -452,7 +416,6 @@ document.addEventListener("DOMContentLoaded", () => {
       this.nextGrid = document.querySelector("#next-grid");
       this.visitCounterEl = document.querySelector("#visit-counter");
 
-      // Buttons
       this.startBtn = document.querySelector("#start-button");
       this.pauseBtn = document.querySelector("#pause-button");
       this.quitBtn = document.querySelector("#quit-button");
@@ -461,35 +424,29 @@ document.addEventListener("DOMContentLoaded", () => {
       this.themeToggle = document.querySelector("#theme-toggle");
       this.musicBtn = document.querySelector("#music-button");
 
-      // Control buttons
       this.leftBtn = document.querySelector("#left-btn");
       this.rightBtn = document.querySelector("#right-btn");
       this.rotateBtn = document.querySelector("#rotate-btn");
       this.downBtn = document.querySelector("#down-btn");
 
-      // Audio elements
       this.bgMusic = document.querySelector("#bg-music");
       this.lvlSound = document.querySelector("#level-up-sound");
       this.landSound = document.querySelector("#land-sound");
       this.clearSound = document.querySelector("#clear-sound");
       this.pulseSound = document.querySelector("#pulse-sound");
 
-      // Audio controls
-      this.musicMute = document.querySelector("#music-mute");
-      this.sfxMute = document.querySelector("#sfx-mute");
-      this.musicVol = document.querySelector("#music-volume");
-      this.sfxVol = document.querySelector("#sfx-volume");
-
-      // Info modal elements
       this.infoBtn = document.querySelector("#info-btn");
       this.infoModal = document.querySelector("#info-modal");
       this.closeInfoBtn = document.querySelector("#close-info");
+      
+      this.feedbackBtn = document.querySelector("#feedback-button");
+      this.feedbackModal = document.querySelector("#feedback-modal");
+      this.closeFeedbackBtn = document.querySelector("#close-feedback");
+      this.copyEmailBtn = document.querySelector("#copy-email");
+      this.feedbackEmail = document.querySelector("#feedback-email");
 
-      // Create grid squares
       this.createGrid();
       this.createNextGrid();
-
-      // Add ARIA labels
       this.addAriaLabels();
     }
 
@@ -515,13 +472,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (this.diffSelect)
           this.diffSelect.setAttribute("aria-label", "Select difficulty level");
 
-        // Add live region for score
         if (this.scoreEl) {
           this.scoreEl.setAttribute("aria-live", "polite");
           this.scoreEl.setAttribute("aria-atomic", "true");
         }
 
-        // Add live region for level
         if (this.levelEl) {
           this.levelEl.setAttribute("aria-live", "assertive");
           this.levelEl.setAttribute("aria-atomic", "true");
@@ -574,7 +529,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     initializeState() {
-      // Game state
       this.score = 0;
       this.level = 1;
       this.baseSpeed = CONFIG.SPEEDS.EASY;
@@ -586,29 +540,23 @@ document.addEventListener("DOMContentLoaded", () => {
       this.saveTimer = null;
       this.lastSaveState = "";
 
-      // ✨ NEW: Language state
-      this.currentLang = "en"; // Default to English
+      this.currentLang = "en";
 
-      // 7-bag randomizer system
       this.pieceBag = [];
       this.fillBag();
 
-      // Piece state
       this.currentPos = 4;
       this.currentRot = 0;
       this.typeIdx = this.drawFromBag();
       this.nextTypeIdx = this.drawFromBag();
 
-      // Player data
       this.playerName = "";
       this.leaderboard = this.loadLeaderboard();
       this.pbMap = this.loadPersonalBests();
 
-      // All 7 Tetris shapes with all rotations
       const W = CONFIG.GRID_WIDTH;
 
       this.shapes = [
-        // L-piece (Orange)
         [
           [1, W + 1, W * 2 + 1, 2],
           [W, W + 1, W + 2, W * 2 + 2],
@@ -616,7 +564,6 @@ document.addEventListener("DOMContentLoaded", () => {
           [W, W * 2, W * 2 + 1, W * 2 + 2],
         ],
 
-        // J-piece (Blue) - Mirror of L
         [
           [0, W, W * 2, W * 2 + 1],
           [W, W + 1, W + 2, 2],
@@ -624,19 +571,16 @@ document.addEventListener("DOMContentLoaded", () => {
           [W, W + 1, W + 2, W * 2],
         ],
 
-        // Z-piece (Red)
         [
           [0, W, W + 1, W * 2 + 1],
           [W + 1, W + 2, W * 2, W * 2 + 1],
         ],
 
-        // S-piece (Green) - Mirror of Z
         [
           [1, W, W + 1, W * 2],
           [W, W + 1, W * 2 + 1, W * 2 + 2],
         ],
 
-        // T-piece (Purple)
         [
           [1, W, W + 1, W + 2],
           [1, W + 1, W + 2, W * 2 + 1],
@@ -644,37 +588,33 @@ document.addEventListener("DOMContentLoaded", () => {
           [1, W, W + 1, W * 2 + 1],
         ],
 
-        // O-piece (Yellow) - Square
         [[0, 1, W, W + 1]],
 
-        // I-piece (Cyan) - Line
         [
           [1, W + 1, W * 2 + 1, W * 3 + 1],
           [W, W + 1, W + 2, W + 3],
         ],
       ];
 
-      // Preview shapes for next piece display
       const N = CONFIG.NEXT_GRID_SIZE;
       this.nextShapes = {
-        0: [[1, N + 1, N * 2 + 1, 2]], // L
-        1: [[0, N, N * 2, N * 2 + 1]], // J
-        2: [[0, N, N + 1, N * 2 + 1]], // Z
-        3: [[1, N, N + 1, N * 2]], // S
-        4: [[1, N, N + 1, N + 2]], // T
-        5: [[0, 1, N, N + 1]], // O
-        6: [[1, N + 1, N * 2 + 1, N * 3 + 1]], // I
+        0: [[1, N + 1, N * 2 + 1, 2]],
+        1: [[0, N, N * 2, N * 2 + 1]],
+        2: [[0, N, N + 1, N * 2 + 1]],
+        3: [[1, N, N + 1, N * 2]],
+        4: [[1, N, N + 1, N + 2]],
+        5: [[0, 1, N, N + 1]],
+        6: [[1, N + 1, N * 2 + 1, N * 3 + 1]],
       };
 
-      // Colors for each piece type
       this.colors = [
-        "color-l", // Orange
-        "color-j", // Blue
-        "color-z", // Red
-        "color-s", // Green
-        "color-t", // Purple
-        "color-o", // Yellow
-        "color-i", // Cyan
+        "color-l",
+        "color-j",
+        "color-z",
+        "color-s",
+        "color-t",
+        "color-o",
+        "color-i",
       ];
 
       this.current = this.shapes[this.typeIdx][0];
@@ -683,9 +623,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ==== 7-Bag Randomizer System ==== */
     fillBag() {
-      // Create a bag with all 7 pieces
       this.pieceBag = [0, 1, 2, 3, 4, 5, 6];
-      // Shuffle using Fisher-Yates algorithm
       for (let i = this.pieceBag.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [this.pieceBag[i], this.pieceBag[j]] = [
@@ -696,11 +634,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     drawFromBag() {
-      // If bag is empty, refill it
       if (this.pieceBag.length === 0) {
         this.fillBag();
       }
-      // Draw the next piece from the bag
       return this.pieceBag.pop();
     }
 
@@ -709,7 +645,6 @@ document.addEventListener("DOMContentLoaded", () => {
         this.sound = new SoundManager(this);
       } catch (err) {
         console.error("Audio initialization failed:", err);
-        // Create stub sound manager
         this.sound = {
           play: () => {},
           resumeCtx: () => {},
@@ -769,14 +704,12 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ==== Event Listeners ==== */
     setupEventListeners() {
       try {
-        // Keyboard - bind and track for cleanup
         const keyHandler = this.handleKeyboard.bind(this);
         document.addEventListener("keydown", keyHandler);
         this.cleanupHandlers.push(() =>
           document.removeEventListener("keydown", keyHandler)
         );
 
-        // Buttons
         if (this.startBtn)
           this.startBtn.onclick = () => this.safeCall("startGame");
         if (this.pauseBtn)
@@ -792,7 +725,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (this.musicBtn)
           this.musicBtn.onclick = () => this.safeCall("toggleMusic");
 
-        // Control buttons
         if (this.leftBtn)
           this.leftBtn.onclick = () => this.safeCall("moveLeft");
         if (this.rightBtn)
@@ -802,15 +734,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (this.downBtn)
           this.downBtn.onclick = () => this.safeCall("moveDown");
 
-        // Info modal
         if (this.infoBtn) {
           this.infoBtn.onclick = () => this.openInfoModal();
         }
-        // Language toggle
+        
         const langToggle = document.querySelector("#lang-toggle");
         if (langToggle) {
           langToggle.onclick = () => this.toggleLanguage();
         }
+        
         if (this.closeInfoBtn) {
           this.closeInfoBtn.onclick = () => this.closeInfoModal();
         }
@@ -820,57 +752,24 @@ document.addEventListener("DOMContentLoaded", () => {
           };
         }
 
-        // Touch
+        // Feedback modal
+        if (this.feedbackBtn) {
+          this.feedbackBtn.onclick = () => this.openFeedbackModal();
+        }
+        if (this.closeFeedbackBtn) {
+          this.closeFeedbackBtn.onclick = () => this.closeFeedbackModal();
+        }
+        if (this.feedbackModal) {
+          this.feedbackModal.onclick = (e) => {
+            if (e.target === this.feedbackModal) this.closeFeedbackModal();
+          };
+        }
+        if (this.copyEmailBtn) {
+          this.copyEmailBtn.onclick = () => this.copyEmail();
+        }
+
         this.setupTouchControls();
 
-        // Audio controls
-        if (this.musicMute) {
-          this.musicMute.addEventListener("change", () => {
-            if (this.sound) this.sound.musicMuted = this.musicMute.checked;
-          });
-        }
-        if (this.sfxMute) {
-          this.sfxMute.addEventListener("change", () => {
-            if (this.sound) this.sound.sfxMuted = this.sfxMute.checked;
-          });
-        }
-        if (this.musicVol) {
-          this.musicVol.addEventListener("input", () => {
-            if (this.sound)
-              this.sound.musicVolume = parseFloat(this.musicVol.value || "0.8");
-          });
-        }
-        if (this.sfxVol) {
-          this.sfxVol.addEventListener("input", () => {
-            if (this.sound)
-              this.sound.sfxVolume = parseFloat(this.sfxVol.value || "1");
-          });
-        }
-
-        // Audio menu dropdown
-        const audioMenu = document.querySelector("#audio-menu");
-        if (audioMenu) {
-          audioMenu.addEventListener("change", () => {
-            const panel = document.querySelector("#audio-dropdown-panel");
-            if (panel) {
-              panel.classList.remove("hidden");
-
-              // Hide all options
-              document.querySelectorAll(".audio-option").forEach((opt) => {
-                opt.hidden = true;
-              });
-
-              // Show selected
-              const selected = audioMenu.value;
-              if (selected) {
-                const option = document.querySelector(`#option-${selected}`);
-                if (option) option.hidden = false;
-              }
-            }
-          });
-        }
-
-        // Visibility change - pause when tab hidden
         const visibilityHandler = () => {
           if (document.hidden && this.isPlaying && !this.isPaused) {
             this.togglePause();
@@ -885,9 +784,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /**
-     * Safely call a method with error handling
-     */
     safeCall(methodName) {
       try {
         if (typeof this[methodName] === "function") {
@@ -924,56 +820,132 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /* ==== ✨ BILINGUAL LANGUAGE SYSTEM ==== */
+    openFeedbackModal() {
+      try {
+        if (this.feedbackModal) {
+          this.feedbackModal.style.display = "flex";
+          this.feedbackModalCleanup = a11y.trapFocus(this.feedbackModal);
+          a11y.announce("Feedback modal opened");
+        }
+      } catch (err) {
+        console.error("Error opening feedback modal:", err);
+      }
+    }
+
+    closeFeedbackModal() {
+      try {
+        if (this.feedbackModal) {
+          this.feedbackModal.style.display = "none";
+          if (this.feedbackModalCleanup) {
+            this.feedbackModalCleanup();
+            this.feedbackModalCleanup = null;
+          }
+        }
+      } catch (err) {
+        console.error("Error closing feedback modal:", err);
+      }
+    }
+
+    copyEmail() {
+      try {
+        const email = this.feedbackEmail?.textContent || "Marmolejo.ricardo@gmail.com";
+        
+        // Try modern clipboard API first
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email)
+            .then(() => {
+              this.showPopup("📋 Email copied to clipboard!");
+              a11y.announce("Email address copied to clipboard");
+            })
+            .catch(() => {
+              this.fallbackCopyEmail(email);
+            });
+        } else {
+          this.fallbackCopyEmail(email);
+        }
+      } catch (err) {
+        console.error("Copy email error:", err);
+        this.showPopup("❌ Could not copy email");
+      }
+    }
+
+    fallbackCopyEmail(email) {
+      try {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = email;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.select();
+        
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        if (successful) {
+          this.showPopup("📋 Email copied to clipboard!");
+          a11y.announce("Email address copied to clipboard");
+        } else {
+          this.showPopup("❌ Could not copy email. Please copy manually.");
+        }
+      } catch (err) {
+        console.error("Fallback copy error:", err);
+        this.showPopup("❌ Could not copy email. Please copy manually.");
+      }
+    }
+
+    /* ==== ✨ BILINGUAL LANGUAGE SYSTEM (CORRECTED) ==== */
     
+    /**
+     * Toggle between English and Spanish languages
+     * Updates all UI elements including dropdowns
+     */
     toggleLanguage() {
       try {
-        // 🎯 STEP 1: Toggle the language state
+        // Toggle language state
         this.currentLang = this.currentLang === "en" ? "es" : "en";
         
-        // 🎯 STEP 2: Get all English and Spanish elements
+        // Get all language elements
         const enElements = document.querySelectorAll(".lang-en");
         const esElements = document.querySelectorAll(".lang-es");
         
-        // 🎯 STEP 3: Toggle visibility based on current language
+        // Toggle visibility based on current language
         if (this.currentLang === "es") {
-          // Switch to Spanish
           enElements.forEach(el => el.hidden = true);
           esElements.forEach(el => el.hidden = false);
           
-          // Update the language toggle button
           const langBtn = document.querySelector("#lang-toggle");
           if (langBtn) langBtn.textContent = "🌐 English";
           
-          // Update the HTML lang attribute for accessibility
           document.documentElement.lang = "es";
-          
-          // Announce in Spanish
           a11y.announce("Idioma cambiado a español");
           
         } else {
-          // Switch to English
           enElements.forEach(el => el.hidden = false);
           esElements.forEach(el => el.hidden = true);
           
-          // Update the language toggle button
           const langBtn = document.querySelector("#lang-toggle");
-          if (langBtn) langBtn.textContent = "🌐 Español";
+          if (langBtn) langBtn.textContent = "🌐 Spanish";
           
-          // Update the HTML lang attribute for accessibility
           document.documentElement.lang = "en";
-          
-          // Announce in English
           a11y.announce("Language changed to English");
         }
         
-        // 🎯 STEP 4: Update dynamic content that's not in HTML
+        // ✅ ONLY ONE SET OF UPDATES - OUTSIDE THE IF/ELSE
+        
+        // Update dynamic content
         this.updateDynamicText();
         
-        // 🎯 STEP 5: Save the language preference
+        // Update dropdown menus
+        this.updateDifficultyOptions();
+        
+        // Update feedback email mailto link
+        this.updateFeedbackEmail();
+        
+        // Save preference
         storage.setItem(CONFIG.STORAGE_KEYS.LANGUAGE, this.currentLang);
         
-        // 🎯 STEP 6: Update the instructions modal
+        // Update instructions modal
         const enInstructions = document.querySelector("#instructions-en");
         const esInstructions = document.querySelector("#instructions-es");
         
@@ -992,42 +964,153 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    /**
+     * Update dropdown options based on current language
+     * HTML <option> elements can't contain nested tags, so we use data attributes
+     */
+    updateDifficultyOptions() {
+      try {
+        if (!this.diffSelect) return;
+        
+        const options = this.diffSelect.querySelectorAll('option');
+        const key = this.currentLang === 'es' ? 'data-es' : 'data-en';
+        
+        options.forEach(opt => {
+          const text = opt.getAttribute(key);
+          if (text) opt.textContent = text;
+        });
+      } catch (err) {
+        console.error('Update difficulty options error:', err);
+      }
+    }
+
+    /**
+     * Update feedback email mailto link based on current language
+     */
+    updateFeedbackEmail() {
+      try {
+        console.log('🔍 updateFeedbackEmail called');
+        console.log('Current language:', this.currentLang);
+        
+        if (!this.feedbackEmail) {
+          console.error('❌ feedbackEmail element not found!');
+          return;
+        }
+        
+        console.log('✅ feedbackEmail element found:', this.feedbackEmail);
+        
+        const email = 'Marmolejo.ricardo@gmail.com';
+        
+        if (this.currentLang === 'es') {
+          const subject = encodeURIComponent('Comentarios de Tetris Deluxe');
+          const body = encodeURIComponent(
+            'Hola Ricardo,\n\n' +
+            'Quería compartir algunos comentarios sobre Tetris Deluxe:\n\n' +
+            '[Tus comentarios aquí]\n\n' +
+            '¡Gracias!'
+          );
+          this.feedbackEmail.href = `mailto:${email}?subject=${subject}&body=${body}`;
+          console.log('📧 Spanish email link set');
+        } else {
+          const subject = encodeURIComponent('Tetris Deluxe Feedback');
+          const body = encodeURIComponent(
+            'Hi Ricardo,\n\n' +
+            'I wanted to share some feedback about Tetris Deluxe:\n\n' +
+            '[Your feedback here]\n\n' +
+            'Thank you!'
+          );
+          this.feedbackEmail.href = `mailto:${email}?subject=${subject}&body=${body}`;
+          console.log('📧 English email link set');
+        }
+        
+        console.log('📬 Final href:', this.feedbackEmail.href);
+        
+      } catch (err) {
+        console.error('❌ Update feedback email error:', err);
+      }
+    }
+
+    /**
+     * Update all dynamic text content that's generated by JavaScript
+     * Syncs English and Spanish displays
+     */
     updateDynamicText() {
       try {
-        // This method updates any text that's generated dynamically by JavaScript
-        // and isn't part of the static HTML
-        
-        // 🎯 Update Player Badge
+        // Update player badge with current language
         this.updateBadge();
         
-        // 🎯 Update Score Display
-        // Since we now have separate elements for EN and ES scores,
-        // we need to sync them
-        const scoreEn = document.querySelector("#score");
-        const scoreEs = document.querySelector("#score-es");
-        if (scoreEn && scoreEs) {
-          scoreEs.textContent = scoreEn.textContent;
-        }
+        // Sync score displays
+        this.updateScoreDisplay(this.score);
         
-        // 🎯 Update Level Display
-        const levelEn = document.querySelector("#level");
-        const levelEs = document.querySelector("#level-es");
-        if (levelEn && levelEs) {
-          levelEs.textContent = levelEn.textContent;
-        }
+        // Sync level displays
+        this.updateLevelDisplay(this.level);
         
-        // 🎯 Update High Score Display
-        const highScoreEn = document.querySelector("#high-score");
-        const highScoreEs = document.querySelector("#high-score-es");
-        if (highScoreEn && highScoreEs) {
-          highScoreEs.textContent = highScoreEn.textContent;
-        }
+        // Sync high score displays
+        const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
+        this.updateHighScoreDisplay(currentHighScore);
         
       } catch (err) {
         console.error('Update dynamic text error:', err);
       }
     }
 
+    /**
+     * Helper method to update score in both EN and ES displays
+     * @param {number} score - The score value to display
+     */
+    updateScoreDisplay(score) {
+      try {
+        if (this.scoreEl) {
+          this.scoreEl.textContent = score;
+        }
+        const scoreEs = document.querySelector("#score-es");
+        if (scoreEs) {
+          scoreEs.textContent = score;
+        }
+      } catch (err) {
+        console.error('Update score display error:', err);
+      }
+    }
+
+    /**
+     * Helper method to update level in both EN and ES displays
+     * @param {number} level - The level value to display
+     */
+    updateLevelDisplay(level) {
+      try {
+        if (this.levelEl) {
+          this.levelEl.textContent = level;
+        }
+        const levelEs = document.querySelector("#level-es");
+        if (levelEs) {
+          levelEs.textContent = level;
+        }
+      } catch (err) {
+        console.error('Update level display error:', err);
+      }
+    }
+
+    /**
+     * Helper method to update high score in both EN and ES displays
+     * @param {number} score - The high score value to display
+     */
+    updateHighScoreDisplay(score) {
+      try {
+        if (this.highScoreEl) {
+          this.highScoreEl.textContent = score;
+        }
+        const highScoreEs = document.querySelector("#high-score-es");
+        if (highScoreEs) {
+          highScoreEs.textContent = score;
+        }
+      } catch (err) {
+        console.error('Update high score display error:', err);
+      }
+    }
+
+    /**
+     * Restore saved language preference on page load
+     */
     restoreLanguage() {
       try {
         const savedLang = storage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
@@ -1041,6 +1124,10 @@ document.addEventListener("DOMContentLoaded", () => {
             this.toggleLanguage();
           }
         }
+        
+        // Update email link on page load
+        this.updateFeedbackEmail();
+        
       } catch (err) {
         console.error('Restore language error:', err);
       }
@@ -1050,7 +1137,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     handleKeyboard(e) {
       if (!this.isPlaying || this.isPaused) {
-        // Allow P key to unpause
         if (e.key === "p" || e.key === "P") {
           if (this.isPlaying && this.isPaused) {
             e.preventDefault();
@@ -1063,7 +1149,6 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const key = e.key;
 
-        // Prevent default for game keys
         if (
           [
             "ArrowLeft",
@@ -1130,7 +1215,6 @@ document.addEventListener("DOMContentLoaded", () => {
               const absY = Math.abs(dy);
               const threshold = CONFIG.TOUCH_THRESHOLD;
 
-              // Tap = hard drop
               if (
                 absX < threshold &&
                 absY < threshold &&
@@ -1141,7 +1225,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
               }
 
-              // Swipe
               if (absX > absY) {
                 if (dx > threshold) {
                   this.moveRight();
@@ -1170,7 +1253,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /* ==== Game Logic (with Error Handling) ==== */
+    /* ==== Game Logic ==== */
     draw() {
       try {
         if (!this.current || !this.squares) return;
@@ -1245,12 +1328,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (!this.inBounds(to)) return false;
 
-          // Check horizontal wrapping
           if (offset === -1 && this.colOf(from) === 0) return false;
           if (offset === 1 && this.colOf(from) === CONFIG.GRID_WIDTH - 1)
             return false;
 
-          // Check if destination is taken
           return (
             this.squares[to] && !this.squares[to].classList.contains("taken")
           );
@@ -1322,7 +1403,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const nextRot = (this.currentRot + 1) % shapeSet.length;
         const candidate = shapeSet[nextRot];
 
-        // Wall kick offsets
         const kicks = [0, -1, 1, -2, 2];
         this.undraw();
 
@@ -1331,7 +1411,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const newBase = this.currentPos + kick;
           const positions = candidate.map((i) => newBase + i);
 
-          // Validate all positions
           const isValid = positions.every((p) => {
             return (
               this.inBounds(p) &&
@@ -1342,12 +1421,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (!isValid) continue;
 
-          // Check for horizontal wrapping
           const cols = positions.map((p) => this.colOf(p));
           const colSpan = Math.max(...cols) - Math.min(...cols);
-          if (colSpan > 3) continue; // Wrapping detected
+          if (colSpan > 3) continue;
 
-          // Valid rotation
           this.currentRot = nextRot;
           this.current = candidate;
           this.currentPos = newBase;
@@ -1361,7 +1438,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (err) {
         errorHandler.handleError(err, "rotate");
-        this.draw(); // Restore visual state
+        this.draw();
       }
     }
 
@@ -1388,7 +1465,6 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         this.isFreezing = true;
 
-        // Lock piece
         this.current.forEach((i) => {
           const idx = this.currentPos + i;
           if (this.inBounds(idx) && this.squares[idx]) {
@@ -1408,7 +1484,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         await this.handleLines();
 
-        // Spawn next piece
         this.typeIdx = this.nextTypeIdx;
         this.nextTypeIdx = this.drawFromBag();
         this.currentRot = 0;
@@ -1417,7 +1492,6 @@ document.addEventListener("DOMContentLoaded", () => {
         this.currentPos = 4;
         this.drawPreview();
 
-        // Check game over
         const isGameOver = this.current.some((i) => {
           const idx = this.currentPos + i;
           return (
@@ -1462,14 +1536,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!fullRows.length) return;
 
-        // Animate clearing
         fullRows.flat().forEach((x) => {
           if (this.squares[x]) this.squares[x].classList.add("clear-anim");
         });
 
         const lines = fullRows.length;
 
-        // Multi-chime sound effect
         if (this.sound) {
           this.sound.play("clear", { delay: 120 });
           if (lines >= 2) {
@@ -1485,7 +1557,6 @@ document.addEventListener("DOMContentLoaded", () => {
           setTimeout(resolve, CONFIG.LINE_CLEAR_DELAY)
         );
 
-        // Remove lines and shift down
         fullRows.forEach((row) => {
           row.forEach((x) => {
             if (this.squares[x]) {
@@ -1501,23 +1572,18 @@ document.addEventListener("DOMContentLoaded", () => {
           this.squares.unshift(...removed);
         });
 
-        // Re-append to DOM in correct order
         const fragment = document.createDocumentFragment();
         this.squares.forEach((sq) => fragment.appendChild(sq));
         this.grid.appendChild(fragment);
 
-        // Update score - sync both English and Spanish displays
         const points =
           lines === 1 ? 100 : lines === 2 ? 300 : lines === 3 ? 500 : 800;
         this.score += points;
         
-        // Update both score displays
-        if (this.scoreEl) this.scoreEl.textContent = this.score;
-        const scoreEs = document.querySelector("#score-es");
-        if (scoreEs) scoreEs.textContent = this.score;
+        // Use helper method to update both displays
+        this.updateScoreDisplay(this.score);
         
         this.recalcLevel();
-
         this.saveState();
 
         const lineWord = lines === 1 ? "line" : "lines";
@@ -1537,10 +1603,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (newLevel !== this.level) {
           this.level = newLevel;
           
-          // Update both English and Spanish displays
-          if (this.levelEl) this.levelEl.textContent = this.level;
-          const levelEs = document.querySelector("#level-es");
-          if (levelEs) levelEs.textContent = this.level;
+          // Use helper method to update both displays
+          this.updateLevelDisplay(this.level);
 
           if (!a11y.shouldReduceMotion()) {
             document.body.classList.add("level-up");
@@ -1622,28 +1686,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async startGame() {
       try {
-        // Show custom name modal
         const lastName =
           storage.getItem(CONFIG.STORAGE_KEYS.PLAYER_NAME) ||
           this.playerName ||
           "";
         const input = await this.showNameModal(lastName);
 
-        if (input === null) return; // Cancelled
+        if (input === null) return;
 
-        // CRITICAL: Sanitize user input
         this.playerName = Utils.sanitizeName(input || "Player 1");
         storage.setItem(CONFIG.STORAGE_KEYS.PLAYER_NAME, this.playerName);
         this.updateBadge();
         
-        // Update both high score displays
-        if (this.highScoreEl) {
-          this.highScoreEl.textContent = this.pbMap[this.playerName] || 0;
-        }
-        const highScoreEs = document.querySelector("#high-score-es");
-        if (highScoreEs) {
-          highScoreEs.textContent = this.pbMap[this.playerName] || 0;
-        }
+        // Use helper method to update both displays
+        const currentHighScore = this.pbMap[this.playerName] || 0;
+        this.updateHighScoreDisplay(currentHighScore);
 
         if (!this.timer) {
           if (!this.current || !this.current.length) {
@@ -1661,12 +1718,14 @@ document.addEventListener("DOMContentLoaded", () => {
           this.recalcLevel();
           this.startLoop();
 
-          // Start music safely
+          // Try to start music with better error handling
           if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
             const playPromise = this.bgMusic.play();
             if (playPromise && typeof playPromise.catch === "function") {
               playPromise.catch((err) => {
                 console.log("Music autoplay blocked:", err);
+                // Music will need to be manually enabled via button
+                // This is normal browser behavior
               });
             }
           }
@@ -1691,7 +1750,6 @@ document.addEventListener("DOMContentLoaded", () => {
           modal.setAttribute("aria-labelledby", "modal-title");
           modal.setAttribute("aria-modal", "true");
 
-          // SECURITY: Using textContent instead of innerHTML for user data
           const modalContent = document.createElement("div");
           modalContent.className = "modal-content";
 
@@ -1735,7 +1793,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           document.body.appendChild(modal);
 
-          // Trap focus
           const cleanupFocus = a11y.trapFocus(modal);
 
           input.focus();
@@ -1837,17 +1894,13 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         this.score = 0;
         
-        // Reset both score displays
-        if (this.scoreEl) this.scoreEl.textContent = 0;
-        const scoreEs = document.querySelector("#score-es");
-        if (scoreEs) scoreEs.textContent = 0;
+        // Use helper method to update both displays
+        this.updateScoreDisplay(0);
         
         this.level = 1;
         
-        // Reset both level displays
-        if (this.levelEl) this.levelEl.textContent = 1;
-        const levelEs = document.querySelector("#level-es");
-        if (levelEs) levelEs.textContent = 1;
+        // Use helper method to update both displays
+        this.updateLevelDisplay(1);
 
         if (this.squares) {
           this.squares.forEach((s) => {
@@ -1877,17 +1930,14 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         console.warn("Attempting critical error recovery...");
 
-        // Stop all loops
         this.stopLoop();
 
-        // Reset game state
         if (this.isPlaying) {
           this.isPlaying = false;
           this.isPaused = false;
           this.isFreezing = false;
         }
 
-        // Try to restore last good state or reset
         if (!this.tryRestore()) {
           this.reset();
         }
@@ -1898,7 +1948,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       } catch (err) {
         console.error("Critical error recovery failed:", err);
-        // Last resort: full page reload
         if (confirm("Game encountered a critical error. Reload page?")) {
           window.location.reload();
         }
@@ -1922,7 +1971,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /* ==== Storage (with Error Handling) ==== */
+    /* ==== Storage ==== */
     saveStateIfChanged() {
       if (!this.isPlaying) return;
 
@@ -1954,7 +2003,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     saveState() {
-      this.lastSaveState = ""; // Force save
+      this.lastSaveState = "";
       this.saveStateIfChanged();
     }
 
@@ -2020,33 +2069,29 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const s = JSON.parse(raw);
 
-        // Validate
         if (typeof s.score !== "number" || s.score < 0)
           throw new Error("Invalid score");
         if (typeof s.level !== "number" || s.level < 1)
           throw new Error("Invalid level");
         if (!Array.isArray(s.grid)) throw new Error("Invalid grid");
 
-        // Check version compatibility
         if (s.version && s.version !== CONFIG.VERSION) {
           console.warn("Save version mismatch, clearing");
           this.clearState();
           return false;
         }
 
-        // Check expiry
         const maxAge = CONFIG.SAVE_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
         if (s.timestamp && Date.now() - s.timestamp > maxAge) {
           this.clearState();
           return false;
         }
 
-        // Restore state
         this.score = s.score || 0;
-        if (this.scoreEl) this.scoreEl.textContent = this.score;
+        this.updateScoreDisplay(this.score);
         
         this.level = s.level || 1;
-        if (this.levelEl) this.levelEl.textContent = this.level;
+        this.updateLevelDisplay(this.level);
         
         this.baseSpeed = s.baseSpeed || CONFIG.SPEEDS.EASY;
         this.speed = s.speed || this.baseSpeed;
@@ -2068,18 +2113,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (s.name) this.playerName = Utils.sanitizeName(s.name);
         this.updateBadge();
         
-        // Update both high score displays
-        if (this.highScoreEl) {
-          this.highScoreEl.textContent = this.playerName
-            ? this.pbMap[this.playerName] || 0
-            : 0;
-        }
-        const highScoreEs = document.querySelector("#high-score-es");
-        if (highScoreEs) {
-          highScoreEs.textContent = this.playerName
-            ? this.pbMap[this.playerName] || 0
-            : 0;
-        }
+        // Use helper method to update both displays
+        const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
+        this.updateHighScoreDisplay(currentHighScore);
 
         this.showPopup(
           "🔄 Restored previous game (press ▶️ Start to continue)",
@@ -2099,7 +2135,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const raw = storage.getItem(CONFIG.STORAGE_KEYS.LEADERBOARD);
       try {
         const data = raw ? JSON.parse(raw) : [];
-        // Validate array
         if (!Array.isArray(data)) return [];
         return data.filter(
           (entry) =>
@@ -2116,7 +2151,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const raw = storage.getItem(CONFIG.STORAGE_KEYS.PERSONAL_BEST);
       try {
         const data = raw ? JSON.parse(raw) : {};
-        // Validate object
         if (typeof data !== "object" || data === null) return {};
         return data;
       } catch {
@@ -2126,7 +2160,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     saveScore() {
       try {
-        // SECURITY: Sanitize name
         const entry = {
           name: Utils.sanitizeName(this.playerName || "Anonymous"),
           score: Math.max(0, Math.floor(this.score || 0)),
@@ -2164,7 +2197,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.leaderboard.forEach((p, i) => {
           const li = document.createElement("li");
-          // SECURITY: Using textContent instead of innerHTML
           li.textContent = `${i + 1}. ${p.name} — ${p.score}`;
           if (p.date) li.title = `Date: ${p.date}`;
           li.setAttribute("role", "listitem");
@@ -2173,18 +2205,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.lbList.appendChild(fragment);
 
-        // Update both high score displays
-        if (this.highScoreEl) {
-          this.highScoreEl.textContent = this.playerName
-            ? this.pbMap[this.playerName] || 0
-            : 0;
-        }
-        const highScoreEs = document.querySelector("#high-score-es");
-        if (highScoreEs) {
-          highScoreEs.textContent = this.playerName
-            ? this.pbMap[this.playerName] || 0
-            : 0;
-        }
+        // Use helper method to update both displays
+        const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
+        this.updateHighScoreDisplay(currentHighScore);
       } catch (err) {
         console.error("Failed to render leaderboard:", err);
         if (this.lbList) {
@@ -2209,14 +2232,8 @@ document.addEventListener("DOMContentLoaded", () => {
           a11y.announce(`New personal best: ${this.score}!`, "assertive");
         }
         
-        // Update both high score displays
-        if (this.highScoreEl) {
-          this.highScoreEl.textContent = this.pbMap[this.playerName] || 0;
-        }
-        const highScoreEs = document.querySelector("#high-score-es");
-        if (highScoreEs) {
-          highScoreEs.textContent = this.pbMap[this.playerName] || 0;
-        }
+        // Use helper method to update both displays
+        this.updateHighScoreDisplay(this.pbMap[this.playerName] || 0);
       } catch (err) {
         console.error("Update personal best error:", err);
       }
@@ -2248,7 +2265,6 @@ document.addEventListener("DOMContentLoaded", () => {
               "Changing difficulty will reset your current game. Continue?"
             )
           ) {
-            // Revert selection
             const state = JSON.parse(
               storage.getItem(CONFIG.STORAGE_KEYS.SAVE) || "{}"
             );
@@ -2281,22 +2297,18 @@ document.addEventListener("DOMContentLoaded", () => {
     updateBadge() {
       try {
         if (this.badgeEl) {
-          // Clear existing content
           this.badgeEl.innerHTML = "";
           
-          // Create English version
           const enSpan = document.createElement("span");
           enSpan.className = "lang-en";
           enSpan.textContent = `👤 Player: ${this.playerName || "—"} — Level: ${this.difficultyLabel("en")}`;
           enSpan.hidden = this.currentLang !== "en";
           
-          // Create Spanish version
           const esSpan = document.createElement("span");
           esSpan.className = "lang-es";
           esSpan.textContent = `👤 Jugador: ${this.playerName || "—"} — Nivel: ${this.difficultyLabel("es")}`;
           esSpan.hidden = this.currentLang !== "es";
           
-          // Append both
           this.badgeEl.appendChild(enSpan);
           this.badgeEl.appendChild(esSpan);
         }
@@ -2310,7 +2322,20 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.toggle("dark");
         const isDark = document.body.classList.contains("dark");
         storage.setItem(CONFIG.STORAGE_KEYS.THEME, isDark ? "dark" : "light");
-        this.showPopup("🌗 Theme Toggled");
+        
+        if (this.themeToggle) {
+          const enSpan = this.themeToggle.querySelector(".lang-en");
+          const esSpan = this.themeToggle.querySelector(".lang-es");
+          
+          if (isDark) {
+            if (enSpan) enSpan.textContent = "☀️ SunLight";
+            if (esSpan) esSpan.textContent = "☀️ Sol";
+          } else {
+            if (enSpan) enSpan.textContent = "🌙 MoonLight";
+            if (esSpan) esSpan.textContent = "🌙 Luna";
+          }
+        }
+        
         a11y.announce(`Theme switched to ${isDark ? "dark" : "light"} mode`);
       } catch (err) {
         errorHandler.handleError(err, "toggleTheme");
@@ -2322,6 +2347,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const savedTheme = storage.getItem(CONFIG.STORAGE_KEYS.THEME);
         if (savedTheme === "dark") {
           document.body.classList.add("dark");
+        }
+        
+        const isDark = document.body.classList.contains("dark");
+        if (this.themeToggle) {
+          const enSpan = this.themeToggle.querySelector(".lang-en");
+          const esSpan = this.themeToggle.querySelector(".lang-es");
+          
+          if (isDark) {
+            if (enSpan) enSpan.textContent = "☀️ SunLight";
+            if (esSpan) esSpan.textContent = "☀️ Sol";
+          } else {
+            if (enSpan) enSpan.textContent = "🌙 MoonLight";
+            if (esSpan) esSpan.textContent = "🌙 Luna";
+          }
         }
       } catch (err) {
         console.error("Restore theme error:", err);
@@ -2336,13 +2375,15 @@ document.addEventListener("DOMContentLoaded", () => {
           if (this.sound && !this.sound.musicMuted) {
             const playPromise = this.bgMusic.play();
             if (playPromise && typeof playPromise.catch === "function") {
-              playPromise.catch((err) => {
-                console.log("Music play failed:", err);
-                this.showPopup("🔇 Music blocked by browser");
-              });
-            } else {
-              this.showPopup("🎵 Music On");
-              a11y.announce("Music turned on");
+              playPromise
+                .then(() => {
+                  this.showPopup("🎵 Music On");
+                  a11y.announce("Music turned on");
+                })
+                .catch((err) => {
+                  console.log("Music play failed:", err);
+                  this.showPopup("🔇 Music blocked by browser. Click Start to enable.");
+                });
             }
           }
         } else {
@@ -2358,22 +2399,18 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ==== Cleanup ==== */
     destroy() {
       try {
-        // Clean up event listeners
         this.cleanupHandlers.forEach((cleanup) => {
           try {
             cleanup();
           } catch {}
         });
 
-        // Stop timers
         this.stopLoop();
 
-        // Clean up audio
         if (this.sound && this.sound.cleanup) {
           this.sound.cleanup();
         }
 
-        // Remove popup
         if (this.popup && this.popup.parentNode) {
           this.popup.parentNode.removeChild(this.popup);
         }
@@ -2393,7 +2430,6 @@ document.addEventListener("DOMContentLoaded", () => {
       this.urls = new Map();
       this.activeNodes = new Set();
 
-      // Load persisted settings
       this._sfxVolume = Utils.clamp(
         parseFloat(storage.getItem(CONFIG.STORAGE_KEYS.SFX_VOLUME) || "1"),
         0,
@@ -2415,10 +2451,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     wireUI() {
       try {
-        if (this.game.musicVol) this.game.musicVol.value = this._musicVolume;
-        if (this.game.sfxVol) this.game.sfxVol.value = this._sfxVolume;
-        if (this.game.musicMute) this.game.musicMute.checked = this._musicMuted;
-        if (this.game.sfxMute) this.game.sfxMute.checked = this._sfxMuted;
+        // Set initial volumes from storage
         if (this.game.bgMusic)
           this.game.bgMusic.volume = this._musicMuted ? 0 : this._musicVolume;
       } catch (err) {
@@ -2538,7 +2571,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         source.connect(gainNode).connect(ctx.destination);
 
-        // Track active nodes for cleanup
         this.activeNodes.add(source);
         source.onended = () => this.activeNodes.delete(source);
 
@@ -2583,7 +2615,6 @@ document.addEventListener("DOMContentLoaded", () => {
             playPromise.catch(cleanup);
           }
 
-          // Failsafe cleanup
           setTimeout(cleanup, CONFIG.AUDIO_CLEANUP_TIMEOUT);
         } catch (err) {
           console.warn("HTML5 audio playback failed:", err);
@@ -2605,7 +2636,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cleanup() {
       try {
-        // Stop all active audio nodes
         this.activeNodes.forEach((node) => {
           try {
             node.stop();
@@ -2613,7 +2643,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         this.activeNodes.clear();
 
-        // Close audio context
         if (this.audioCtx && this.audioCtx.state !== "closed") {
           this.audioCtx.close();
         }
@@ -2622,7 +2651,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Getters and setters
     get sfxMuted() {
       return this._sfxMuted;
     }

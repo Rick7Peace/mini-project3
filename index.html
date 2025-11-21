@@ -1,291 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎮 Tetris Deluxe v10</title>
-  <link rel="stylesheet" href="./assets/style.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎮 Tetris Deluxe v10.2</title>
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
 
-<body class="dark">
+  <body class="dark">
+    <!-- HEADER -->
+    <header>
+      <h1>🎮 Tetris Deluxe</h1>
 
-  <!-- HEADER -->
-  <header>
-    <h1>🎮 Tetris Deluxe</h1>
-
-    <div class="header-buttons">
-      <button id="theme-toggle">
-        <span class="lang-en">🌙 Dark Mode</span>
-        <span class="lang-es" hidden>🌙 Modo Oscuro</span>
-      </button>
-      <button id="info-btn" class="info-btn">
-        <span class="lang-en">ℹ️ Instructions</span>
-        <span class="lang-es" hidden>ℹ️ Instrucciones</span>
-      </button>
-      <button id="lang-toggle" class="lang-toggle">🌐 Español</button>
-    </div>
-  </header>
-
-  <!-- MAIN GAME AREA -->
-  <div class="game-container">
-    <div id="grid"></div>
-
-    <div id="mobile-controls">
-      <button id="left-btn">⬅️</button>
-      <button id="rotate-btn">🔄</button>
-      <button id="right-btn">➡️</button>
-      <button id="down-btn">⬇️</button>
-    </div>
-
-    <aside class="info">
-
-      <h2>
-        <span class="lang-en">Score: <span id="score">0</span></span>
-        <span class="lang-es" hidden>Puntuación: <span id="score-es">0</span></span>
-      </h2>
-      
-      <p id="player-badge">
-        <span class="lang-en">👤 Player: —</span>
-        <span class="lang-es" hidden>👤 Jugador: —</span>
-      </p>
-      
-      <h3>
-        <span class="lang-en">🏆 High Score: <span id="high-score">0</span></span>
-        <span class="lang-es" hidden>🏆 Puntuación Máxima: <span id="high-score-es">0</span></span>
-      </h3>
-
-      <h3>
-        <span class="lang-en">🎚️ Level: <span id="level">1</span></span>
-        <span class="lang-es" hidden>🎚️ Nivel: <span id="level-es">1</span></span>
-      </h3>
-
-      <div id="next-wrapper">
-        <h4>
-          <span class="lang-en">Next</span>
-          <span class="lang-es" hidden>Siguiente</span>
-        </h4>
-        <div id="next-grid"></div>
-      </div>
-
-      <div id="leaderboard">
-        <h4>
-          <span class="lang-en">Top 10 Players</span>
-          <span class="lang-es" hidden>Top 10 Jugadores</span>
-        </h4>
-        <ol id="leaderboard-list"></ol>
-      </div>
-
-      <label for="difficulty">
-        <span class="lang-en">Difficulty:</span>
-        <span class="lang-es" hidden>Dificultad:</span>
-      </label>
-      <select id="difficulty">
-        <option value="1">
-          <span class="lang-en">1 – Easy</span>
-          <span class="lang-es" hidden>1 – Fácil</span>
-        </option>
-        <option value="2">
-          <span class="lang-en">2 – Medium</span>
-          <span class="lang-es" hidden>2 – Medio</span>
-        </option>
-        <option value="3">
-          <span class="lang-en">3 – Hard</span>
-          <span class="lang-es" hidden>3 – Difícil</span>
-        </option>
-      </select>
-
-      <div class="buttons">
-        <button id="start-button">
-          <span class="lang-en">▶️ Start</span>
-          <span class="lang-es" hidden>▶️ Iniciar</span>
+      <div class="header-buttons">
+        <button id="theme-toggle">
+          <span class="lang-en">🌙 MoonLight</span>
+          <span class="lang-es" hidden>🌙 Luna</span>
         </button>
-        <button id="pause-button">
-          <span class="lang-en">⏸️ Pause</span>
-          <span class="lang-es" hidden>⏸️ Pausar</span>
+        <button id="info-btn" class="info-btn">
+          <span class="lang-en">ℹ️ Instructions</span>
+          <span class="lang-es" hidden>ℹ️ Instrucciones</span>
         </button>
-        <button id="quit-button">
-          <span class="lang-en">❌ Quit</span>
-          <span class="lang-es" hidden>❌ Salir</span>
+        <button id="lang-toggle" class="lang-toggle">🌐 Spanish</button>
+      </div>
+    </header>
+
+    <!-- MAIN GAME AREA -->
+    <div class="game-container">
+      <div id="grid"></div>
+
+      <div id="mobile-controls">
+        <button id="left-btn">⬅️</button>
+        <button id="rotate-btn">🔄</button>
+        <button id="right-btn">➡️</button>
+        <button id="down-btn">⬇️</button>
+      </div>
+
+      <aside class="info">
+        <h2>
+          <span class="lang-en">Score: <span id="score">0</span></span>
+          <span class="lang-es" hidden
+            >Puntuación: <span id="score-es">0</span></span
+          >
+        </h2>
+
+        <p id="player-badge">
+          <span class="lang-en">👤 Player: —</span>
+          <span class="lang-es" hidden>👤 Jugador: —</span>
+        </p>
+
+        <h3>
+          <span class="lang-en"
+            >🏆 High Score: <span id="high-score">0</span></span
+          >
+          <span class="lang-es" hidden
+            >🏆 Puntuación Máxima: <span id="high-score-es">0</span></span
+          >
+        </h3>
+
+        <h3>
+          <span class="lang-en">🎚️ Level: <span id="level">1</span></span>
+          <span class="lang-es" hidden
+            >🎚️ Nivel: <span id="level-es">1</span></span
+          >
+        </h3>
+
+        <div id="next-wrapper">
+          <h4>
+            <span class="lang-en">Next</span>
+            <span class="lang-es" hidden>Siguiente</span>
+          </h4>
+          <div id="next-grid"></div>
+        </div>
+
+        <div id="leaderboard">
+          <h4>
+            <span class="lang-en">Top 10 Players</span>
+            <span class="lang-es" hidden>Top 10 Jugadores</span>
+          </h4>
+          <ol id="leaderboard-list"></ol>
+        </div>
+
+        <label for="difficulty">
+          <span class="lang-en">Difficulty:</span>
+          <span class="lang-es" hidden>Dificultad:</span>
+        </label>
+        <select id="difficulty">
+          <option value="1" data-en="1 – Easy" data-es="1 – Fácil">
+            1 – Easy
+          </option>
+          <option value="2" data-en="2 – Medium" data-es="2 – Medio">
+            2 – Medium
+          </option>
+          <option value="3" data-en="3 – Hard" data-es="3 – Difícil">
+            3 – Hard
+          </option>
+        </select>
+
+        <div class="buttons">
+          <button id="start-button">
+            <span class="lang-en">▶️ Start</span>
+            <span class="lang-es" hidden>▶️ Empezar</span>
+          </button>
+          <button id="pause-button">
+            <span class="lang-en">⏸️ Pause</span>
+            <span class="lang-es" hidden>⏸️ Pausar</span>
+          </button>
+          <button id="quit-button">
+            <span class="lang-en">❌ Quit</span>
+            <span class="lang-es" hidden>❌ Salir</span>
+          </button>
+          <button id="reset-scores">
+            <span class="lang-en">🔁 Reset Scores</span>
+            <span class="lang-es" hidden>🔁 Reiniciar Puntuaciones</span>
+          </button>
+        </div>
+
+        <button id="music-button">
+          <span class="lang-en">🎵 Play Music</span>
+          <span class="lang-es" hidden>🎵 Reproducir Música</span>
         </button>
-        <button id="reset-scores">
-          <span class="lang-en">🔁 Reset Scores</span>
-          <span class="lang-es" hidden>🔁 Reiniciar Puntuaciones</span>
+
+        <button id="feedback-button" class="feedback-btn">
+          <span class="lang-en">💬 Feedback</span>
+          <span class="lang-es" hidden>💬 Comentarios</span>
+        </button>
+
+        <!-- AUDIO ASSETS -->
+        <audio id="bg-music" loop>
+          <source
+            src="https://ia800905.us.archive.org/22/items/TetrisThemeMusic/Tetris.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+        <audio id="level-up-sound">
+          <source
+            src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+        <audio id="land-sound">
+          <source
+            src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+        <audio id="clear-sound">
+          <source
+            src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+        <audio id="pulse-sound">
+          <source
+            src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+      </aside>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-main">
+        <span class="lang-en"
+          >Built with 💙 — 8-Bit Arcade Sound & Neon Clears —</span
+        >
+        <span class="lang-es" hidden
+          >Hecho con 💙 — Sonido Arcade 8-Bit y Limpiezas Neón —</span
+        >
+      </div>
+      <div class="footer-visitors">
+        <span class="lang-en">👀 Visitors:</span>
+        <span class="lang-es" hidden>👀 Visitantes:</span>
+        <span id="visit-counter"></span>
+      </div>
+    </footer>
+
+    <!-- BILINGUAL INSTRUCTIONS MODAL -->
+    <div id="info-modal" class="info-modal">
+      <div class="info-modal-content">
+        <!-- ENGLISH VERSION -->
+        <div id="instructions-en" class="instructions-content">
+          <h2>📘 How to Play Tetris Deluxe</h2>
+        
+          <h3>🎯 The Goal</h3>
+          <p>
+            Tetris is a puzzle game where colorful blocks (called "tetrominos") fall from the top of the screen. 
+            Your goal is to arrange these blocks to create complete horizontal lines, which will then disappear 
+            and give you points. Don't let the blocks stack up to the top, or it's game over!
+          </p>
+        
+          <h3>🎮 Controls (Keyboard)</h3>
+          <ul>
+            <li><strong>⬅️ Left Arrow</strong> — Move the falling piece left</li>
+            <li><strong>➡️ Right Arrow</strong> — Move the falling piece right</li>
+            <li><strong>⬆️ Up Arrow</strong> — Rotate the piece (turn it clockwise)</li>
+            <li><strong>⬇️ Down Arrow</strong> — Make the piece fall faster (soft drop)</li>
+            <li><strong>SPACE</strong> — Drop the piece instantly to the bottom (hard drop)</li>
+            <li><strong>P</strong> — Pause the game (press P again to resume)</li>
+          </ul>
+        
+          <h3>📱 Mobile Controls</h3>
+          <p>
+            On mobile devices or tablets, use the touch buttons below the game grid:
+          </p>
+          <ul>
+            <li><strong>⬅️ Left Button</strong> — Move piece left</li>
+            <li><strong>➡️ Right Button</strong> — Move piece right</li>
+            <li><strong>🔄 Rotate Button</strong> — Rotate the piece</li>
+            <li><strong>⬇️ Down Button</strong> — Drop piece faster</li>
+            <li><strong>Tap the grid</strong> — Quick drop to bottom</li>
+          </ul>
+        
+          <h3>📦 How to Play</h3>
+          <ol>
+            <li><strong>Press Start</strong> — Enter your name and click "Start Game"</li>
+            <li><strong>Watch the pieces fall</strong> — Different shaped blocks will drop from the top</li>
+            <li><strong>Move and rotate</strong> — Position each piece where you want it before it lands</li>
+            <li><strong>Complete lines</strong> — Fill an entire horizontal row with no gaps to clear it</li>
+            <li><strong>Keep playing</strong> — The game speeds up as you level up. Keep clearing lines!</li>
+            <li><strong>Avoid the top</strong> — If blocks stack up to the very top, the game ends</li>
+          </ol>
+        
+          <h3>💡 Beginner Tips</h3>
+          <ul>
+            <li><strong>Plan ahead</strong> — Look at the "Next" preview to see what's coming</li>
+            <li><strong>Leave no gaps</strong> — Try to stack pieces tightly with no holes</li>
+            <li><strong>Clear lines often</strong> — Don't wait too long or blocks will pile up</li>
+            <li><strong>Use rotation</strong> — Most pieces can be rotated to fit better</li>
+            <li><strong>Practice makes perfect</strong> — The more you play, the better you'll get!</li>
+          </ul>
+        
+          <h3>⭐ Scoring System</h3>
+          <ul>
+            <li><strong>Single Line</strong> — 100 points (clear 1 line at once)</li>
+            <li><strong>Double Line</strong> — 300 points (clear 2 lines at once)</li>
+            <li><strong>Triple Line</strong> — 500 points (clear 3 lines at once)</li>
+            <li><strong>Tetris! (Four Lines)</strong> — 800 points (clear 4 lines at once — the best!)</li>
+          </ul>
+          <p><strong>Tip:</strong> Try to clear multiple lines at once for higher scores!</p>
+        
+          <h3>🎚️ Difficulty Levels</h3>
+          <ul>
+            <li><strong>Easy</strong> — Pieces fall slowly (great for beginners!)</li>
+            <li><strong>Medium</strong> — Moderate speed (good challenge)</li>
+            <li><strong>Hard</strong> — Fast-paced action (for experienced players)</li>
+          </ul>
+          <p>Choose your difficulty before starting. You can change it anytime between games.</p>
+        
+          <h3>🎵 Features</h3>
+          <ul>
+            <li><strong>Music Toggle</strong> — Turn background music on/off with the 🎵 button</li>
+            <li><strong>Theme Toggle</strong> — Switch between dark and light modes</li>
+            <li><strong>Leaderboard</strong> — See the top 10 high scores</li>
+            <li><strong>Personal Best</strong> — Track your highest score</li>
+          </ul>
+        
+          <p><strong>Ready to play? Press the ▶️ Start button and have fun!</strong></p>
+        </div>
+        <!-- SPANISH VERSION -->
+        <div id="instructions-es" class="instructions-content" hidden>
+          <h2>📘 Cómo Jugar Tetris Deluxe</h2>
+        
+          <h3>🎯 El Objetivo</h3>
+          <p>
+            Tetris es un juego de rompecabezas donde bloques de colores (llamados "tetrominos") caen desde 
+            la parte superior de la pantalla. Tu objetivo es organizar estos bloques para crear líneas 
+            horizontales completas, que luego desaparecerán y te darán puntos. ¡No dejes que los bloques 
+            se apilen hasta arriba, o será el fin del juego!
+          </p>
+        
+          <h3>🎮 Controles (Teclado)</h3>
+          <ul>
+            <li><strong>⬅️ Flecha Izquierda</strong> — Mover la pieza que cae hacia la izquierda</li>
+            <li><strong>➡️ Flecha Derecha</strong> — Mover la pieza que cae hacia la derecha</li>
+            <li><strong>⬆️ Flecha Arriba</strong> — Rotar la pieza (girarla en sentido horario)</li>
+            <li><strong>⬇️ Flecha Abajo</strong> — Hacer que la pieza caiga más rápido (caída suave)</li>
+            <li><strong>ESPACIO</strong> — Dejar caer la pieza instantáneamente al fondo (caída rápida)</li>
+            <li><strong>P</strong> — Pausar el juego (presiona P nuevamente para reanudar)</li>
+          </ul>
+        
+          <h3>📱 Controles Móviles</h3>
+          <p>
+            En dispositivos móviles o tabletas, usa los botones táctiles debajo de la cuadrícula del juego:
+          </p>
+          <ul>
+            <li><strong>⬅️ Botón Izquierdo</strong> — Mover pieza a la izquierda</li>
+            <li><strong>➡️ Botón Derecho</strong> — Mover pieza a la derecha</li>
+            <li><strong>🔄 Botón Rotar</strong> — Rotar la pieza</li>
+            <li><strong>⬇️ Botón Abajo</strong> — Dejar caer la pieza más rápido</li>
+            <li><strong>Tocar la cuadrícula</strong> — Caída rápida al fondo</li>
+          </ul>
+        
+          <h3>📦 Cómo Jugar</h3>
+          <ol>
+            <li><strong>Presiona Empezar</strong> — Ingresa tu nombre y haz clic en "Empezar Juego"</li>
+            <li><strong>Observa caer las piezas</strong> — Diferentes bloques con formas caerán desde arriba</li>
+            <li><strong>Mueve y rota</strong> — Posiciona cada pieza donde la desees antes de que aterrice</li>
+            <li><strong>Completa líneas</strong> — Llena una fila horizontal completa sin espacios para eliminarla</li>
+            <li><strong>Sigue jugando</strong> — El juego se acelera a medida que subes de nivel. ¡Sigue eliminando líneas!</li>
+            <li><strong>Evita la parte superior</strong> — Si los bloques se apilan hasta arriba, el juego termina</li>
+          </ol>
+        
+          <h3>💡 Consejos para Principiantes</h3>
+          <ul>
+            <li><strong>Planifica con anticipación</strong> — Mira la vista previa "Siguiente" para ver qué viene</li>
+            <li><strong>No dejes espacios</strong> — Intenta apilar las piezas apretadamente sin huecos</li>
+            <li><strong>Elimina líneas a menudo</strong> — No esperes demasiado o los bloques se acumularán</li>
+            <li><strong>Usa la rotación</strong> — La mayoría de las piezas se pueden rotar para que encajen mejor</li>
+            <li><strong>La práctica hace al maestro</strong> — ¡Cuanto más juegues, mejor serás!</li>
+          </ul>
+        
+          <h3>⭐ Sistema de Puntuación</h3>
+          <ul>
+            <li><strong>Una Línea</strong> — 100 puntos (eliminar 1 línea a la vez)</li>
+            <li><strong>Dos Líneas</strong> — 300 puntos (eliminar 2 líneas a la vez)</li>
+            <li><strong>Tres Líneas</strong> — 500 puntos (eliminar 3 líneas a la vez)</li>
+            <li><strong>¡Tetris! (Cuatro Líneas)</strong> — 800 puntos (eliminar 4 líneas a la vez — ¡lo mejor!)</li>
+          </ul>
+          <p><strong>Consejo:</strong> ¡Intenta eliminar varias líneas a la vez para obtener puntuaciones más altas!</p>
+        
+          <h3>🎚️ Niveles de Dificultad</h3>
+          <ul>
+            <li><strong>Fácil</strong> — Las piezas caen lentamente (¡genial para principiantes!)</li>
+            <li><strong>Medio</strong> — Velocidad moderada (buen desafío)</li>
+            <li><strong>Difícil</strong> — Acción acelerada (para jugadores experimentados)</li>
+          </ul>
+          <p>Elige tu dificultad antes de comenzar. Puedes cambiarla en cualquier momento entre juegos.</p>
+        
+          <h3>🎵 Características</h3>
+          <ul>
+            <li><strong>Alternar Música</strong> — Activa/desactiva la música de fondo con el botón 🎵</li>
+            <li><strong>Alternar Tema</strong> — Cambia entre modos oscuro y claro</li>
+            <li><strong>Tabla de Clasificación</strong> — Mira las 10 puntuaciones más altas</li>
+            <li><strong>Mejor Personal</strong> — Rastrea tu puntuación más alta</li>
+          </ul>
+        
+          <p><strong>¿Listo para jugar? ¡Presiona el botón ▶️ Empezar y diviértete!</strong></p>
+        </div>
+            <!-- FEEDBACK MODAL -->
+    <div id="feedback-modal" class="info-modal">
+      <div class="info-modal-content feedback-content">
+        <h2>
+          <span class="lang-en">💬 Send Feedback</span>
+          <span class="lang-es" hidden>💬 Enviar Comentarios</span>
+        </h2>
+
+        <p class="feedback-intro">
+          <span class="lang-en"
+            >I'd love to hear your thoughts on Tetris Deluxe! Please send your
+            feedback, bug reports, or suggestions to:</span
+          >
+          <span class="lang-es" hidden
+            >¡Me encantaría escuchar tus opiniones sobre Tetris Deluxe! Por
+            favor envía tus comentarios, reportes de errores o sugerencias
+            a:</span
+          >
+        </p>
+
+        <div class="email-display">
+          <span class="email-icon">📧</span>
+          <a href="#" class="email-link" id="feedback-email">
+            Marmolejo.ricardo@gmail.com
+          </a>
+        </div>
+        <p class="feedback-note">
+          <span class="lang-en">
+            Click the email above to open your mail client, or copy it to send feedback later.
+            <strong>Note:</strong> If clicking doesn't work, use the Copy Email button below.
+          </span>
+          <span class="lang-es" hidden>
+            Haz clic en el correo electrónico arriba para abrir tu cliente de correo, o cópialo para enviar comentarios más tarde.
+            <strong>Nota:</strong> Si hacer clic no funciona, usa el botón Copiar Correo a continuación.
+          </span>
+        </p>
+        <button id="copy-email" class="copy-email-btn">
+          <span class="lang-en">📋 Copy Email</span>
+          <span class="lang-es" hidden>📋 Copiar Correo</span>
+        </button>
+
+        <button id="close-feedback" class="close-info">
+          <span class="lang-en">Close</span>
+          <span class="lang-es" hidden>Cerrar</span>
         </button>
       </div>
-
-      <button id="music-button">
-        <span class="lang-en">🎵 Play Music</span>
-        <span class="lang-es" hidden>🎵 Reproducir Música</span>
-      </button>
-
-      <label for="audio-menu">
-        <span class="lang-en">Audio Settings:</span>
-        <span class="lang-es" hidden>Configuración de Audio:</span>
-      </label>
-      <select id="audio-menu">
-        <option value="">
-          <span class="lang-en">Select Audio Option</span>
-          <span class="lang-es" hidden>Seleccionar Opción de Audio</span>
-        </option>
-        <option value="mute-music">
-          <span class="lang-en">Mute Music</span>
-          <span class="lang-es" hidden>Silenciar Música</span>
-        </option>
-        <option value="mute-sfx">
-          <span class="lang-en">Mute SFX</span>
-          <span class="lang-es" hidden>Silenciar Efectos</span>
-        </option>
-        <option value="music-volume">
-          <span class="lang-en">Music Volume</span>
-          <span class="lang-es" hidden>Volumen de Música</span>
-        </option>
-        <option value="sfx-volume">
-          <span class="lang-en">SFX Volume</span>
-          <span class="lang-es" hidden>Volumen de Efectos</span>
-        </option>
-      </select>
-
-      <div id="audio-dropdown-panel" class="hidden">
-        <div class="audio-option" id="option-mute-music" hidden>
-          <label>
-            <input type="checkbox" id="music-mute" />
-            <span class="lang-en">Mute Music</span>
-            <span class="lang-es" hidden>Silenciar Música</span>
-          </label>
-        </div>
-        <div class="audio-option" id="option-mute-sfx" hidden>
-          <label>
-            <input type="checkbox" id="sfx-mute" />
-            <span class="lang-en">Mute SFX</span>
-            <span class="lang-es" hidden>Silenciar Efectos</span>
-          </label>
-        </div>
-        <div class="audio-option" id="option-music-volume" hidden>
-          <label for="music-volume">
-            <span class="lang-en">Music Volume</span>
-            <span class="lang-es" hidden>Volumen de Música</span>
-          </label>
-          <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.8" />
-        </div>
-        <div class="audio-option" id="option-sfx-volume" hidden>
-          <label for="sfx-volume">
-            <span class="lang-en">SFX Volume</span>
-            <span class="lang-es" hidden>Volumen de Efectos</span>
-          </label>
-          <input id="sfx-volume" type="range" min="0" max="1" step="0.01" value="1" />
-        </div>
-      </div>
-
-      <!-- AUDIO ASSETS -->
-      <audio id="bg-music" loop>
-        <source src="https://ia800905.us.archive.org/22/items/TetrisThemeMusic/Tetris.mp3" type="audio/mpeg" />
-      </audio>
-      <audio id="level-up-sound">
-        <source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg" />
-      </audio>
-      <audio id="land-sound">
-        <source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg" />
-      </audio>
-      <audio id="clear-sound">
-        <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg" />
-      </audio>
-      <audio id="pulse-sound">
-        <source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" />
-      </audio>
-
-    </aside>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-main">
-      <span class="lang-en">Built with 💙 — 8-Bit Arcade Sound & Neon Clears —</span>
-      <span class="lang-es" hidden>Hecho con 💙 — Sonido Arcade 8-Bit y Limpiezas Neón —</span>
     </div>
-    <div class="footer-visitors">
-      <span class="lang-en">👀 Visitors:</span>
-      <span class="lang-es" hidden>👀 Visitantes:</span>
-      <span id="visit-counter"></span>
-    </div>
-  </footer>
 
-  <!-- BILINGUAL INSTRUCTIONS MODAL -->
-  <div id="info-modal" class="info-modal">
-    <div class="info-modal-content">
-
-      <!-- ENGLISH VERSION -->
-      <div id="instructions-en" class="instructions-content">
-        <h2>📘 How to Play Tetris Deluxe</h2>
-
-        <h3>🎮 Controls</h3>
-        <ul>
-          <li>⬅️ Left Arrow — Move Left</li>
-          <li>➡️ Right Arrow — Move Right</li>
-          <li>⬆️ Up Arrow — Rotate</li>
-          <li>⬇️ Down Arrow — Soft Drop</li>
-          <li>SPACE — Hard Drop</li>
-          <li>P — Pause</li>
-        </ul>
-
-        <h3>📦 Gameplay</h3>
-        <ul>
-          <li>Stack pieces without reaching the top.</li>
-          <li>Complete lines to score points.</li>
-          <li>Level increases speed.</li>
-        </ul>
-
-        <h3>📱 Mobile</h3>
-        <p>Use the touch buttons under the grid.</p>
-
-        <h3>⭐ Scoring</h3>
-        <ul>
-          <li>Single Line — 100 pts</li>
-          <li>Double Line — 300 pts</li>
-          <li>Triple Line — 500 pts</li>
-          <li>Four Lines (Tetris!) — 800 pts</li>
-        </ul>
-      </div>
-
-      <!-- SPANISH VERSION -->
-      <div id="instructions-es" class="instructions-content" hidden>
-        <h2>📘 Cómo Jugar Tetris Deluxe</h2>
-
-        <h3>🎮 Controles</h3>
-        <ul>
-          <li>⬅️ Flecha Izquierda — Mover a la Izquierda</li>
-          <li>➡️ Flecha Derecha — Mover a la Derecha</li>
-          <li>⬆️ Flecha Arriba — Rotar</li>
-          <li>⬇️ Flecha Abajo — Caída Suave</li>
-          <li>ESPACIO — Caída Rápida</li>
-          <li>P — Pausar</li>
-        </ul>
-
-        <h3>📦 Jugabilidad</h3>
-        <ul>
-          <li>Apila las piezas sin llegar a la parte superior.</li>
-          <li>Completa líneas para ganar puntos.</li>
-          <li>El nivel aumenta la velocidad.</li>
-        </ul>
-
-        <h3>📱 Móvil</h3>
-        <p>Usa los botones táctiles debajo de la cuadrícula.</p>
-
-        <h3>⭐ Puntuación</h3>
-        <ul>
-          <li>Una Línea — 100 pts</li>
-          <li>Dos Líneas — 300 pts</li>
-          <li>Tres Líneas — 500 pts</li>
-          <li>Cuatro Líneas (¡Tetris!) — 800 pts</li>
-        </ul>
-      </div>
-
-      <button id="close-info" class="close-info">
-        <span class="lang-en">Close</span>
-        <span class="lang-es" hidden>Cerrar</span>
-      </button>
-    </div>
-  </div>
-
-  <script src="./assets/script.js"></script>
-</body>
+    <script src="./assets/script.js"></script>
+  </body>
 </html>
