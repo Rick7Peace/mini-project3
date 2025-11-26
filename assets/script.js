@@ -36,7 +36,7 @@ const CONFIG = {
   TOUCH_THRESHOLD: 24,
   TOUCH_TAP_TIME: 250,
 
-  // Storage keys (rebranded from tetris* to fb*)
+  // Storage keys
   STORAGE_KEYS: {
     SAVE: "fbSave",
     LEADERBOARD: "fbLeaderboard",
