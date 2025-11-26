@@ -1,4 +1,15 @@
-/* 🎨 Tetris Deluxe v10.2 — Production-Ready CSS */
+/* -------------------------------------------------------
+   FallingBlocks+ v10.2
+   Modern Falling-Block Puzzle Game
+   Neon Glassmorphism UI • Bilingual • Accessibility Ready
+
+   This project is NOT affiliated with or endorsed by 
+   The Tetris Company or any trademark owners.
+
+   Licensed under MIT — Copyright (c) 2024 Ricardo Marmolejo
+--------------------------------------------------------- */
+
+/* 🎨 Production-Ready CSS */
 /* Zero JavaScript, Pure Styles */
 
 /* ==== CSS Variables ==== */
@@ -17,7 +28,7 @@
   --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
   --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.4);
   
-  /* Vibrant Tetromino Colors - Neon Style */
+  /* Vibrant block Colors - Neon Style */
   --color-l: #ff6b35;
   --color-l-glow: rgba(255, 107, 53, 0.6);
   --color-j: #4facfe;
@@ -227,7 +238,7 @@ h1 {
 /* ==== Game Grid ==== */
 #grid {
   display: grid;
-  grid-template-columns: repeat(10, var(--square-size));
+  grid-template-columns: repeat(12, var(--square-size));
   grid-template-rows: repeat(20, var(--square-size));
   background: var(--grid-bg);
   border: 3px solid var(--grid-border);
@@ -273,7 +284,7 @@ h1 {
   position: relative;
 }
 
-/* Tetromino Colors with Neon Glow */
+/* block Colors with Neon Glow */
 .color-l { 
   background: var(--color-l); 
   box-shadow: 
@@ -323,7 +334,7 @@ h1 {
     0 0 20px var(--color-i-glow);
 }
 
-.tetromino.active {
+.block.active {
   animation: neonPulse 1.5s ease-in-out infinite;
   filter: brightness(1.2);
 }
@@ -683,72 +694,6 @@ label {
   line-height: 1.6;
   margin-bottom: 20px;
   color: var(--text-primary);
-}
-
-.email-display {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: var(--bg-tertiary);
-  padding: 20px;
-  border-radius: 14px;
-  margin: 20px 0;
-  border: 2px solid var(--border-glass);
-}
-
-.email-icon {
-  font-size: 2rem;
-}
-
-.email-link {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--accent-primary);
-  text-decoration: none;
-  transition: all var(--transition-fast);
-}
-
-.email-link:hover {
-  color: var(--color-i);
-  text-decoration: underline;
-}
-
-.feedback-note {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-top: 15px;
-  padding: 12px;
-  background: var(--bg-tertiary);
-  border-radius: 10px;
-  border-left: 3px solid var(--accent-primary);
-}
-
-.feedback-note strong {
-  color: var(--text-primary);
-  font-weight: 700;
-}
-
-.copy-email-btn {
-  width: 100%;
-  margin-top: 15px;
-  background: var(--accent-gradient);
-  color: white;
-  padding: 14px;
-  font-size: 1rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.copy-email-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
 /* Name Input Modal */

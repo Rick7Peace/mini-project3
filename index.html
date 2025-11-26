@@ -3,14 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> Tetris Deluxe v10.2</title>
+    <meta name="description" content="FallingBlocks+ - A free, open-source falling block puzzle game with bilingual support, custom themes, and accessibility features." />
+    <meta name="keywords" content="puzzle game, falling blocks, block game, free game, open source" />
+    <meta name="author" content="Ricardo Marmolejo" />
+    <title>FallingBlocks+</title>
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
 
   <body class="dark">
     <!-- HEADER -->
     <header>
-      <h1> Tetris Deluxe</h1>
+      <h1>FallingBlocks+</h1>
 
       <div class="header-buttons">
         <button id="theme-toggle">
@@ -127,11 +130,10 @@
         </button>
 
         <!-- AUDIO ASSETS -->
-        <audio id="bg-music" loop>
-          <source
-            src="https://ia800905.us.archive.org/22/items/TetrisThemeMusic/Tetris.mp3"
-            type="audio/mpeg"
-          />
+        <!-- 🎵 Background Music: "Level 1" by Juhani Junkala (CC0 Public Domain) -->
+        <!-- Download from: https://opengameart.org/content/5-chiptunes-action -->
+        <audio id="bg-music" loop preload="auto">
+          <source src="./assets/music/SLOWEST-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3" type="audio/mpeg" />
         </audio>
         <audio id="level-up-sound">
           <source
@@ -164,11 +166,15 @@
     <footer>
       <div class="footer-main">
         <span class="lang-en"
-          >Built with 💙 — 8-Bit Arcade Sound & Neon Clears —</span
+          >Built with 💙 — Neon Blocks & Clear Lines —</span
         >
         <span class="lang-es" hidden
-          >Hecho con 💙 — Sonido Arcade 8-Bit y Limpiezas Neón —</span
+          >Hecho con 💙 — Bloques Neón y Filas Claras —</span
         >
+      </div>
+      <div class="footer-credits">
+        <!-- <span class="lang-en">🎵 Music: "Level 1" by Juhani Junkala (CC0)</span> -->
+        <!-- <span class="lang-es" hidden>🎵 Música: "Level 1" por Juhani Junkala (CC0)</span> -->
       </div>
       <div class="footer-visitors">
         <span class="lang-en">👀 Visitors:</span>
@@ -182,13 +188,14 @@
       <div class="info-modal-content">
         <!-- ENGLISH VERSION -->
         <div id="instructions-en" class="instructions-content">
-          <h2>📘 How to Play Tetris Deluxe</h2>
+          <h2>📘 How to Play FallingBlocks+</h2>
         
           <h3>🎯 The Goal</h3>
           <p>
-            Tetris is a puzzle game where colorful blocks (called "tetrominos") fall from the top of the screen. 
-            Your goal is to arrange these blocks to create complete horizontal lines, which will then disappear 
-            and give you points. Don't let the blocks stack up to the top, or it's game over!
+            FallingBlocks+ is a fast-paced falling-block puzzle game where colorful pieces
+            drop from the top of the screen. Your goal is to arrange these pieces to create
+            complete horizontal lines. When a line is filled with no gaps, it disappears
+            and you earn points. If the stack of blocks reaches the top of the board, the game ends.
           </p>
         
           <h3>🎮 Controls (Keyboard)</h3>
@@ -216,7 +223,7 @@
           <h3>📦 How to Play</h3>
           <ol>
             <li><strong>Press Start</strong> — Enter your name and click "Start Game"</li>
-            <li><strong>Watch the pieces fall</strong> — Different shaped blocks will drop from the top</li>
+            <li><strong>Watch the pieces fall</strong> — Different shaped blocks will drop from above</li>
             <li><strong>Move and rotate</strong> — Position each piece where you want it before it lands</li>
             <li><strong>Complete lines</strong> — Fill an entire horizontal row with no gaps to clear it</li>
             <li><strong>Keep playing</strong> — The game speeds up as you level up. Keep clearing lines!</li>
@@ -237,7 +244,7 @@
             <li><strong>Single Line</strong> — 100 points (clear 1 line at once)</li>
             <li><strong>Double Line</strong> — 300 points (clear 2 lines at once)</li>
             <li><strong>Triple Line</strong> — 500 points (clear 3 lines at once)</li>
-            <li><strong>Tetris! (Four Lines)</strong> — 800 points (clear 4 lines at once — the best!)</li>
+            <li><strong>Quad Clear (Four Lines)</strong> — 800 points (clear 4 lines at once — very powerful!)</li>
           </ul>
           <p><strong>Tip:</strong> Try to clear multiple lines at once for higher scores!</p>
         
@@ -262,14 +269,15 @@
 
         <!-- SPANISH VERSION -->
         <div id="instructions-es" class="instructions-content" hidden>
-          <h2>📘 Cómo Jugar Tetris Deluxe</h2>
+          <h2>📘 Cómo Jugar FallingBlocks+</h2>
         
           <h3>🎯 El Objetivo</h3>
           <p>
-            Tetris es un juego de rompecabezas donde bloques de colores (llamados "tetrominos") caen desde 
-            la parte superior de la pantalla. Tu objetivo es organizar estos bloques para crear líneas 
-            horizontales completas, que luego desaparecerán y te darán puntos. ¡No dejes que los bloques 
-            se apilen hasta arriba, o será el fin del juego!
+            FallingBlocks+ es un juego de rompecabezas de bloques que caen desde la parte 
+            superior de la pantalla. Tu objetivo es organizar estas piezas para crear 
+            líneas horizontales completas. Cuando una línea se llena sin espacios, 
+            desaparece y ganas puntos. Si los bloques se apilan hasta la parte superior 
+            del tablero, el juego termina.
           </p>
         
           <h3>🎮 Controles (Teclado)</h3>
@@ -318,7 +326,7 @@
             <li><strong>Una Línea</strong> — 100 puntos (eliminar 1 línea a la vez)</li>
             <li><strong>Dos Líneas</strong> — 300 puntos (eliminar 2 líneas a la vez)</li>
             <li><strong>Tres Líneas</strong> — 500 puntos (eliminar 3 líneas a la vez)</li>
-            <li><strong>¡Tetris! (Cuatro Líneas)</strong> — 800 puntos (eliminar 4 líneas a la vez — ¡lo mejor!)</li>
+            <li><strong>Cuatro Líneas (Borrado Cuádruple)</strong> — 800 puntos (eliminar 4 líneas a la vez — muy poderoso)</li>
           </ul>
           <p><strong>Consejo:</strong> ¡Intenta eliminar varias líneas a la vez para obtener puntuaciones más altas!</p>
         
@@ -350,7 +358,7 @@
     </div>
     <!-- END INSTRUCTIONS MODAL -->
 
-    <!-- ✨ NEW FEEDBACK MODAL WITH FORM -->
+    <!-- ✨ FEEDBACK MODAL WITH FORM -->
     <div id="feedback-modal" class="info-modal">
       <div class="info-modal-content feedback-content">
         <h2>
@@ -360,11 +368,11 @@
 
         <p class="feedback-intro">
           <span class="lang-en"
-            >I'd love to hear your thoughts on Tetris Deluxe! Share your feedback, 
+            >I'd love to hear your thoughts on FallingBlocks+! Share your feedback, 
             bug reports, or suggestions below:</span
           >
           <span class="lang-es" hidden
-            >¡Me encantaría escuchar tus opiniones sobre Tetris Deluxe! Comparte 
+            >¡Me encantaría escuchar tus opiniones sobre FallingBlocks+! Comparte 
             tus comentarios, reportes de errores o sugerencias a continuación:</span
           >
         </p>

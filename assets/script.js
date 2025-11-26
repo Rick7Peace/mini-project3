@@ -1,11 +1,11 @@
-// 🎮 Tetris Deluxe v10.2.1 — PRODUCTION-READY Edition (CORRECTED)
+// 🎮 FallingBlocks+ v10.3.0 — PRODUCTION-READY Edition
 // ✅ 10/10 Metrics: Security, Error Handling, Accessibility, Performance
-// ✨ BILINGUAL SYSTEM FULLY CORRECTED + Email Feedback FIXED
+// ✨ BILINGUAL SYSTEM + Formspree Feedback + CC0 Music
 
 /* ==== Configuration Constants ==== */
 const CONFIG = {
   // Grid dimensions
-  GRID_WIDTH: 10,
+  GRID_WIDTH: 12,
   GRID_HEIGHT: 20,
   NEXT_GRID_SIZE: 4,
 
@@ -36,25 +36,25 @@ const CONFIG = {
   TOUCH_THRESHOLD: 24,
   TOUCH_TAP_TIME: 250,
 
-  // Storage keys
+  // Storage keys (rebranded from tetris* to fb*)
   STORAGE_KEYS: {
-    SAVE: "tetrisSave",
-    LEADERBOARD: "tetrisLeaderboard",
-    PERSONAL_BEST: "tetrisPB",
-    PLAYER_NAME: "tetrisPlayerName",
-    THEME: "tetrisTheme",
-    SFX_VOLUME: "tetrisSfxVol",
-    MUSIC_VOLUME: "tetrisMusicVol",
-    SFX_MUTE: "tetrisSfxMute",
-    MUSIC_MUTE: "tetrisMusicMute",
-    LANGUAGE: "tetrisLanguage",
+    SAVE: "fbSave",
+    LEADERBOARD: "fbLeaderboard",
+    PERSONAL_BEST: "fbPB",
+    PLAYER_NAME: "fbPlayerName",
+    THEME: "fbTheme",
+    SFX_VOLUME: "fbSfxVol",
+    MUSIC_VOLUME: "fbMusicVol",
+    SFX_MUTE: "fbSfxMute",
+    MUSIC_MUTE: "fbMusicMute",
+    LANGUAGE: "fbLanguage",
   },
 
   // API
-  VISITOR_NAMESPACE: "tetris-deluxe-v10",
+  VISITOR_NAMESPACE: "fallingblocks-plus-v10",
 
   // Version for save compatibility
-  VERSION: "10.2.1",
+  VERSION: "10.3.0",
   
   // Debug mode (set to false for production)
   DEBUG: false,
@@ -195,7 +195,7 @@ class SafeStorage {
   }
 
   cleanup() {
-    const oldKeys = ["tetrisSave", "tetrisOldSave", "tetrisBackup"];
+    const oldKeys = ["fbSave", "fbOldSave", "fbBackup"];
     oldKeys.forEach((key) => {
       try {
         localStorage.removeItem(key);
@@ -390,7 +390,7 @@ const a11y = new AccessibilityManager();
 
 /* ==== Main Game Class ==== */
 document.addEventListener("DOMContentLoaded", () => {
-  class TetrisGame {
+  class FallingBlocksGame {
     constructor() {
       try {
         this.cleanupHandlers = [];
@@ -465,7 +465,7 @@ document.addEventListener("DOMContentLoaded", () => {
           this.grid.setAttribute("role", "application");
           this.grid.setAttribute(
             "aria-label",
-            "Tetris game board. Use arrow keys to play."
+            "FallingBlocks+ game board. Use arrow keys to play."
           );
         }
         if (this.startBtn)
@@ -565,6 +565,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const W = CONFIG.GRID_WIDTH;
 
+      // Piece shapes (L, J, Z, S, T, O, I)
       this.shapes = [
         [
           [1, W + 1, W * 2 + 1, 2],
@@ -774,7 +775,7 @@ document.addEventListener("DOMContentLoaded", () => {
           };
         }
         
-        // NEW: Feedback form handlers
+        // Feedback form handlers
         const submitFeedbackBtn = document.querySelector("#submit-feedback");
         const feedbackMessage = document.querySelector("#feedback-message");
         const charCount = document.querySelector("#char-count");
@@ -918,7 +919,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         // 🚀 FORMSPREE INTEGRATION
-        // Your Formspree form endpoint
         const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xldzyovb';
         
         // Prepare form data
@@ -926,9 +926,9 @@ document.addEventListener("DOMContentLoaded", () => {
           name: sanitizedName,
           email: email,
           message: sanitizedMessage,
-          _replyto: email, // Formspree will use this for reply-to
-          _subject: `Tetris Deluxe Feedback from ${sanitizedName}`,
-          _template: 'box', // Formspree template
+          _replyto: email,
+          _subject: `FallingBlocks+ Feedback from ${sanitizedName}`,
+          _template: 'box',
           game_version: CONFIG.VERSION,
           timestamp: new Date().toISOString()
         };
@@ -1031,22 +1031,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /* ==== ✨ BILINGUAL LANGUAGE SYSTEM (CORRECTED - v10.2.1) ==== */
+    /* ==== ✨ BILINGUAL LANGUAGE SYSTEM ==== */
     
-    /**
-     * Toggle between English and Spanish languages
-     * Updates all UI elements including dropdowns and email links
-     */
     toggleLanguage() {
       try {
-        // Toggle language state
         this.currentLang = this.currentLang === "en" ? "es" : "en";
         
-        // Get all language elements
         const enElements = document.querySelectorAll(".lang-en");
         const esElements = document.querySelectorAll(".lang-es");
         
-        // Toggle visibility based on current language
         if (this.currentLang === "es") {
           enElements.forEach(el => el.hidden = true);
           esElements.forEach(el => el.hidden = false);
@@ -1068,16 +1061,10 @@ document.addEventListener("DOMContentLoaded", () => {
           a11y.announce("Language changed to English");
         }
         
-        // Update dynamic content
         this.updateDynamicText();
-        
-        // Update dropdown menus
         this.updateDifficultyOptions();
-        
-        // Save preference
         storage.setItem(CONFIG.STORAGE_KEYS.LANGUAGE, this.currentLang);
         
-        // Update instructions modal
         const enInstructions = document.querySelector("#instructions-en");
         const esInstructions = document.querySelector("#instructions-es");
         
@@ -1096,10 +1083,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /**
-     * Update dropdown options based on current language
-     * HTML <option> elements can't contain nested tags, so we use data attributes
-     */
     updateDifficultyOptions() {
       try {
         if (!this.diffSelect) return;
@@ -1116,34 +1099,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /**
-     * Update all dynamic text content that's generated by JavaScript
-     * Syncs English and Spanish displays
-     */
     updateDynamicText() {
       try {
-        // Update player badge with current language
         this.updateBadge();
-        
-        // Sync score displays
         this.updateScoreDisplay(this.score);
-        
-        // Sync level displays
         this.updateLevelDisplay(this.level);
-        
-        // Sync high score displays
         const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
         this.updateHighScoreDisplay(currentHighScore);
-        
       } catch (err) {
         console.error('Update dynamic text error:', err);
       }
     }
 
-    /**
-     * Helper method to update score in both EN and ES displays
-     * @param {number} score - The score value to display
-     */
     updateScoreDisplay(score) {
       try {
         if (this.scoreEl) {
@@ -1158,10 +1125,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /**
-     * Helper method to update level in both EN and ES displays
-     * @param {number} level - The level value to display
-     */
     updateLevelDisplay(level) {
       try {
         if (this.levelEl) {
@@ -1176,10 +1139,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /**
-     * Helper method to update high score in both EN and ES displays
-     * @param {number} score - The high score value to display
-     */
     updateHighScoreDisplay(score) {
       try {
         if (this.highScoreEl) {
@@ -1194,23 +1153,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /**
-     * Restore saved language preference on page load
-     */
     restoreLanguage() {
       try {
         const savedLang = storage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
         if (savedLang && (savedLang === "en" || savedLang === "es")) {
           this.currentLang = savedLang;
           
-          // If saved language is Spanish, toggle to it
           if (savedLang === "es") {
-            // Temporarily set to English so toggle will switch to Spanish
             this.currentLang = "en";
             this.toggleLanguage();
           }
         }
-        
       } catch (err) {
         console.error('Restore language error:', err);
       }
@@ -1345,7 +1298,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const idx = this.currentPos + i;
           if (this.inBounds(idx) && this.squares[idx]) {
             this.squares[idx].classList.add(
-              "tetromino",
+              "block",
               this.currentColor,
               "active"
             );
@@ -1364,7 +1317,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const idx = this.currentPos + i;
           if (this.inBounds(idx) && this.squares[idx]) {
             this.squares[idx].classList.remove(
-              "tetromino",
+              "block",
               this.currentColor,
               "active"
             );
@@ -1645,7 +1598,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (this.squares[x]) {
               this.squares[x].classList.remove(
                 "taken",
-                "tetromino",
+                "block",
                 "clear-anim",
                 ...this.colors
               );
@@ -1663,7 +1616,6 @@ document.addEventListener("DOMContentLoaded", () => {
           lines === 1 ? 100 : lines === 2 ? 300 : lines === 3 ? 500 : 800;
         this.score += points;
         
-        // Use helper method to update both displays
         this.updateScoreDisplay(this.score);
         
         this.recalcLevel();
@@ -1686,7 +1638,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (newLevel !== this.level) {
           this.level = newLevel;
           
-          // Use helper method to update both displays
           this.updateLevelDisplay(this.level);
 
           if (!a11y.shouldReduceMotion()) {
@@ -1781,7 +1732,6 @@ document.addEventListener("DOMContentLoaded", () => {
         storage.setItem(CONFIG.STORAGE_KEYS.PLAYER_NAME, this.playerName);
         this.updateBadge();
         
-        // Use helper method to update both displays
         const currentHighScore = this.pbMap[this.playerName] || 0;
         this.updateHighScoreDisplay(currentHighScore);
 
@@ -1801,14 +1751,11 @@ document.addEventListener("DOMContentLoaded", () => {
           this.recalcLevel();
           this.startLoop();
 
-          // Try to start music with better error handling
           if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
             const playPromise = this.bgMusic.play();
             if (playPromise && typeof playPromise.catch === "function") {
               playPromise.catch((err) => {
                 console.log("Music autoplay blocked:", err);
-                // Music will need to be manually enabled via button
-                // This is normal browser behavior
               });
             }
           }
@@ -1985,19 +1932,17 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         this.score = 0;
         
-        // Use helper method to update both displays
         this.updateScoreDisplay(0);
         
         this.level = 1;
         
-        // Use helper method to update both displays
         this.updateLevelDisplay(1);
 
         if (this.squares) {
           this.squares.forEach((s) => {
             if (s) {
               s.classList.remove(
-                "tetromino",
+                "block",
                 "taken",
                 "clear-anim",
                 "grid-flash",
@@ -2145,7 +2090,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!cell) return;
 
           if (cell.taken) s.classList.add("taken");
-          if (cell.active) s.classList.add("active", "tetromino");
+          if (cell.active) s.classList.add("active", "block");
           if (cell.color && cell.color !== "taken") s.classList.add(cell.color);
         });
       } catch (err) {
@@ -2204,7 +2149,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (s.name) this.playerName = Utils.sanitizeName(s.name);
         this.updateBadge();
         
-        // Use helper method to update both displays
         const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
         this.updateHighScoreDisplay(currentHighScore);
 
@@ -2296,7 +2240,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.lbList.appendChild(fragment);
 
-        // Use helper method to update both displays
         const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
         this.updateHighScoreDisplay(currentHighScore);
       } catch (err) {
@@ -2323,7 +2266,6 @@ document.addEventListener("DOMContentLoaded", () => {
           a11y.announce(`New personal best: ${this.score}!`, "assertive");
         }
         
-        // Use helper method to update both displays
         this.updateHighScoreDisplay(this.pbMap[this.playerName] || 0);
       } catch (err) {
         console.error("Update personal best error:", err);
@@ -2542,7 +2484,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     wireUI() {
       try {
-        // Set initial volumes from storage
         if (this.game.bgMusic)
           this.game.bgMusic.volume = this._musicMuted ? 0 : this._musicVolume;
       } catch (err) {
@@ -2786,7 +2727,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Initialize game
-  const game = new TetrisGame();
+  const game = new FallingBlocksGame();
 
   // Cleanup on page unload
   window.addEventListener("beforeunload", () => {
