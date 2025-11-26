@@ -1,21 +1,21 @@
 # mini-project3
 
-# 🎮 Tetris Deluxe v10.2
+# Fallingblocks+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-10.2-green.svg)](https://github.com/Rick7Peace/mini-project3)
 [![Bilingual](https://img.shields.io/badge/languages-EN%20|%20ES-orange.svg)](https://github.com/Rick7Peace/mini-project3)
 
-A modern, production-ready Tetris game built with vanilla JavaScript, featuring bilingual support (English/Spanish), accessibility compliance, and a stunning neon-themed UI.
+A modern, production-ready Fallingblocks+ game built with vanilla JavaScript, featuring bilingual support (English/Spanish), accessibility compliance, and a stunning neon-themed UI.
 
-![Tetris Deluxe Screenshot](screenshot.png)
+![Fallingblocks+ Screenshot](screenshot.png)
 
 ---
 
 ## ✨ Features
 
 ### 🎯 Core Gameplay
-- **Classic Tetris Mechanics** — 7-piece bag randomizer system
+- **Falingblocks+ Mechanics** — 7-piece bag randomizer system
 - **Progressive Difficulty** — Three levels (Easy, Medium, Hard)
 - **Smart Speed Scaling** — Increases as you level up
 - **Advanced Controls** — Keyboard, touch, and mobile button support
@@ -57,7 +57,7 @@ A modern, production-ready Tetris game built with vanilla JavaScript, featuring 
 - **Game State Restoration** — Restores position, level, and score
 
 ### 🎵 Audio System
-- **Background Music** — Classic Tetris theme
+- **Background Music** — Fallingblocks+ theme
 - **Sound Effects** — Line clears, level ups, piece landing
 - **Web Audio API** — High-quality audio playback
 - **HTML5 Fallback** — Works even without Web Audio support
@@ -90,7 +90,7 @@ Then open `http://localhost:8000` in your browser.
 
 ## 📁 Project Structure
 ```
-tetris-deluxe/
+mini-project3/
 ├── index.html              # Main HTML file
 ├── assets/
 │   ├── script.js          # Game logic (10.2 production-ready)
@@ -128,7 +128,7 @@ tetris-deluxe/
 | 1 Line (Single) | 100 pts |
 | 2 Lines (Double) | 300 pts |
 | 3 Lines (Triple) | 500 pts |
-| 4 Lines (Tetris!) | 800 pts |
+| 4 Lines (Fallingblocks+!) | 800 pts |
 
 **Tip:** Clear multiple lines at once for higher scores!
 
@@ -216,8 +216,7 @@ const CONFIG = {
 
 Have feedback, bug reports, or suggestions? I'd love to hear from you!
 
-📧 **Email:** [Marmolejo.ricardo@gmail.com](mailto:Marmolejo.ricardo@gmail.com?subject=Tetris%20Deluxe%20Feedback&body=Hi%20Ricardo%2C%0A%0AI%20wanted%20to%20share%20some%20feedback%20about%20Tetris%20Deluxe%3A%0A%0A%5BYour%20feedback%20here%5D%0A%0AThank%20you!)
-
+📧 **Email:** [Marmolejo.ricardo@gmail.com](mailto:Marmolejo.ricardo@gmail.com?)
 ---
 
 ## 🎓 Educational Purpose
@@ -264,8 +263,8 @@ SOFTWARE.
 
 ## 🙏 Acknowledgments
 
-- **Tetris** — Original game by Alexey Pajitnov
-- **Tetris Theme Music** — Public domain arrangement
+- **Falingblocks+** — Original game by Alexey Pajitnov
+- **Game Music** — Public domain arrangement
 - **Sound Effects** — [Mixkit](https://mixkit.co/)
 - **Inspiration** — Classic arcade games and modern web design
 
