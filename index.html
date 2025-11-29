@@ -6,11 +6,29 @@
     <meta name="description" content="FallingBlocks+ - A free, open-source falling block puzzle game with bilingual support, custom themes, and accessibility features." />
     <meta name="keywords" content="puzzle game, falling blocks, block game, free game, open source" />
     <meta name="author" content="Ricardo Marmolejo" />
-    <title>FallingBlocks+</title>
+    
+    <!-- Security Headers (meta tags - server should also set HTTP headers) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    
+    <!-- PWA Support -->
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <title>FallingBlocks+ v11.0</title>
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
 
   <body class="dark">
+    <!-- ACCESSIBILITY: Skip to main content -->
+    <a href="#grid" class="skip-link">
+      <span class="lang-en">Skip to game board</span>
+      <span class="lang-es" hidden>Ir al tablero de juego</span>
+    </a>
+
     <!-- HEADER -->
     <header>
       <h1>FallingBlocks+</h1>
@@ -30,21 +48,19 @@
 
     <!-- MAIN GAME AREA -->
     <div class="game-container">
-      <div id="grid"></div>
+      <div id="grid" tabindex="0"></div>
 
       <div id="mobile-controls">
-        <button id="left-btn">⬅️</button>
-        <button id="rotate-btn">🔄</button>
-        <button id="right-btn">➡️</button>
-        <button id="down-btn">⬇️</button>
+        <button id="left-btn" aria-label="Move left">⬅️</button>
+        <button id="rotate-btn" aria-label="Rotate piece">🔄</button>
+        <button id="right-btn" aria-label="Move right">➡️</button>
+        <button id="down-btn" aria-label="Move down">⬇️</button>
       </div>
 
       <aside class="info">
         <h2>
           <span class="lang-en">Score: <span id="score">0</span></span>
-          <span class="lang-es" hidden
-            >Puntuación: <span id="score-es">0</span></span
-          >
+          <span class="lang-es" hidden>Puntuación: <span id="score-es">0</span></span>
         </h2>
 
         <p id="player-badge">
@@ -53,19 +69,13 @@
         </p>
 
         <h3>
-          <span class="lang-en"
-            >🏆 High Score: <span id="high-score">0</span></span
-          >
-          <span class="lang-es" hidden
-            >🏆 Puntuación Máxima: <span id="high-score-es">0</span></span
-          >
+          <span class="lang-en">🏆 High Score: <span id="high-score">0</span></span>
+          <span class="lang-es" hidden>🏆 Puntuación Máxima: <span id="high-score-es">0</span></span>
         </h3>
 
         <h3>
-          <span class="lang-en">🎚️ Level: <span id="level">1</span></span>
-          <span class="lang-es" hidden
-            >🎚️ Nivel: <span id="level-es">1</span></span
-          >
+          <span class="lang-en"> Level: <span id="level">1</span></span>
+          <span class="lang-es" hidden> Nivel: <span id="level-es">1</span></span>
         </h3>
 
         <div id="next-wrapper">
@@ -89,15 +99,9 @@
           <span class="lang-es" hidden>Dificultad:</span>
         </label>
         <select id="difficulty">
-          <option value="1" data-en="1 – Easy" data-es="1 – Fácil">
-            1 – Easy
-          </option>
-          <option value="2" data-en="2 – Medium" data-es="2 – Medio">
-            2 – Medium
-          </option>
-          <option value="3" data-en="3 – Hard" data-es="3 – Difícil">
-            3 – Hard
-          </option>
+          <option value="1" data-en="1 – Easy" data-es="1 – Fácil">1 – Easy</option>
+          <option value="2" data-en="2 – Medium" data-es="2 – Medio">2 – Medium</option>
+          <option value="3" data-en="3 – Hard" data-es="3 – Difícil">3 – Hard</option>
         </select>
 
         <div class="buttons">
@@ -130,34 +134,20 @@
         </button>
 
         <!-- AUDIO ASSETS -->
-        <!-- 🎵 Background Music: "Level 1" by Juhani Junkala (CC0 Public Domain) -->
-        <!-- Download from: https://opengameart.org/content/5-chiptunes-action -->
         <audio id="bg-music" loop preload="auto">
           <source src="./assets/music/SLOWEST-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3" type="audio/mpeg" />
         </audio>
         <audio id="level-up-sound">
-          <source
-            src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"
-            type="audio/mpeg"
-          />
+          <source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg" />
         </audio>
         <audio id="land-sound">
-          <source
-            src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3"
-            type="audio/mpeg"
-          />
+          <source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg" />
         </audio>
         <audio id="clear-sound">
-          <source
-            src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
-            type="audio/mpeg"
-          />
+          <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg" />
         </audio>
         <audio id="pulse-sound">
-          <source
-            src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
-            type="audio/mpeg"
-          />
+          <source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" />
         </audio>
       </aside>
     </div>
@@ -165,16 +155,8 @@
     <!-- FOOTER -->
     <footer>
       <div class="footer-main">
-        <span class="lang-en"
-          >Built with 💙 — Neon Blocks & Clear Lines —</span
-        >
-        <span class="lang-es" hidden
-          >Hecho con 💙 — Bloques Neón y Filas Claras —</span
-        >
-      </div>
-      <div class="footer-credits">
-        <!-- <span class="lang-en">🎵 Music: "Level 1" by Juhani Junkala (CC0)</span> -->
-        <!-- <span class="lang-es" hidden>🎵 Música: "Level 1" por Juhani Junkala (CC0)</span> -->
+        <span class="lang-en">Built with 💙  </span>
+        <span class="lang-es" hidden>Hecho con </span>
       </div>
       <div class="footer-visitors">
         <span class="lang-en">👀 Visitors:</span>
@@ -183,202 +165,141 @@
       </div>
     </footer>
 
-    <!-- BILINGUAL INSTRUCTIONS MODAL -->
-    <div id="info-modal" class="info-modal">
+    <!-- INSTRUCTIONS MODAL -->
+    <div id="info-modal" class="info-modal" role="dialog" aria-labelledby="info-modal-title" aria-modal="true">
       <div class="info-modal-content">
         <!-- ENGLISH VERSION -->
         <div id="instructions-en" class="instructions-content">
-          <h2>📘 How to Play FallingBlocks+</h2>
+          <h2 id="info-modal-title"> How to Play FallingBlocks+</h2>
         
-          <h3>🎯 The Goal</h3>
+          <h3> Goal of the Game</h3>
           <p>
-            FallingBlocks+ is a fast-paced falling-block puzzle game where colorful pieces
-            drop from the top of the screen. Your goal is to arrange these pieces to create
-            complete horizontal lines. When a line is filled with no gaps, it disappears
-            and you earn points. If the stack of blocks reaches the top of the board, the game ends.
+          Place the falling shapes to complete horizontal lines.  
+          Full lines disappear and give you points.  
+          If the stack reaches the top of the grid, the game ends.
           </p>
-        
-          <h3>🎮 Controls (Keyboard)</h3>
+          
+          <h3>⌨️ Controls</h3>
           <ul>
-            <li><strong>⬅️ Left Arrow</strong> — Move the falling piece left</li>
-            <li><strong>➡️ Right Arrow</strong> — Move the falling piece right</li>
-            <li><strong>⬆️ Up Arrow</strong> — Rotate the piece (turn it clockwise)</li>
-            <li><strong>⬇️ Down Arrow</strong> — Make the piece fall faster (soft drop)</li>
-            <li><strong>SPACE</strong> — Drop the piece instantly to the bottom (hard drop)</li>
-            <li><strong>P</strong> — Pause the game (press P again to resume)</li>
+            <li>⬅️ Left Arrow — Move left</li>
+            <li>➡️ Right Arrow — Move right</li>
+            <li>⬆️ Up Arrow — Rotate</li>
+            <li>⬇️ Down Arrow — Soft drop (faster fall)</li>
+            <li>SPACE — Hard drop (instantly place piece)</li>
+            <li>P — Pause / Resume</li>
           </ul>
-        
+          
           <h3>📱 Mobile Controls</h3>
+          <ul>
+            <li>Swipe Left — Move left</li>
+            <li>Swipe Right — Move right</li>
+            <li>Swipe Up — Rotate</li>
+            <li>Swipe Down — Soft drop</li>
+            <li>Tap — Hard drop</li>
+          </ul>
+          
+          <h3>📈 Levels, Scoring & Speed</h3>
+          <ul>
+            <li>Clear lines to earn points.</li>
+            <li>More lines at the same time = more points.</li>
+            <li>Every 500 hundred points, you level up.</li>
+            <li>Higher levels make the pieces fall faster.</li>
+          </ul>
+          
+          <h3>💡 Tips</h3>
+          <ul>
+            <li>Keep your stack low.</li>
+            <li>Use hard drop to place pieces quickly.</li>
+            <li>Watch the “Next Piece” preview to plan ahead.</li>
+          </ul>
+          
+          <h3>⚙️ Difficulty</h3>
           <p>
-            On mobile devices or tablets, use the touch buttons below the game grid:
+          Easy = Slow • Medium = Normal • Hard = Fast  
+          Choose before starting the game.
           </p>
-          <ul>
-            <li><strong>⬅️ Left Button</strong> — Move piece left</li>
-            <li><strong>➡️ Right Button</strong> — Move piece right</li>
-            <li><strong>🔄 Rotate Button</strong> — Rotate the piece</li>
-            <li><strong>⬇️ Down Button</strong> — Drop piece faster</li>
-            <li><strong>Tap the grid</strong> — Quick drop to bottom</li>
-          </ul>
-        
-          <h3>📦 How to Play</h3>
-          <ol>
-            <li><strong>Press Start</strong> — Enter your name and click "Start Game"</li>
-            <li><strong>Watch the pieces fall</strong> — Different shaped blocks will drop from above</li>
-            <li><strong>Move and rotate</strong> — Position each piece where you want it before it lands</li>
-            <li><strong>Complete lines</strong> — Fill an entire horizontal row with no gaps to clear it</li>
-            <li><strong>Keep playing</strong> — The game speeds up as you level up. Keep clearing lines!</li>
-            <li><strong>Avoid the top</strong> — If blocks stack up to the very top, the game ends</li>
-          </ol>
-        
-          <h3>💡 Beginner Tips</h3>
-          <ul>
-            <li><strong>Plan ahead</strong> — Look at the "Next" preview to see what's coming</li>
-            <li><strong>Leave no gaps</strong> — Try to stack pieces tightly with no holes</li>
-            <li><strong>Clear lines often</strong> — Don't wait too long or blocks will pile up</li>
-            <li><strong>Use rotation</strong> — Most pieces can be rotated to fit better</li>
-            <li><strong>Practice makes perfect</strong> — The more you play, the better you'll get!</li>
-          </ul>
-        
-          <h3>⭐ Scoring System</h3>
-          <ul>
-            <li><strong>Single Line</strong> — 100 points (clear 1 line at once)</li>
-            <li><strong>Double Line</strong> — 300 points (clear 2 lines at once)</li>
-            <li><strong>Triple Line</strong> — 500 points (clear 3 lines at once)</li>
-            <li><strong>Quad Clear (Four Lines)</strong> — 800 points (clear 4 lines at once — very powerful!)</li>
-          </ul>
-          <p><strong>Tip:</strong> Try to clear multiple lines at once for higher scores!</p>
-        
-          <h3>🎚️ Difficulty Levels</h3>
-          <ul>
-            <li><strong>Easy</strong> — Pieces fall slowly (great for beginners!)</li>
-            <li><strong>Medium</strong> — Moderate speed (good challenge)</li>
-            <li><strong>Hard</strong> — Fast-paced action (for experienced players)</li>
-          </ul>
-          <p>Choose your difficulty before starting. You can change it anytime between games.</p>
-        
-          <h3>🎵 Features</h3>
-          <ul>
-            <li><strong>Music Toggle</strong> — Turn background music on/off with the 🎵 button</li>
-            <li><strong>Theme Toggle</strong> — Switch between dark and light modes</li>
-            <li><strong>Leaderboard</strong> — See the top 10 high scores</li>
-            <li><strong>Personal Best</strong> — Track your highest score</li>
-          </ul>
-        
-          <p><strong>Ready to play? Press the ▶️ Start button and have fun!</strong></p>
+          
+          <p><strong>Ready? Press ▶️ Start!</strong></p> 
         </div>
 
         <!-- SPANISH VERSION -->
         <div id="instructions-es" class="instructions-content" hidden>
-          <h2>📘 Cómo Jugar FallingBlocks+</h2>
-        
-          <h3>🎯 El Objetivo</h3>
-          <p>
-            FallingBlocks+ es un juego de rompecabezas de bloques que caen desde la parte 
-            superior de la pantalla. Tu objetivo es organizar estas piezas para crear 
-            líneas horizontales completas. Cuando una línea se llena sin espacios, 
-            desaparece y ganas puntos. Si los bloques se apilan hasta la parte superior 
-            del tablero, el juego termina.
-          </p>
-        
-          <h3>🎮 Controles (Teclado)</h3>
-          <ul>
-            <li><strong>⬅️ Flecha Izquierda</strong> — Mover la pieza que cae hacia la izquierda</li>
-            <li><strong>➡️ Flecha Derecha</strong> — Mover la pieza que cae hacia la derecha</li>
-            <li><strong>⬆️ Flecha Arriba</strong> — Rotar la pieza (girarla en sentido horario)</li>
-            <li><strong>⬇️ Flecha Abajo</strong> — Hacer que la pieza caiga más rápido (caída suave)</li>
-            <li><strong>ESPACIO</strong> — Dejar caer la pieza instantáneamente al fondo (caída rápida)</li>
-            <li><strong>P</strong> — Pausar el juego (presiona P nuevamente para reanudar)</li>
-          </ul>
-        
-          <h3>📱 Controles Móviles</h3>
-          <p>
-            En dispositivos móviles o tabletas, usa los botones táctiles debajo de la cuadrícula del juego:
-          </p>
-          <ul>
-            <li><strong>⬅️ Botón Izquierdo</strong> — Mover pieza a la izquierda</li>
-            <li><strong>➡️ Botón Derecho</strong> — Mover pieza a la derecha</li>
-            <li><strong>🔄 Botón Rotar</strong> — Rotar la pieza</li>
-            <li><strong>⬇️ Botón Abajo</strong> — Dejar caer la pieza más rápido</li>
-            <li><strong>Tocar la cuadrícula</strong> — Caída rápida al fondo</li>
-          </ul>
-        
-          <h3>📦 Cómo Jugar</h3>
-          <ol>
-            <li><strong>Presiona Empezar</strong> — Ingresa tu nombre y haz clic en "Empezar Juego"</li>
-            <li><strong>Observa caer las piezas</strong> — Diferentes bloques con formas caerán desde arriba</li>
-            <li><strong>Mueve y rota</strong> — Posiciona cada pieza donde la desees antes de que aterrice</li>
-            <li><strong>Completa líneas</strong> — Llena una fila horizontal completa sin espacios para eliminarla</li>
-            <li><strong>Sigue jugando</strong> — El juego se acelera a medida que subes de nivel. ¡Sigue eliminando líneas!</li>
-            <li><strong>Evita la parte superior</strong> — Si los bloques se apilan hasta arriba, el juego termina</li>
-          </ol>
-        
-          <h3>💡 Consejos para Principiantes</h3>
-          <ul>
-            <li><strong>Planifica con anticipación</strong> — Mira la vista previa "Siguiente" para ver qué viene</li>
-            <li><strong>No dejes espacios</strong> — Intenta apilar las piezas apretadamente sin huecos</li>
-            <li><strong>Elimina líneas a menudo</strong> — No esperes demasiado o los bloques se acumularán</li>
-            <li><strong>Usa la rotación</strong> — La mayoría de las piezas se pueden rotar para que encajen mejor</li>
-            <li><strong>La práctica hace al maestro</strong> — ¡Cuanto más juegues, mejor serás!</li>
-          </ul>
-        
-          <h3>⭐ Sistema de Puntuación</h3>
-          <ul>
-            <li><strong>Una Línea</strong> — 100 puntos (eliminar 1 línea a la vez)</li>
-            <li><strong>Dos Líneas</strong> — 300 puntos (eliminar 2 líneas a la vez)</li>
-            <li><strong>Tres Líneas</strong> — 500 puntos (eliminar 3 líneas a la vez)</li>
-            <li><strong>Cuatro Líneas (Borrado Cuádruple)</strong> — 800 puntos (eliminar 4 líneas a la vez — muy poderoso)</li>
-          </ul>
-          <p><strong>Consejo:</strong> ¡Intenta eliminar varias líneas a la vez para obtener puntuaciones más altas!</p>
-        
-          <h3>🎚️ Niveles de Dificultad</h3>
-          <ul>
-            <li><strong>Fácil</strong> — Las piezas caen lentamente (¡genial para principiantes!)</li>
-            <li><strong>Medio</strong> — Velocidad moderada (buen desafío)</li>
-            <li><strong>Difícil</strong> — Acción acelerada (para jugadores experimentados)</li>
-          </ul>
-          <p>Elige tu dificultad antes de comenzar. Puedes cambiarla en cualquier momento entre juegos.</p>
-        
-          <h3>🎵 Características</h3>
-          <ul>
-            <li><strong>Alternar Música</strong> — Activa/desactiva la música de fondo con el botón 🎵</li>
-            <li><strong>Alternar Tema</strong> — Cambia entre modos oscuro y claro</li>
-            <li><strong>Tabla de Clasificación</strong> — Mira las 10 puntuaciones más altas</li>
-            <li><strong>Mejor Personal</strong> — Rastrea tu puntuación más alta</li>
-          </ul>
-        
-          <p><strong>¿Listo para jugar? ¡Presiona el botón ▶️ Empezar y diviértete!</strong></p>
-        </div>
+          <h2> Cómo Jugar</h2>
 
-        <!-- CLOSE BUTTON FOR INSTRUCTIONS -->
+          <h3> Objetivo del Juego</h3>
+          <p>
+          Coloca las piezas que caen para formar líneas completas.  
+          Las líneas completas desaparecen y dan puntos.  
+          Si la pila llega hasta arriba, el juego termina.
+          </p>
+          
+          <h3>⌨️ Controles</h3>
+          <ul>
+            <li>⬅️ Izquierda — Mover</li>
+            <li>➡️ Derecha — Mover</li>
+            <li>⬆️ Arriba — Rotar</li>
+            <li>⬇️ Abajo — Caída rápida</li>
+            <li>ESPACIO — Caída instantánea</li>
+            <li>P — Pausar / Reanudar</li>
+          </ul>
+          
+          <h3>📱 Controles Móviles</h3>
+          <ul>
+            <li>Deslizar Izquierda — Mover</li>
+            <li>Deslizar Derecha — Mover</li>
+            <li>Deslizar Arriba — Rotar</li>
+            <li>Deslizar Abajo — Caída rápida</li>
+            <li>Toque — Caída instantánea</li>
+          </ul>
+          
+          <h3>📈 Niveles, Puntos y Velocidad</h3>
+          <ul>
+            <li>Completar líneas te da puntos.</li>
+            <li>Más líneas a la vez = más puntos.</li>
+            <li>Cada 500 puntos subes de nivel.</li>
+            <li>Los niveles altos hacen que las piezas caigan más rápido.</li>
+          </ul>
+          
+          <h3>💡 Consejos</h3>
+          <ul>
+            <li>Mantén la pila baja.</li>
+            <li>Usa la caída instantánea para jugar más rápido.</li>
+            <li>Mira la vista previa “Siguiente Pieza”.</li>
+          </ul>
+          
+          <h3>⚙️ Dificultad</h3>
+          <p>
+          Fácil = Lento • Medio = Normal • Difícil = Rápido  
+          Elige la dificultad antes de comenzar.
+          </p>
+          
+          <p><strong>¡Listo? ¡Presiona ▶️ Empezar!</strong></p>
+                            </div>
+
         <button id="close-info" class="close-info">
           <span class="lang-en">Close</span>
           <span class="lang-es" hidden>Cerrar</span>
         </button>
       </div>
     </div>
-    <!-- END INSTRUCTIONS MODAL -->
 
-    <!-- ✨ FEEDBACK MODAL WITH FORM -->
-    <div id="feedback-modal" class="info-modal">
+    <!-- FEEDBACK MODAL -->
+    <div id="feedback-modal" class="info-modal" role="dialog" aria-labelledby="feedback-modal-title" aria-modal="true">
       <div class="info-modal-content feedback-content">
-        <h2>
+        <h2 id="feedback-modal-title">
           <span class="lang-en">💬 Send Feedback</span>
           <span class="lang-es" hidden>💬 Enviar Comentarios</span>
         </h2>
 
         <p class="feedback-intro">
-          <span class="lang-en"
-            >I'd love to hear your thoughts on FallingBlocks+! Share your feedback, 
-            bug reports, or suggestions below:</span
-          >
-          <span class="lang-es" hidden
-            >¡Me encantaría escuchar tus opiniones sobre FallingBlocks+! Comparte 
-            tus comentarios, reportes de errores o sugerencias a continuación:</span
-          >
+          <span class="lang-en">Share your feedback, bug reports, or suggestions:</span>
+          <span class="lang-es" hidden>Comparte tus comentarios, reportes de errores o sugerencias:</span>
         </p>
 
         <div id="feedback-form-container">
-          <!-- Name Input (Optional) -->
+          <!-- Honeypot field for spam protection -->
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+          
           <div class="form-group">
             <label for="feedback-name">
               <span class="lang-en">Your Name (Optional)</span>
@@ -390,12 +311,12 @@
               class="feedback-input"
               maxlength="50"
               placeholder="John Doe"
+              autocomplete="name"
             />
           </div>
 
-          <!-- Email Input (Optional) -->
           <div class="form-group">
-            <label for="feedback-email">
+            <label for="feedback-email-input">
               <span class="lang-en">Your Email (Optional - for replies)</span>
               <span class="lang-es" hidden>Tu Correo (Opcional - para respuestas)</span>
             </label>
@@ -404,10 +325,10 @@
               id="feedback-email-input" 
               class="feedback-input"
               placeholder="you@example.com"
+              autocomplete="email"
             />
           </div>
 
-          <!-- Message Textarea -->
           <div class="form-group">
             <label for="feedback-message">
               <span class="lang-en">Your Message *</span>
@@ -419,20 +340,19 @@
               rows="6"
               maxlength="1000"
               required
+              aria-required="true"
             ></textarea>
             <div class="char-counter">
               <span id="char-count">0</span> / 1000
             </div>
           </div>
 
-          <!-- Submit Button -->
           <button id="submit-feedback" class="submit-feedback-btn">
             <span class="lang-en">📤 Send Feedback</span>
             <span class="lang-es" hidden>📤 Enviar Comentarios</span>
           </button>
 
-          <!-- Status Message -->
-          <div id="feedback-status" class="feedback-status" style="display: none;"></div>
+          <div id="feedback-status" class="feedback-status" style="display: none;" role="alert" aria-live="polite"></div>
         </div>
 
         <button id="close-feedback" class="close-info">
@@ -441,7 +361,6 @@
         </button>
       </div>
     </div>
-    <!-- END FEEDBACK MODAL -->
 
     <script src="./assets/script.js"></script>
   </body>

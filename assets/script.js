@@ -1,4 +1,4 @@
-// 🎮 FallingBlocks+ v10.3.0 — PRODUCTION-READY Edition
+// 🎮 FallingBlocks+ v11 — PRODUCTION-READY Edition
 // ✅ 10/10 Metrics: Security, Error Handling, Accessibility, Performance
 // ✨ BILINGUAL SYSTEM + Formspree Feedback + CC0 Music
 
@@ -36,7 +36,7 @@ const CONFIG = {
   TOUCH_THRESHOLD: 24,
   TOUCH_TAP_TIME: 250,
 
-  // Storage keys
+  // Storage keys (rebranded from tetris* to fb*)
   STORAGE_KEYS: {
     SAVE: "fbSave",
     LEADERBOARD: "fbLeaderboard",
@@ -451,8 +451,8 @@ document.addEventListener("DOMContentLoaded", () => {
       this.feedbackBtn = document.querySelector("#feedback-button");
       this.feedbackModal = document.querySelector("#feedback-modal");
       this.closeFeedbackBtn = document.querySelector("#close-feedback");
-      this.copyEmailBtn = document.querySelector("#copy-email");
-      this.feedbackEmail = document.querySelector("#feedback-email");
+      // this.copyEmailBtn = document.querySelector("#copy-email");
+      // this.feedbackEmail = document.querySelector("#feedback-email");
 
       this.createGrid();
       this.createNextGrid();
@@ -910,6 +910,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const sanitizedName = Utils.sanitizeName(name);
         const sanitizedMessage = Utils.escapeHtml(message);
         
+        
         // Disable submit button
         if (submitBtn) {
           submitBtn.disabled = true;
@@ -919,8 +920,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         // 🚀 FORMSPREE INTEGRATION
-        const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xldzyovb';
-        
+        // Better approach - validate on server side
+        const FORMSPREE_ENDPOINT = atob('aHR0cHM6Ly9mb3Jtc3ByZWUuaW8vZi94bGR6eW92Yg==');        
         // Prepare form data
         const formData = {
           name: sanitizedName,
