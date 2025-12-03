@@ -18,7 +18,15 @@ const CONFIG = {
   MIN_SPEED: 120,
   SPEED_REDUCTION_PER_LEVEL: 60,
 
-  // Timing
+  // ✅ NEW: Add this line for reCAPTCHA
+  RECAPTCHA_SITE_KEY: '6Ld4ex8sAAAAAF8wqZbOX2UJEU2MvXgpYiyZ9LKS',
+
+  // ✅ NEW: Rate limiting (already exists)
+  FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions
+  // ✅ NEW: Rate limiting
+  FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions
+  MAX_MESSAGE_LENGTH: 1000,
+  MAX_NAME_LENGTH: 50,  // Timing
   FREEZE_DELAY: 150,
   LINE_CLEAR_DELAY: 300,
   AUDIO_CLEANUP_TIMEOUT: 5000,
@@ -229,6 +237,82 @@ const Utils = {
     return div.innerHTML;
   },
 
+  // ✅ NEW: Email validation
+  validateEmail(email) {
+    if (!email || email.length === 0) return { valid: true, error: null }; // Empty is OK (optional field)
+    
+    // Check length
+    if (email.length > 254) {
+      return { valid: false, error: 'Email too long (max 254 characters)' };
+    }
+    
+    if (email.length < 3) {
+      return { valid: false, error: 'Email too short' };
+    }
+    
+    // RFC 5322 compliant regex (simplified)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!emailRegex.test(email)) {
+      return { valid: false, error: 'Invalid email format' };
+    }
+    
+    // Additional security checks
+    if (email.includes('..')) {
+      return { valid: false, error: 'Invalid email format (consecutive dots)' };
+    }
+    
+    if (email.startsWith('.') || email.endsWith('.')) {
+      return { valid: false, error: 'Invalid email format (starts/ends with dot)' };
+    }
+    
+    return { valid: true, error: null };
+  },
+
+  // ✅ NEW: Message validation
+  validateMessage(message) {
+    if (!message || typeof message !== 'string') {
+      return { valid: false, error: 'Message is required' };
+    }
+    
+    const trimmed = message.trim();
+    
+    if (trimmed.length === 0) {
+      return { valid: false, error: 'Message cannot be empty' };
+    }
+    
+    if (trimmed.length < 10) {
+      return { valid: false, error: 'Message too short (minimum 10 characters)' };
+    }
+    
+    if (trimmed.length > CONFIG.MAX_MESSAGE_LENGTH) {
+      return { 
+        valid: false, 
+        error: `Message too long (maximum ${CONFIG.MAX_MESSAGE_LENGTH} characters)` 
+      };
+    }
+    
+    // Check for suspicious patterns
+    const suspiciousPatterns = [
+      /<script/i,
+      /javascript:/i,
+      /on\w+=/i,
+      /<iframe/i,
+      /eval\(/i,
+      /document\.cookie/i
+    ];
+    
+    for (const pattern of suspiciousPatterns) {
+      if (pattern.test(trimmed)) {
+        return { 
+          valid: false, 
+          error: 'Message contains potentially unsafe content' 
+        };
+      }
+    }
+    
+    return { valid: true, error: null };
+  },
   debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -548,21 +632,22 @@ document.addEventListener("DOMContentLoaded", () => {
       this.timer = null;
       this.saveTimer = null;
       this.lastSaveState = "";
-
+    
       this.currentLang = "en";
-
+    
       this.pieceBag = [];
       this.fillBag();
-
+    
       this.currentPos = 4;
       this.currentRot = 0;
       this.typeIdx = this.drawFromBag();
       this.nextTypeIdx = this.drawFromBag();
-
+    
       this.playerName = "";
       this.leaderboard = this.loadLeaderboard();
       this.pbMap = this.loadPersonalBests();
-
+      this.lastFeedbackSubmission = 0;
+    
       const W = CONFIG.GRID_WIDTH;
 
       // Piece shapes (L, J, Z, S, T, O, I)
@@ -882,7 +967,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    submitFeedback() {
+    async submitFeedback() {
       try {
         const nameInput = document.querySelector("#feedback-name");
         const emailInput = document.querySelector("#feedback-email-input");
@@ -890,6 +975,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const statusDiv = document.querySelector("#feedback-status");
         const submitBtn = document.querySelector("#submit-feedback");
         
+        // ✅ Rate limiting check
+        const now = Date.now();
+        const timeSinceLastSubmit = now - this.lastFeedbackSubmission;
+        
+        if (timeSinceLastSubmit < CONFIG.FEEDBACK_COOLDOWN) {
+          const remainingSeconds = Math.ceil((CONFIG.FEEDBACK_COOLDOWN - timeSinceLastSubmit) / 1000);
+          if (statusDiv) {
+            statusDiv.style.display = "block";
+            statusDiv.className = "feedback-status error";
+            statusDiv.innerHTML = this.currentLang === "es" 
+              ? `⏳ Por favor espera ${remainingSeconds} segundos antes de enviar otro comentario.`
+              : `⏳ Please wait ${remainingSeconds} seconds before submitting another feedback.`;
+          }
+          return;
+        }
+        
+        // Validate message
         if (!messageInput || !messageInput.value.trim()) {
           if (statusDiv) {
             statusDiv.style.display = "block";
@@ -906,10 +1008,37 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = emailInput?.value.trim() || "";
         const message = messageInput.value.trim();
         
+        // Validate message length
+        const messageValidation = Utils.validateMessage(message);
+        if (!messageValidation.valid) {
+          if (statusDiv) {
+            statusDiv.style.display = "block";
+            statusDiv.className = "feedback-status error";
+            statusDiv.innerHTML = this.currentLang === "es"
+              ? `⚠️ ${messageValidation.error}`
+              : `⚠️ ${messageValidation.error}`;
+          }
+          return;
+        }
+        
+        // Validate email if provided
+        if (email) {
+          const emailValidation = Utils.validateEmail(email);
+          if (!emailValidation.valid) {
+            if (statusDiv) {
+              statusDiv.style.display = "block";
+              statusDiv.className = "feedback-status error";
+              statusDiv.innerHTML = this.currentLang === "es"
+                ? `⚠️ ${emailValidation.error}`
+                : `⚠️ ${emailValidation.error}`;
+            }
+            return;
+          }
+        }
+        
         // Sanitize inputs
         const sanitizedName = Utils.sanitizeName(name);
         const sanitizedMessage = Utils.escapeHtml(message);
-        
         
         // Disable submit button
         if (submitBtn) {
@@ -919,9 +1048,22 @@ document.addEventListener("DOMContentLoaded", () => {
             : '<span class="lang-en">📤 Sending...</span>';
         }
         
-        // 🚀 FORMSPREE INTEGRATION
-        // Better approach - validate on server side
-        const FORMSPREE_ENDPOINT = atob('aHR0cHM6Ly9mb3Jtc3ByZWUuaW8vZi94bGR6eW92Yg==');        
+        // ✅ Get reCAPTCHA token
+        let recaptchaToken = null;
+        try {
+          if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
+            recaptchaToken = await grecaptcha.execute(CONFIG.RECAPTCHA_SITE_KEY, { 
+              action: 'submit_feedback' 
+            });
+          }
+        } catch (recaptchaError) {
+          console.warn('reCAPTCHA failed, continuing without it:', recaptchaError);
+          // Continue anyway - graceful degradation
+        }
+        
+        // Formspree endpoint
+        const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xldzyo' + 'vb'; // Split to avoid scraping
+        
         // Prepare form data
         const formData = {
           name: sanitizedName,
@@ -931,97 +1073,85 @@ document.addEventListener("DOMContentLoaded", () => {
           _subject: `FallingBlocks+ Feedback from ${sanitizedName}`,
           _template: 'box',
           game_version: CONFIG.VERSION,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          language: this.currentLang
         };
         
+        // ✅ Add reCAPTCHA token if available
+        if (recaptchaToken) {
+          formData._recaptcha = recaptchaToken;
+        }
+        
         // Send to Formspree
-        fetch(FORMSPREE_ENDPOINT, {
+        const response = await fetch(FORMSPREE_ENDPOINT, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
           body: JSON.stringify(formData)
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          // Success!
-          if (statusDiv) {
-            statusDiv.style.display = "block";
-            statusDiv.className = "feedback-status success";
-            statusDiv.innerHTML = this.currentLang === "es"
-              ? "✅ ¡Comentarios enviados exitosamente! Gracias por tu opinión."
-              : "✅ Feedback sent successfully! Thank you for your input.";
-          }
-          
-          // Show popup
-          this.showPopup(
-            this.currentLang === "es" 
-              ? "📧 ¡Comentarios enviados!" 
-              : "📧 Feedback sent!",
-            3000
-          );
-          
-          a11y.announce(
-            this.currentLang === "es"
-              ? "Comentarios enviados exitosamente"
-              : "Feedback sent successfully"
-          );
-          
-          // Clear form after 2 seconds
-          setTimeout(() => {
-            if (nameInput) nameInput.value = "";
-            if (emailInput) emailInput.value = "";
-            if (messageInput) messageInput.value = "";
-            
-            const charCount = document.querySelector("#char-count");
-            if (charCount) charCount.textContent = "0";
-            
-            // Close modal after 3 seconds
-            setTimeout(() => {
-              this.closeFeedbackModal();
-            }, 1000);
-          }, 2000);
-        })
-        .catch(error => {
-          // Error handling
-          console.error("Formspree submission error:", error);
-          
-          if (statusDiv) {
-            statusDiv.style.display = "block";
-            statusDiv.className = "feedback-status error";
-            statusDiv.innerHTML = this.currentLang === "es"
-              ? "❌ Error al enviar. Por favor verifica tu conexión e intenta de nuevo."
-              : "❌ Error sending. Please check your connection and try again.";
-          }
-        })
-        .finally(() => {
-          // Re-enable button
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = this.currentLang === "es"
-              ? '<span class="lang-es">📤 Enviar Comentarios</span>'
-              : '<span class="lang-en">📤 Send Feedback</span>';
-          }
         });
         
-      } catch (err) {
-        console.error("Submit feedback error:", err);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // ✅ Update rate limit timestamp on success
+        this.lastFeedbackSubmission = Date.now();
+        
+        // Success!
+        if (statusDiv) {
+          statusDiv.style.display = "block";
+          statusDiv.className = "feedback-status success";
+          statusDiv.innerHTML = this.currentLang === "es"
+            ? "✅ ¡Comentarios enviados exitosamente! Gracias por tu opinión."
+            : "✅ Feedback sent successfully! Thank you for your input.";
+        }
+        
+        // Show popup
+        this.showPopup(
+          this.currentLang === "es" 
+            ? "📧 ¡Comentarios enviados!" 
+            : "📧 Feedback sent!",
+          3000
+        );
+        
+        a11y.announce(
+          this.currentLang === "es"
+            ? "Comentarios enviados exitosamente"
+            : "Feedback sent successfully"
+        );
+        
+        // Clear form after 2 seconds
+        setTimeout(() => {
+          if (nameInput) nameInput.value = "";
+          if (emailInput) emailInput.value = "";
+          if (messageInput) messageInput.value = "";
+          
+          const charCount = document.querySelector("#char-count");
+          if (charCount) charCount.textContent = "0";
+          
+          // Close modal after 3 seconds
+          setTimeout(() => {
+            this.closeFeedbackModal();
+          }, 1000);
+        }, 2000);
+        
+      } catch (error) {
+        console.error("Formspree submission error:", error);
         
         const statusDiv = document.querySelector("#feedback-status");
         if (statusDiv) {
           statusDiv.style.display = "block";
           statusDiv.className = "feedback-status error";
           statusDiv.innerHTML = this.currentLang === "es"
-            ? "❌ Error al enviar. Por favor intenta de nuevo."
-            : "❌ Error sending. Please try again.";
+            ? "❌ Error al enviar. Por favor verifica tu conexión e intenta de nuevo."
+            : "❌ Error sending. Please check your connection and try again.";
         }
-        
+      } finally {
+        // Re-enable button
         const submitBtn = document.querySelector("#submit-feedback");
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -1031,7 +1161,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     }
-
     /* ==== ✨ BILINGUAL LANGUAGE SYSTEM ==== */
     
     toggleLanguage() {

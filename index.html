@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="FallingBlocks+ - A free, open-source falling block puzzle game with bilingual support, custom themes, and accessibility features." />
-    <meta name="keywords" content="puzzle game, falling blocks, block game, free game, open source" />
-    <meta name="author" content="Ricardo Marmolejo" />
-    
-    <!-- Security Headers (meta tags - server should also set HTTP headers) -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
-    <meta name="referrer" content="no-referrer-when-downgrade" />
-    
-    
-    <!-- PWA Support -->
-    <meta name="theme-color" content="#1a1a2e" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
-    <title>FallingBlocks+ v11.0</title>
-    <link rel="stylesheet" href="./assets/style.css" />
-  </head>
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="description" content="FallingBlocks+ - A free, open-source falling block puzzle game with bilingual support, custom themes, and accessibility features." />
+      <meta name="keywords" content="puzzle game, falling blocks, block game, free game, open source" />
+      <meta name="author" content="Ricardo Marmolejo" />
+      
+      <!-- Security Headers (will be set via netlify.toml instead) -->
+      <!-- Removed: X-Frame-Options meta tag (doesn't work in meta) -->
+      
+      <!-- PWA Support -->
+      <meta name="theme-color" content="#1a1a2e" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="mobile-web-app-capable" content="yes"> <!-- ✅ Added modern standard -->
+      
+      <!-- ✅ reCAPTCHA v3 -->
+      <script src="https://www.google.com/recaptcha/api.js?render=6Ld4ex8sAAAAAF8wqZbOX2UJEU2MvXgpYiyZ9LKS"></script>
+      
+      <title>FallingBlocks+ v11.0</title>
+      <link rel="stylesheet" href="./assets/style.css" />
+    </head> 
 
   <body class="dark">
     <!-- ACCESSIBILITY: Skip to main content -->
