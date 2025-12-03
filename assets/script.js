@@ -482,7 +482,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.initializeDOM();
         this.initializeState();
         this.initializeAudio();
-        this.initializeVisitorCounter();
+        // this.initializeVisitorCounter();
         this.setupEventListeners();
         this.setupPopup();
         this.restoreTheme();
@@ -750,23 +750,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async initializeVisitorCounter() {
       if (!this.visitCounterEl) return;
-
       try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const url = `https://api.countapi.store/hit/${
-          CONFIG.VISITOR_NAMESPACE
-        }/visits?nocache=${Date.now()}`;
-        const response = await Utils.fetchWithRetry(url);
-        const data = await response.json();
-
-        this.visitCounterEl.textContent = data.value.toLocaleString();
+        this.visitCounterEl.textContent = "🌟";
         this.visitCounterEl.classList.add("loaded");
       } catch (err) {
-        console.warn("Visitor counter failed:", err);
         this.visitCounterEl.textContent = "—";
       }
     }
-
     setupPopup() {
       try {
         this.popup = document.createElement("div");
