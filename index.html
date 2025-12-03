@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="description" content="FallingBlocks+ - A free, open-source falling block puzzle game with bilingual support, custom themes, and accessibility features." />
-      <meta name="keywords" content="puzzle game, falling blocks, block game, free game, open source" />
-      <meta name="author" content="Ricardo Marmolejo" />
-      
-      <!-- Security Headers (will be set via netlify.toml instead) -->
-      <!-- Removed: X-Frame-Options meta tag (doesn't work in meta) -->
-      
-      <!-- PWA Support -->
-      <meta name="theme-color" content="#1a1a2e" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      <meta name="mobile-web-app-capable" content="yes"> <!-- ✅ Added modern standard -->
-      
-      <!-- ✅ reCAPTCHA v3 -->
-      <script src="https://www.google.com/recaptcha/api.js?render=6Ld4ex8sAAAAAF8wqZbOX2UJEU2MvXgpYiyZ9LKS"></script>
-      
-      <title>FallingBlocks+ v11.0</title>
-      <link rel="stylesheet" href="./assets/style.css" />
-    </head> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="FallingBlocks+ - A free, open-source falling block puzzle game with bilingual support, custom themes, and accessibility features."
+    />
+    <meta
+      name="keywords"
+      content="puzzle game, falling blocks, block game, free game, open source"
+    />
+    <meta name="author" content="Ricardo Marmolejo" />
+
+    <!-- Security Headers (will be set via netlify.toml instead) -->
+    <!-- Removed: X-Frame-Options meta tag (doesn't work in meta) -->
+
+    <!-- PWA Support -->
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <!-- ✅ Added modern standard -->
+
+    <!-- ✅ reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Ld4ex8sAAAAAF8wqZbOX2UJEU2MvXgpYiyZ9LKS"></script>
+
+    <title>FallingBlocks+ v11.0</title>
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
 
   <body class="dark">
     <!-- ACCESSIBILITY: Skip to main content -->
@@ -48,121 +58,151 @@
     </header>
 
     <!-- MAIN GAME AREA -->
-<!-- MAIN GAME AREA -->
-<div class="game-container">
-  <!-- LEFT PANEL: Controls -->
-  <aside class="controls-panel">
-    <label for="difficulty">
-      <span class="lang-en">Difficulty:</span>
-      <span class="lang-es" hidden>Dificultad:</span>
-    </label>
-    <select id="difficulty">
-      <option value="1" data-en="1 – Easy" data-es="1 – Fácil">1 – Easy</option>
-      <option value="2" data-en="2 – Medium" data-es="2 – Medio">2 – Medium</option>
-      <option value="3" data-en="3 – Hard" data-es="3 – Difícil">3 – Hard</option>
-    </select>
+    <!-- MAIN GAME AREA -->
+    <div class="game-container">
+      <!-- LEFT PANEL: Controls -->
+      <aside class="controls-panel">
+        <label for="difficulty">
+          <span class="lang-en">Difficulty:</span>
+          <span class="lang-es" hidden>Dificultad:</span>
+        </label>
+        <select id="difficulty">
+          <option value="1" data-en="1 – Easy" data-es="1 – Fácil">
+            1 – Easy
+          </option>
+          <option value="2" data-en="2 – Medium" data-es="2 – Medio">
+            2 – Medium
+          </option>
+          <option value="3" data-en="3 – Hard" data-es="3 – Difícil">
+            3 – Hard
+          </option>
+        </select>
 
-    <div class="buttons">
-      <button id="start-button">
-        <span class="lang-en">▶️ Start</span>
-        <span class="lang-es" hidden>▶️ Empezar</span>
-      </button>
-      <button id="pause-button">
-        <span class="lang-en">⏸️ Pause</span>
-        <span class="lang-es" hidden>⏸️ Pausar</span>
-      </button>
-      <button id="quit-button">
-        <span class="lang-en">❌ Quit</span>
-        <span class="lang-es" hidden>❌ Salir</span>
-      </button>
-      <button id="reset-scores">
-        <span class="lang-en">🔁 Reset Scores</span>
-        <span class="lang-es" hidden>🔁 Reiniciar Puntuaciones</span>
-      </button>
+        <div class="buttons">
+          <button id="start-button">
+            <span class="lang-en">▶️ Start</span>
+            <span class="lang-es" hidden>▶️ Empezar</span>
+          </button>
+          <button id="pause-button">
+            <span class="lang-en">⏸️ Pause</span>
+            <span class="lang-es" hidden>⏸️ Pausar</span>
+          </button>
+          <button id="quit-button">
+            <span class="lang-en">❌ Quit</span>
+            <span class="lang-es" hidden>❌ Salir</span>
+          </button>
+          <button id="reset-scores">
+            <span class="lang-en">🔁 Reset Scores</span>
+            <span class="lang-es" hidden>🔁 Reiniciar Puntuaciones</span>
+          </button>
+        </div>
+
+        <button id="music-button">
+          <span class="lang-en">🎵 Play Music</span>
+          <span class="lang-es" hidden>🎵 Reproducir Música</span>
+        </button>
+
+        <button id="feedback-button" class="feedback-btn">
+          <span class="lang-en">💬 Feedback</span>
+          <span class="lang-es" hidden>💬 Comentarios</span>
+        </button>
+
+        <!-- AUDIO ASSETS -->
+        <audio id="bg-music" loop preload="auto">
+          <source
+            src="./assets/music/SLOWEST-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+        <audio id="level-up-sound">
+          <source
+            src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+        <audio id="land-sound">
+          <source
+            src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+        <audio id="clear-sound">
+          <source
+            src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+        <audio id="pulse-sound">
+          <source
+            src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+      </aside>
+
+      <!-- CENTER: Game Grid -->
+      <div class="grid-wrapper">
+        <div id="grid" tabindex="0"></div>
+
+        <div id="mobile-controls">
+          <button id="left-btn" aria-label="Move left">⬅️</button>
+          <button id="rotate-btn" aria-label="Rotate piece">🔄</button>
+          <button id="right-btn" aria-label="Move right">➡️</button>
+          <button id="down-btn" aria-label="Move down">⬇️</button>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL: Stats -->
+      <aside class="info">
+        <h2>
+          <span class="lang-en">Score: <span id="score">0</span></span>
+          <span class="lang-es" hidden
+            >Puntuación: <span id="score-es">0</span></span
+          >
+        </h2>
+
+        <p id="player-badge">
+          <span class="lang-en">👤 Player: —</span>
+          <span class="lang-es" hidden>👤 Jugador: —</span>
+        </p>
+
+        <h3>
+          <span class="lang-en"
+            >🏆 High Score: <span id="high-score">0</span></span
+          >
+          <span class="lang-es" hidden
+            >🏆 Puntuación Máxima: <span id="high-score-es">0</span></span
+          >
+        </h3>
+
+        <h3>
+          <span class="lang-en">Level: <span id="level">1</span></span>
+          <span class="lang-es" hidden
+            >Nivel: <span id="level-es">1</span></span
+          >
+        </h3>
+
+        <div id="next-wrapper">
+          <h4>
+            <span class="lang-en">Next</span>
+            <span class="lang-es" hidden>Siguiente</span>
+          </h4>
+          <div id="next-grid"></div>
+        </div>
+
+        <div id="leaderboard">
+          <h4>
+            <span class="lang-en">Top 10 Players</span>
+            <span class="lang-es" hidden>Top 10 Jugadores</span>
+          </h4>
+          <ol id="leaderboard-list"></ol>
+        </div>
+      </aside>
     </div>
-
-    <button id="music-button">
-      <span class="lang-en">🎵 Play Music</span>
-      <span class="lang-es" hidden>🎵 Reproducir Música</span>
-    </button>
-
-    <button id="feedback-button" class="feedback-btn">
-      <span class="lang-en">💬 Feedback</span>
-      <span class="lang-es" hidden>💬 Comentarios</span>
-    </button>
-
-    <!-- AUDIO ASSETS -->
-    <audio id="bg-music" loop preload="auto">
-      <source src="./assets/music/SLOWEST-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="level-up-sound">
-      <source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="land-sound">
-      <source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="clear-sound">
-      <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="pulse-sound">
-      <source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" />
-    </audio>
-  </aside>
-
-  <!-- CENTER: Game Grid -->
-  <div class="grid-wrapper">
-    <div id="grid" tabindex="0"></div>
-
-    <div id="mobile-controls">
-      <button id="left-btn" aria-label="Move left">⬅️</button>
-      <button id="rotate-btn" aria-label="Rotate piece">🔄</button>
-      <button id="right-btn" aria-label="Move right">➡️</button>
-      <button id="down-btn" aria-label="Move down">⬇️</button>
-    </div>
-  </div>
-
-  <!-- RIGHT PANEL: Stats -->
-  <aside class="info">
-    <h2>
-      <span class="lang-en">Score: <span id="score">0</span></span>
-      <span class="lang-es" hidden>Puntuación: <span id="score-es">0</span></span>
-    </h2>
-
-    <p id="player-badge">
-      <span class="lang-en">👤 Player: —</span>
-      <span class="lang-es" hidden>👤 Jugador: —</span>
-    </p>
-
-    <h3>
-      <span class="lang-en">🏆 High Score: <span id="high-score">0</span></span>
-      <span class="lang-es" hidden>🏆 Puntuación Máxima: <span id="high-score-es">0</span></span>
-    </h3>
-
-    <h3>
-      <span class="lang-en">Level: <span id="level">1</span></span>
-      <span class="lang-es" hidden>Nivel: <span id="level-es">1</span></span>
-    </h3>
-
-    <div id="next-wrapper">
-      <h4>
-        <span class="lang-en">Next</span>
-        <span class="lang-es" hidden>Siguiente</span>
-      </h4>
-      <div id="next-grid"></div>
-    </div>
-
-    <div id="leaderboard">
-      <h4>
-        <span class="lang-en">Top 10 Players</span>
-        <span class="lang-es" hidden>Top 10 Jugadores</span>
-      </h4>
-      <ol id="leaderboard-list"></ol>
-    </div>
-  </aside>
-</div>    <!-- FOOTER -->
+    <!-- FOOTER -->
     <footer>
       <div class="footer-main">
-        <span class="lang-en">Built with 💙  </span>
+        <span class="lang-en">Built with 💙 </span>
         <span class="lang-es" hidden>Hecho con </span>
       </div>
       <div class="footer-visitors">
@@ -173,19 +213,25 @@
     </footer>
 
     <!-- INSTRUCTIONS MODAL -->
-    <div id="info-modal" class="info-modal" role="dialog" aria-labelledby="info-modal-title" aria-modal="true">
+    <div
+      id="info-modal"
+      class="info-modal"
+      role="dialog"
+      aria-labelledby="info-modal-title"
+      aria-modal="true"
+    >
       <div class="info-modal-content">
         <!-- ENGLISH VERSION -->
         <div id="instructions-en" class="instructions-content">
-          <h2 id="info-modal-title"> How to Play FallingBlocks+</h2>
-        
-          <h3> Goal of the Game</h3>
+          <h2 id="info-modal-title">How to Play FallingBlocks+</h2>
+
+          <h3>Goal of the Game</h3>
           <p>
-          Place the falling shapes to complete horizontal lines.  
-          Full lines disappear and give you points.  
-          If the stack reaches the top of the grid, the game ends.
+            Place the falling shapes to complete horizontal lines. Full lines
+            disappear and give you points. If the stack reaches the top of the
+            grid, the game ends.
           </p>
-          
+
           <h3>⌨️ Controls</h3>
           <ul>
             <li>⬅️ Left Arrow — Move left</li>
@@ -195,7 +241,7 @@
             <li>SPACE — Hard drop (instantly place piece)</li>
             <li>P — Pause / Resume</li>
           </ul>
-          
+
           <h3>📱 Mobile Controls</h3>
           <ul>
             <li>Swipe Left — Move left</li>
@@ -204,7 +250,7 @@
             <li>Swipe Down — Soft drop</li>
             <li>Tap — Hard drop</li>
           </ul>
-          
+
           <h3>📈 Levels, Scoring & Speed</h3>
           <ul>
             <li>Clear lines to earn points.</li>
@@ -212,34 +258,34 @@
             <li>Every 500 hundred points, you level up.</li>
             <li>Higher levels make the pieces fall faster.</li>
           </ul>
-          
+
           <h3>💡 Tips</h3>
           <ul>
             <li>Keep your stack low.</li>
             <li>Use hard drop to place pieces quickly.</li>
             <li>Watch the “Next Piece” preview to plan ahead.</li>
           </ul>
-          
+
           <h3>⚙️ Difficulty</h3>
           <p>
-          Easy = Slow • Medium = Normal • Hard = Fast  
-          Choose before starting the game.
+            Easy = Slow • Medium = Normal • Hard = Fast Choose before starting
+            the game.
           </p>
-          
-          <p><strong>Ready? Press ▶️ Start!</strong></p> 
+
+          <p><strong>Ready? Press ▶️ Start!</strong></p>
         </div>
 
         <!-- SPANISH VERSION -->
         <div id="instructions-es" class="instructions-content" hidden>
-          <h2> Cómo Jugar</h2>
+          <h2>Cómo Jugar</h2>
 
-          <h3> Objetivo del Juego</h3>
+          <h3>Objetivo del Juego</h3>
           <p>
-          Coloca las piezas que caen para formar líneas completas.  
-          Las líneas completas desaparecen y dan puntos.  
-          Si la pila llega hasta arriba, el juego termina.
+            Coloca las piezas que caen para formar líneas completas. Las líneas
+            completas desaparecen y dan puntos. Si la pila llega hasta arriba,
+            el juego termina.
           </p>
-          
+
           <h3>⌨️ Controles</h3>
           <ul>
             <li>⬅️ Izquierda — Mover</li>
@@ -249,7 +295,7 @@
             <li>ESPACIO — Caída instantánea</li>
             <li>P — Pausar / Reanudar</li>
           </ul>
-          
+
           <h3>📱 Controles Móviles</h3>
           <ul>
             <li>Deslizar Izquierda — Mover</li>
@@ -258,7 +304,7 @@
             <li>Deslizar Abajo — Caída rápida</li>
             <li>Toque — Caída instantánea</li>
           </ul>
-          
+
           <h3>📈 Niveles, Puntos y Velocidad</h3>
           <ul>
             <li>Completar líneas te da puntos.</li>
@@ -266,22 +312,22 @@
             <li>Cada 500 puntos subes de nivel.</li>
             <li>Los niveles altos hacen que las piezas caigan más rápido.</li>
           </ul>
-          
+
           <h3>💡 Consejos</h3>
           <ul>
             <li>Mantén la pila baja.</li>
             <li>Usa la caída instantánea para jugar más rápido.</li>
             <li>Mira la vista previa “Siguiente Pieza”.</li>
           </ul>
-          
+
           <h3>⚙️ Dificultad</h3>
           <p>
-          Fácil = Lento • Medio = Normal • Difícil = Rápido  
-          Elige la dificultad antes de comenzar.
+            Fácil = Lento • Medio = Normal • Difícil = Rápido Elige la
+            dificultad antes de comenzar.
           </p>
-          
+
           <p><strong>¡Listo? ¡Presiona ▶️ Empezar!</strong></p>
-                            </div>
+        </div>
 
         <button id="close-info" class="close-info">
           <span class="lang-en">Close</span>
@@ -291,7 +337,13 @@
     </div>
 
     <!-- FEEDBACK MODAL -->
-    <div id="feedback-modal" class="info-modal" role="dialog" aria-labelledby="feedback-modal-title" aria-modal="true">
+    <div
+      id="feedback-modal"
+      class="info-modal"
+      role="dialog"
+      aria-labelledby="feedback-modal-title"
+      aria-modal="true"
+    >
       <div class="info-modal-content feedback-content">
         <h2 id="feedback-modal-title">
           <span class="lang-en">💬 Send Feedback</span>
@@ -299,22 +351,32 @@
         </h2>
 
         <p class="feedback-intro">
-          <span class="lang-en">Share your feedback, bug reports, or suggestions:</span>
-          <span class="lang-es" hidden>Comparte tus comentarios, reportes de errores o sugerencias:</span>
+          <span class="lang-en"
+            >Share your feedback, bug reports, or suggestions:</span
+          >
+          <span class="lang-es" hidden
+            >Comparte tus comentarios, reportes de errores o sugerencias:</span
+          >
         </p>
 
         <div id="feedback-form-container">
           <!-- Honeypot field for spam protection -->
-          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-          
+          <input
+            type="text"
+            name="_gotcha"
+            style="display: none"
+            tabindex="-1"
+            autocomplete="off"
+          />
+
           <div class="form-group">
             <label for="feedback-name">
               <span class="lang-en">Your Name (Optional)</span>
               <span class="lang-es" hidden>Tu Nombre (Opcional)</span>
             </label>
-            <input 
-              type="text" 
-              id="feedback-name" 
+            <input
+              type="text"
+              id="feedback-name"
               class="feedback-input"
               maxlength="50"
               placeholder="John Doe"
@@ -325,11 +387,13 @@
           <div class="form-group">
             <label for="feedback-email-input">
               <span class="lang-en">Your Email (Optional - for replies)</span>
-              <span class="lang-es" hidden>Tu Correo (Opcional - para respuestas)</span>
+              <span class="lang-es" hidden
+                >Tu Correo (Opcional - para respuestas)</span
+              >
             </label>
-            <input 
-              type="email" 
-              id="feedback-email-input" 
+            <input
+              type="email"
+              id="feedback-email-input"
               class="feedback-input"
               placeholder="you@example.com"
               autocomplete="email"
@@ -341,8 +405,8 @@
               <span class="lang-en">Your Message *</span>
               <span class="lang-es" hidden>Tu Mensaje *</span>
             </label>
-            <textarea 
-              id="feedback-message" 
+            <textarea
+              id="feedback-message"
               class="feedback-textarea"
               rows="6"
               maxlength="1000"
@@ -359,7 +423,13 @@
             <span class="lang-es" hidden>📤 Enviar Comentarios</span>
           </button>
 
-          <div id="feedback-status" class="feedback-status" style="display: none;" role="alert" aria-live="polite"></div>
+          <div
+            id="feedback-status"
+            class="feedback-status"
+            style="display: none"
+            role="alert"
+            aria-live="polite"
+          ></div>
         </div>
 
         <button id="close-feedback" class="close-info">
