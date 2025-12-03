@@ -48,112 +48,118 @@
     </header>
 
     <!-- MAIN GAME AREA -->
-    <div class="game-container">
-      <div id="grid" tabindex="0"></div>
+<!-- MAIN GAME AREA -->
+<div class="game-container">
+  <!-- LEFT PANEL: Controls -->
+  <aside class="controls-panel">
+    <label for="difficulty">
+      <span class="lang-en">Difficulty:</span>
+      <span class="lang-es" hidden>Dificultad:</span>
+    </label>
+    <select id="difficulty">
+      <option value="1" data-en="1 – Easy" data-es="1 – Fácil">1 – Easy</option>
+      <option value="2" data-en="2 – Medium" data-es="2 – Medio">2 – Medium</option>
+      <option value="3" data-en="3 – Hard" data-es="3 – Difícil">3 – Hard</option>
+    </select>
 
-      <div id="mobile-controls">
-        <button id="left-btn" aria-label="Move left">⬅️</button>
-        <button id="rotate-btn" aria-label="Rotate piece">🔄</button>
-        <button id="right-btn" aria-label="Move right">➡️</button>
-        <button id="down-btn" aria-label="Move down">⬇️</button>
-      </div>
-
-      <aside class="info">
-        <h2>
-          <span class="lang-en">Score: <span id="score">0</span></span>
-          <span class="lang-es" hidden>Puntuación: <span id="score-es">0</span></span>
-        </h2>
-
-        <p id="player-badge">
-          <span class="lang-en">👤 Player: —</span>
-          <span class="lang-es" hidden>👤 Jugador: —</span>
-        </p>
-
-        <h3>
-          <span class="lang-en">🏆 High Score: <span id="high-score">0</span></span>
-          <span class="lang-es" hidden>🏆 Puntuación Máxima: <span id="high-score-es">0</span></span>
-        </h3>
-
-        <h3>
-          <span class="lang-en"> Level: <span id="level">1</span></span>
-          <span class="lang-es" hidden> Nivel: <span id="level-es">1</span></span>
-        </h3>
-
-        <div id="next-wrapper">
-          <h4>
-            <span class="lang-en">Next</span>
-            <span class="lang-es" hidden>Siguiente</span>
-          </h4>
-          <div id="next-grid"></div>
-        </div>
-
-        <div id="leaderboard">
-          <h4>
-            <span class="lang-en">Top 10 Players</span>
-            <span class="lang-es" hidden>Top 10 Jugadores</span>
-          </h4>
-          <ol id="leaderboard-list"></ol>
-        </div>
-
-        <label for="difficulty">
-          <span class="lang-en">Difficulty:</span>
-          <span class="lang-es" hidden>Dificultad:</span>
-        </label>
-        <select id="difficulty">
-          <option value="1" data-en="1 – Easy" data-es="1 – Fácil">1 – Easy</option>
-          <option value="2" data-en="2 – Medium" data-es="2 – Medio">2 – Medium</option>
-          <option value="3" data-en="3 – Hard" data-es="3 – Difícil">3 – Hard</option>
-        </select>
-
-        <div class="buttons">
-          <button id="start-button">
-            <span class="lang-en">▶️ Start</span>
-            <span class="lang-es" hidden>▶️ Empezar</span>
-          </button>
-          <button id="pause-button">
-            <span class="lang-en">⏸️ Pause</span>
-            <span class="lang-es" hidden>⏸️ Pausar</span>
-          </button>
-          <button id="quit-button">
-            <span class="lang-en">❌ Quit</span>
-            <span class="lang-es" hidden>❌ Salir</span>
-          </button>
-          <button id="reset-scores">
-            <span class="lang-en">🔁 Reset Scores</span>
-            <span class="lang-es" hidden>🔁 Reiniciar Puntuaciones</span>
-          </button>
-        </div>
-
-        <button id="music-button">
-          <span class="lang-en">🎵 Play Music</span>
-          <span class="lang-es" hidden>🎵 Reproducir Música</span>
-        </button>
-
-        <button id="feedback-button" class="feedback-btn">
-          <span class="lang-en">💬 Feedback</span>
-          <span class="lang-es" hidden>💬 Comentarios</span>
-        </button>
-
-        <!-- AUDIO ASSETS -->
-        <audio id="bg-music" loop preload="auto">
-          <source src="./assets/music/SLOWEST-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3" type="audio/mpeg" />
-        </audio>
-        <audio id="level-up-sound">
-          <source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg" />
-        </audio>
-        <audio id="land-sound">
-          <source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg" />
-        </audio>
-        <audio id="clear-sound">
-          <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg" />
-        </audio>
-        <audio id="pulse-sound">
-          <source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" />
-        </audio>
-      </aside>
+    <div class="buttons">
+      <button id="start-button">
+        <span class="lang-en">▶️ Start</span>
+        <span class="lang-es" hidden>▶️ Empezar</span>
+      </button>
+      <button id="pause-button">
+        <span class="lang-en">⏸️ Pause</span>
+        <span class="lang-es" hidden>⏸️ Pausar</span>
+      </button>
+      <button id="quit-button">
+        <span class="lang-en">❌ Quit</span>
+        <span class="lang-es" hidden>❌ Salir</span>
+      </button>
+      <button id="reset-scores">
+        <span class="lang-en">🔁 Reset Scores</span>
+        <span class="lang-es" hidden>🔁 Reiniciar Puntuaciones</span>
+      </button>
     </div>
 
-    <!-- FOOTER -->
+    <button id="music-button">
+      <span class="lang-en">🎵 Play Music</span>
+      <span class="lang-es" hidden>🎵 Reproducir Música</span>
+    </button>
+
+    <button id="feedback-button" class="feedback-btn">
+      <span class="lang-en">💬 Feedback</span>
+      <span class="lang-es" hidden>💬 Comentarios</span>
+    </button>
+
+    <!-- AUDIO ASSETS -->
+    <audio id="bg-music" loop preload="auto">
+      <source src="./assets/music/SLOWEST-TEMPO2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="level-up-sound">
+      <source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="land-sound">
+      <source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="clear-sound">
+      <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="pulse-sound">
+      <source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg" />
+    </audio>
+  </aside>
+
+  <!-- CENTER: Game Grid -->
+  <div class="grid-wrapper">
+    <div id="grid" tabindex="0"></div>
+
+    <div id="mobile-controls">
+      <button id="left-btn" aria-label="Move left">⬅️</button>
+      <button id="rotate-btn" aria-label="Rotate piece">🔄</button>
+      <button id="right-btn" aria-label="Move right">➡️</button>
+      <button id="down-btn" aria-label="Move down">⬇️</button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL: Stats -->
+  <aside class="info">
+    <h2>
+      <span class="lang-en">Score: <span id="score">0</span></span>
+      <span class="lang-es" hidden>Puntuación: <span id="score-es">0</span></span>
+    </h2>
+
+    <p id="player-badge">
+      <span class="lang-en">👤 Player: —</span>
+      <span class="lang-es" hidden>👤 Jugador: —</span>
+    </p>
+
+    <h3>
+      <span class="lang-en">🏆 High Score: <span id="high-score">0</span></span>
+      <span class="lang-es" hidden>🏆 Puntuación Máxima: <span id="high-score-es">0</span></span>
+    </h3>
+
+    <h3>
+      <span class="lang-en">Level: <span id="level">1</span></span>
+      <span class="lang-es" hidden>Nivel: <span id="level-es">1</span></span>
+    </h3>
+
+    <div id="next-wrapper">
+      <h4>
+        <span class="lang-en">Next</span>
+        <span class="lang-es" hidden>Siguiente</span>
+      </h4>
+      <div id="next-grid"></div>
+    </div>
+
+    <div id="leaderboard">
+      <h4>
+        <span class="lang-en">Top 10 Players</span>
+        <span class="lang-es" hidden>Top 10 Jugadores</span>
+      </h4>
+      <ol id="leaderboard-list"></ol>
+    </div>
+  </aside>
+</div>    <!-- FOOTER -->
     <footer>
       <div class="footer-main">
         <span class="lang-en">Built with 💙  </span>

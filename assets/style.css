@@ -201,9 +201,8 @@ header {
   position: relative;
   overflow: hidden;
   animation: slideDown 0.6s var(--bounce);
-  margin: 25px;
+  margin: 25px 25px 40px 25px; /* ← Changed: added 40px bottom margin */
 }
-
 header::before {
   content: '';
   position: absolute;
@@ -253,14 +252,47 @@ h1 {
 /* ==== Main Game Area ==== */
 .game-container {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  gap: 300px;
-  margin-top: 20px;
+  gap: 60px; /* ← Changed from 30px to 60px */
+  margin-top: 50px; /* ← Changed from 20px to 50px */
   padding: 0 25px;
+  max-width: 1600px; /* ← Changed from 1400px to 1600px for more spread */
+  margin-left: auto;
+  margin-right: auto;
+}
+/* ==== LEFT PANEL: Controls ==== */
+.controls-panel {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--bg-glass);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  padding: 25px;
+  border-radius: 24px;
+  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--border-glass);
+  flex-shrink: 0;
 }
 
+.controls-panel label {
+  color: var(--text-on-glass);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+/* ==== CENTER: Grid Wrapper ==== */
+.grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
 /* ==== Game Grid ==== */
 #grid {
   display: grid;
@@ -277,9 +309,7 @@ h1 {
   padding: 0;
   gap: 0;
   flex-shrink: 0;
-  margin-bottom: 20px;
 }
-
 #grid::before {
   content: '';
   position: absolute;
@@ -348,9 +378,9 @@ h1 {
 .color-o.ghost { color: var(--color-o); }
 .color-i.ghost { color: var(--color-i); }
 
-/* ==== Side Panel ==== */
+/* ==== RIGHT PANEL: Stats ==== */
 aside.info {
-  width: 260px;
+  width: 280px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -361,8 +391,8 @@ aside.info {
   border-radius: 24px;
   box-shadow: var(--shadow-glass);
   border: 1px solid var(--border-glass);
+  flex-shrink: 0;
 }
-
 aside.info h2,
 aside.info h3,
 aside.info h4 {
@@ -843,6 +873,29 @@ audio { display: none; }
   #mobile-controls { display: none !important; }
 }
 
+@media (max-width: 1024px) {
+  .game-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .controls-panel {
+    width: 100%;
+    max-width: 400px;
+    order: 1;
+  }
+  
+  .grid-wrapper {
+    order: 2;
+  }
+  
+  aside.info {
+    width: 100%;
+    max-width: 400px;
+    order: 3;
+  }
+}
+
 @media (max-width: 768px) {
   html { font-size: 14px; }
   
@@ -850,15 +903,10 @@ audio { display: none; }
   
   header { padding: 20px; margin: 15px; }
   
-  .game-container {
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-  }
-  
+  .controls-panel,
   aside.info {
     width: 100%;
-    max-width: 400px;
+    max-width: 100%;
   }
   
   :root { --square-size: 26px; }
@@ -869,7 +917,6 @@ audio { display: none; }
     grid-template-rows: repeat(var(--next-grid-size), 24px);
   }
 }
-
 @media (max-width: 480px) {
   :root { --square-size: 22px; }
   
