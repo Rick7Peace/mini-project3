@@ -19,7 +19,7 @@ const CONFIG = {
   SPEED_REDUCTION_PER_LEVEL: 60,
 
   // ✅ NEW: Add this line for reCAPTCHA
-  RECAPTCHA_SITE_KEY: '6Ld4ex8sAAAAAF8wqZbOX2UJEU2MvXgpYiyZ9LKS',
+  // RECAPTCHA_SITE_KEY: '6Ld4ex8sAAAAAF8wqZbOX2UJEU2MvXgpYiyZ9LKS', was causing 403 errors
 
   // ✅ NEW: Rate limiting (already exists)
   FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions
@@ -1038,19 +1038,6 @@ document.addEventListener("DOMContentLoaded", () => {
             : '<span class="lang-en">📤 Sending...</span>';
         }
         
-        // ✅ Get reCAPTCHA token
-        let recaptchaToken = null;
-        try {
-          if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
-            recaptchaToken = await grecaptcha.execute(CONFIG.RECAPTCHA_SITE_KEY, { 
-              action: 'submit_feedback' 
-            });
-          }
-        } catch (recaptchaError) {
-          console.warn('reCAPTCHA failed, continuing without it:', recaptchaError);
-          // Continue anyway - graceful degradation
-        }
-        
         // Formspree endpoint
         const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xldzyo' + 'vb'; // Split to avoid scraping
         
@@ -1066,11 +1053,6 @@ document.addEventListener("DOMContentLoaded", () => {
           timestamp: new Date().toISOString(),
           language: this.currentLang
         };
-        
-        // ✅ Add reCAPTCHA token if available
-        if (recaptchaToken) {
-          formData._recaptcha = recaptchaToken;
-        }
         
         // Send to Formspree
         const response = await fetch(FORMSPREE_ENDPOINT, {
