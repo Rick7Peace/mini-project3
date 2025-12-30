@@ -18,16 +18,12 @@ const CONFIG = {
   MIN_SPEED: 120,
   SPEED_REDUCTION_PER_LEVEL: 60,
 
-  // ✅ NEW: Add this line for reCAPTCHA
-  // RECAPTCHA_SITE_KEY: '6Ld4ex8sAAAAAF8wqZbOX2UJEU2MvXgpYiyZ9LKS', was causing 403 errors
-
-  // ✅ NEW: Rate limiting (already exists)
-  FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions
-  // ✅ NEW: Rate limiting
-  FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions
-  MAX_MESSAGE_LENGTH: 1000,
-  MAX_NAME_LENGTH: 50,  // Timing
-  FREEZE_DELAY: 150,
+  // Rate limiting
+  FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions  MAX_MESSAGE_LENGTH: 1000,
+  MAX_NAME_LENGTH: 50,
+  
+  // Formspree endpoint
+  FORMSPREE_ENDPOINT: 'https://formspree.io/f/xldzyo' + 'vb',  FREEZE_DELAY: 150,
   LINE_CLEAR_DELAY: 300,
   AUDIO_CLEANUP_TIMEOUT: 5000,
   SAVE_INTERVAL: 2000,
