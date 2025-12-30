@@ -797,7 +797,20 @@ document.addEventListener("DOMContentLoaded", () => {
         this.cleanupHandlers.push(() =>
           document.removeEventListener("keydown", keyHandler)
         );
-
+    
+        // ✅ NEW: Safari orientation fix
+        const handleOrientationChange = () => {
+          // Force Safari to recalculate layout
+          setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+          }, 100);
+        };
+        
+        window.addEventListener('orientationchange', handleOrientationChange);
+        this.cleanupHandlers.push(() =>
+          window.removeEventListener('orientationchange', handleOrientationChange)
+        );
+    
         if (this.startBtn)
           this.startBtn.onclick = () => this.safeCall("startGame");
         if (this.pauseBtn)

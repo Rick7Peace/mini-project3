@@ -873,88 +873,146 @@ audio { display: none; }
   }
 }
 
-/* ===== LANDSCAPE MODE: Desktop layout for phones & tablets ===== */
-@media (orientation: landscape) and (max-width: 1024px) {
+/* ===== LANDSCAPE MODE: Desktop layout for ALL devices ===== */
+/* Enhanced with Safari-specific fixes */
+@media (orientation: landscape) and (max-width: 1024px),
+       (max-device-width: 1024px) and (orientation: landscape),
+       screen and (min-device-aspect-ratio: 9/16) and (max-width: 1024px) {
+  
+  /* Safari-specific orientation fix */
+  @supports (-webkit-touch-callout: none) {
+    html {
+      height: -webkit-fill-available;
+    }
+  }
+  
   .game-container {
     flex-direction: row !important;
     justify-content: center;
     align-items: flex-start;
-    gap: 30px;
-    margin-top: 20px;
-    padding: 0 15px;
+    gap: 20px;
+    margin-top: 15px;
+    padding: 0 10px;
+    max-width: 100vw;
+    /* Safari-specific */
+    -webkit-overflow-scrolling: touch;
   }
   
   .controls-panel {
-    width: 220px !important;
-    max-width: 220px !important;
+    width: 180px !important;
+    max-width: 180px !important;
+    min-width: 180px !important;
     order: 1;
-    padding: 15px;
+    padding: 12px;
+    gap: 12px;
   }
   
   .grid-wrapper {
     order: 2;
+    flex-shrink: 0;
   }
   
   aside.info {
-    width: 220px !important;
-    max-width: 220px !important;
+    width: 180px !important;
+    max-width: 180px !important;
+    min-width: 180px !important;
     order: 3;
-    padding: 15px;
+    padding: 12px;
+    gap: 12px;
   }
   
-  /* Hide mobile controls in landscape */
+  /* Force hide mobile controls in landscape */
   #mobile-controls {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
   
-  /* Optimize sizes for landscape */
+  /* Optimize grid for landscape */
   :root {
-    --square-size: 26px;
+    --square-size: 22px;
   }
   
   #next-grid .square { 
-    width: 22px; 
-    height: 22px; 
+    width: 18px; 
+    height: 18px; 
   }
   
   #next-grid {
-    grid-template-columns: repeat(var(--next-grid-size), 22px);
-    grid-template-rows: repeat(var(--next-grid-size), 22px);
+    grid-template-columns: repeat(var(--next-grid-size), 18px);
+    grid-template-rows: repeat(var(--next-grid-size), 18px);
+    padding: 6px;
   }
   
-  /* Compact header */
+  /* Compact header for landscape */
   header {
-    padding: 15px;
-    margin: 12px 12px 20px 12px;
+    padding: 10px;
+    margin: 8px 8px 12px 8px;
   }
   
   h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
   }
   
   .header-buttons {
-    gap: 10px;
+    gap: 6px;
   }
   
-  /* Compact buttons */
-  button, select {
-    padding: 10px 14px;
-    font-size: 0.9rem;
+  .header-buttons button {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  
+  /* Very compact buttons in landscape */
+  .buttons button,
+  .controls-panel button,
+  .controls-panel select {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+  
+  /* Compact stats */
+  aside.info h2,
+  aside.info h3,
+  aside.info h4 {
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+  
+  #player-badge {
+    padding: 8px 12px;
+    font-size: 0.75rem;
   }
   
   /* Compact leaderboard */
   #leaderboard-list {
-    max-height: 220px;
+    max-height: 160px;
+    gap: 6px;
+  }
+  
+  #leaderboard-list li {
+    padding: 8px 10px;
+    font-size: 0.75rem;
   }
   
   /* Modals adjusted for landscape */
   .info-modal-content,
   .feedback-content {
-    max-height: 75vh;
-    width: 85%;
+    max-height: 70vh;
+    max-width: 90vw;
+    padding: 15px 20px;
+  }
+  
+  .info-modal-content h2 {
+    font-size: 1.3rem;
+  }
+  
+  .info-modal-content h3 {
+    font-size: 1rem;
   }
 }
-
 /* ===== LARGE TABLETS in Portrait: Desktop layout ===== */
 @media (min-width: 1024px) and (orientation: portrait) {
   .game-container {
