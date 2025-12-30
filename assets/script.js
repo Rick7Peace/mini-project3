@@ -21,9 +21,10 @@ const CONFIG = {
   // Rate limiting
   FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions  MAX_MESSAGE_LENGTH: 1000,
   MAX_NAME_LENGTH: 50,
-  
+
   // Formspree endpoint
-  FORMSPREE_ENDPOINT: 'https://formspree.io/f/xldzyo' + 'vb',  FREEZE_DELAY: 150,
+  FORMSPREE_ENDPOINT: "https://formspree.io/f/xldzyo" + "vb",
+  FREEZE_DELAY: 150,
   LINE_CLEAR_DELAY: 300,
   AUDIO_CLEANUP_TIMEOUT: 5000,
   SAVE_INTERVAL: 2000,
@@ -59,7 +60,7 @@ const CONFIG = {
 
   // Version for save compatibility
   VERSION: "10.3.0",
-  
+
   // Debug mode (set to false for production)
   DEBUG: false,
 };
@@ -236,58 +237,64 @@ const Utils = {
   // ✅ NEW: Email validation
   validateEmail(email) {
     if (!email || email.length === 0) return { valid: true, error: null }; // Empty is OK (optional field)
-    
+
     // Check length
     if (email.length > 254) {
-      return { valid: false, error: 'Email too long (max 254 characters)' };
+      return { valid: false, error: "Email too long (max 254 characters)" };
     }
-    
+
     if (email.length < 3) {
-      return { valid: false, error: 'Email too short' };
+      return { valid: false, error: "Email too short" };
     }
-    
+
     // RFC 5322 compliant regex (simplified)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     if (!emailRegex.test(email)) {
-      return { valid: false, error: 'Invalid email format' };
+      return { valid: false, error: "Invalid email format" };
     }
-    
+
     // Additional security checks
-    if (email.includes('..')) {
-      return { valid: false, error: 'Invalid email format (consecutive dots)' };
+    if (email.includes("..")) {
+      return { valid: false, error: "Invalid email format (consecutive dots)" };
     }
-    
-    if (email.startsWith('.') || email.endsWith('.')) {
-      return { valid: false, error: 'Invalid email format (starts/ends with dot)' };
+
+    if (email.startsWith(".") || email.endsWith(".")) {
+      return {
+        valid: false,
+        error: "Invalid email format (starts/ends with dot)",
+      };
     }
-    
+
     return { valid: true, error: null };
   },
 
   // ✅ NEW: Message validation
   validateMessage(message) {
-    if (!message || typeof message !== 'string') {
-      return { valid: false, error: 'Message is required' };
+    if (!message || typeof message !== "string") {
+      return { valid: false, error: "Message is required" };
     }
-    
+
     const trimmed = message.trim();
-    
+
     if (trimmed.length === 0) {
-      return { valid: false, error: 'Message cannot be empty' };
+      return { valid: false, error: "Message cannot be empty" };
     }
-    
+
     if (trimmed.length < 10) {
-      return { valid: false, error: 'Message too short (minimum 10 characters)' };
-    }
-    
-    if (trimmed.length > CONFIG.MAX_MESSAGE_LENGTH) {
-      return { 
-        valid: false, 
-        error: `Message too long (maximum ${CONFIG.MAX_MESSAGE_LENGTH} characters)` 
+      return {
+        valid: false,
+        error: "Message too short (minimum 10 characters)",
       };
     }
-    
+
+    if (trimmed.length > CONFIG.MAX_MESSAGE_LENGTH) {
+      return {
+        valid: false,
+        error: `Message too long (maximum ${CONFIG.MAX_MESSAGE_LENGTH} characters)`,
+      };
+    }
+
     // Check for suspicious patterns
     const suspiciousPatterns = [
       /<script/i,
@@ -295,18 +302,18 @@ const Utils = {
       /on\w+=/i,
       /<iframe/i,
       /eval\(/i,
-      /document\.cookie/i
+      /document\.cookie/i,
     ];
-    
+
     for (const pattern of suspiciousPatterns) {
       if (pattern.test(trimmed)) {
-        return { 
-          valid: false, 
-          error: 'Message contains potentially unsafe content' 
+        return {
+          valid: false,
+          error: "Message contains potentially unsafe content",
         };
       }
     }
-    
+
     return { valid: true, error: null };
   },
   debounce(func, wait) {
@@ -359,7 +366,7 @@ const Utils = {
   clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   },
-  
+
   log(...args) {
     if (CONFIG.DEBUG) {
       console.log(...args);
@@ -527,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.infoBtn = document.querySelector("#info-btn");
       this.infoModal = document.querySelector("#info-modal");
       this.closeInfoBtn = document.querySelector("#close-info");
-      
+
       this.feedbackBtn = document.querySelector("#feedback-button");
       this.feedbackModal = document.querySelector("#feedback-modal");
       this.closeFeedbackBtn = document.querySelector("#close-feedback");
@@ -628,22 +635,22 @@ document.addEventListener("DOMContentLoaded", () => {
       this.timer = null;
       this.saveTimer = null;
       this.lastSaveState = "";
-    
+
       this.currentLang = "en";
-    
+
       this.pieceBag = [];
       this.fillBag();
-    
+
       this.currentPos = 4;
       this.currentRot = 0;
       this.typeIdx = this.drawFromBag();
       this.nextTypeIdx = this.drawFromBag();
-    
+
       this.playerName = "";
       this.leaderboard = this.loadLeaderboard();
       this.pbMap = this.loadPersonalBests();
       this.lastFeedbackSubmission = 0;
-    
+
       const W = CONFIG.GRID_WIDTH;
 
       // Piece shapes (L, J, Z, S, T, O, I)
@@ -818,12 +825,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (this.infoBtn) {
           this.infoBtn.onclick = () => this.openInfoModal();
         }
-        
+
         const langToggle = document.querySelector("#lang-toggle");
         if (langToggle) {
           langToggle.onclick = () => this.toggleLanguage();
         }
-        
+
         if (this.closeInfoBtn) {
           this.closeInfoBtn.onclick = () => this.closeInfoModal();
         }
@@ -845,16 +852,16 @@ document.addEventListener("DOMContentLoaded", () => {
             if (e.target === this.feedbackModal) this.closeFeedbackModal();
           };
         }
-        
+
         // Feedback form handlers
         const submitFeedbackBtn = document.querySelector("#submit-feedback");
         const feedbackMessage = document.querySelector("#feedback-message");
         const charCount = document.querySelector("#char-count");
-        
+
         if (submitFeedbackBtn) {
           submitFeedbackBtn.onclick = () => this.submitFeedback();
         }
-        
+
         if (feedbackMessage && charCount) {
           feedbackMessage.oninput = () => {
             charCount.textContent = feedbackMessage.value.length;
@@ -933,13 +940,13 @@ document.addEventListener("DOMContentLoaded", () => {
             this.feedbackModalCleanup();
             this.feedbackModalCleanup = null;
           }
-          
+
           // Clear form when closing
           const nameInput = document.querySelector("#feedback-name");
           const emailInput = document.querySelector("#feedback-email-input");
           const messageInput = document.querySelector("#feedback-message");
           const statusDiv = document.querySelector("#feedback-status");
-          
+
           if (nameInput) nameInput.value = "";
           if (emailInput) emailInput.value = "";
           if (messageInput) messageInput.value = "";
@@ -960,53 +967,58 @@ document.addEventListener("DOMContentLoaded", () => {
         const messageInput = document.querySelector("#feedback-message");
         const statusDiv = document.querySelector("#feedback-status");
         const submitBtn = document.querySelector("#submit-feedback");
-        
+
         // ✅ Rate limiting check
         const now = Date.now();
         const timeSinceLastSubmit = now - this.lastFeedbackSubmission;
-        
+
         if (timeSinceLastSubmit < CONFIG.FEEDBACK_COOLDOWN) {
-          const remainingSeconds = Math.ceil((CONFIG.FEEDBACK_COOLDOWN - timeSinceLastSubmit) / 1000);
+          const remainingSeconds = Math.ceil(
+            (CONFIG.FEEDBACK_COOLDOWN - timeSinceLastSubmit) / 1000
+          );
           if (statusDiv) {
             statusDiv.style.display = "block";
             statusDiv.className = "feedback-status error";
-            statusDiv.innerHTML = this.currentLang === "es" 
-              ? `⏳ Por favor espera ${remainingSeconds} segundos antes de enviar otro comentario.`
-              : `⏳ Please wait ${remainingSeconds} seconds before submitting another feedback.`;
+            statusDiv.innerHTML =
+              this.currentLang === "es"
+                ? `⏳ Por favor espera ${remainingSeconds} segundos antes de enviar otro comentario.`
+                : `⏳ Please wait ${remainingSeconds} seconds before submitting another feedback.`;
           }
           return;
         }
-        
+
         // Validate message
         if (!messageInput || !messageInput.value.trim()) {
           if (statusDiv) {
             statusDiv.style.display = "block";
             statusDiv.className = "feedback-status error";
-            statusDiv.innerHTML = this.currentLang === "es" 
-              ? "⚠️ Por favor ingresa un mensaje" 
-              : "⚠️ Please enter a message";
+            statusDiv.innerHTML =
+              this.currentLang === "es"
+                ? "⚠️ Por favor ingresa un mensaje"
+                : "⚠️ Please enter a message";
           }
           return;
         }
-        
+
         // Get form values
         const name = nameInput?.value.trim() || "Anonymous";
         const email = emailInput?.value.trim() || "";
         const message = messageInput.value.trim();
-        
+
         // Validate message length
         const messageValidation = Utils.validateMessage(message);
         if (!messageValidation.valid) {
           if (statusDiv) {
             statusDiv.style.display = "block";
             statusDiv.className = "feedback-status error";
-            statusDiv.innerHTML = this.currentLang === "es"
-              ? `⚠️ ${messageValidation.error}`
-              : `⚠️ ${messageValidation.error}`;
+            statusDiv.innerHTML =
+              this.currentLang === "es"
+                ? `⚠️ ${messageValidation.error}`
+                : `⚠️ ${messageValidation.error}`;
           }
           return;
         }
-        
+
         // Validate email if provided
         if (email) {
           const emailValidation = Utils.validateEmail(email);
@@ -1014,29 +1026,31 @@ document.addEventListener("DOMContentLoaded", () => {
             if (statusDiv) {
               statusDiv.style.display = "block";
               statusDiv.className = "feedback-status error";
-              statusDiv.innerHTML = this.currentLang === "es"
-                ? `⚠️ ${emailValidation.error}`
-                : `⚠️ ${emailValidation.error}`;
+              statusDiv.innerHTML =
+                this.currentLang === "es"
+                  ? `⚠️ ${emailValidation.error}`
+                  : `⚠️ ${emailValidation.error}`;
             }
             return;
           }
         }
-        
+
         // Sanitize inputs
         const sanitizedName = Utils.sanitizeName(name);
         const sanitizedMessage = Utils.escapeHtml(message);
-        
+
         // Disable submit button
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = this.currentLang === "es" 
-            ? '<span class="lang-es">📤 Enviando...</span>' 
-            : '<span class="lang-en">📤 Sending...</span>';
+          submitBtn.innerHTML =
+            this.currentLang === "es"
+              ? '<span class="lang-es">📤 Enviando...</span>'
+              : '<span class="lang-en">📤 Sending...</span>';
         }
-        
+
         // Formspree endpoint
-        const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xldzyo' + 'vb'; // Split to avoid scraping
-        
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xldzyo" + "vb"; // Split to avoid scraping
+
         // Prepare form data
         const formData = {
           name: sanitizedName,
@@ -1044,128 +1058,129 @@ document.addEventListener("DOMContentLoaded", () => {
           message: sanitizedMessage,
           _replyto: email,
           _subject: `FallingBlocks+ Feedback from ${sanitizedName}`,
-          _template: 'box',
+          _template: "box",
           game_version: CONFIG.VERSION,
           timestamp: new Date().toISOString(),
-          language: this.currentLang
+          language: this.currentLang,
         };
-        
+
         // Send to Formspree
         const response = await fetch(FORMSPREE_ENDPOINT, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-          body: JSON.stringify(formData)
+          body: JSON.stringify(formData),
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         // ✅ Update rate limit timestamp on success
         this.lastFeedbackSubmission = Date.now();
-        
+
         // Success!
         if (statusDiv) {
           statusDiv.style.display = "block";
           statusDiv.className = "feedback-status success";
-          statusDiv.innerHTML = this.currentLang === "es"
-            ? "✅ ¡Comentarios enviados exitosamente! Gracias por tu opinión."
-            : "✅ Feedback sent successfully! Thank you for your input.";
+          statusDiv.innerHTML =
+            this.currentLang === "es"
+              ? "✅ ¡Comentarios enviados exitosamente! Gracias por tu opinión."
+              : "✅ Feedback sent successfully! Thank you for your input.";
         }
-        
+
         // Show popup
         this.showPopup(
-          this.currentLang === "es" 
-            ? "📧 ¡Comentarios enviados!" 
+          this.currentLang === "es"
+            ? "📧 ¡Comentarios enviados!"
             : "📧 Feedback sent!",
           3000
         );
-        
+
         a11y.announce(
           this.currentLang === "es"
             ? "Comentarios enviados exitosamente"
             : "Feedback sent successfully"
         );
-        
+
         // Clear form after 2 seconds
         setTimeout(() => {
           if (nameInput) nameInput.value = "";
           if (emailInput) emailInput.value = "";
           if (messageInput) messageInput.value = "";
-          
+
           const charCount = document.querySelector("#char-count");
           if (charCount) charCount.textContent = "0";
-          
+
           // Close modal after 3 seconds
           setTimeout(() => {
             this.closeFeedbackModal();
           }, 1000);
         }, 2000);
-        
       } catch (error) {
         console.error("Formspree submission error:", error);
-        
+
         const statusDiv = document.querySelector("#feedback-status");
         if (statusDiv) {
           statusDiv.style.display = "block";
           statusDiv.className = "feedback-status error";
-          statusDiv.innerHTML = this.currentLang === "es"
-            ? "❌ Error al enviar. Por favor verifica tu conexión e intenta de nuevo."
-            : "❌ Error sending. Please check your connection and try again.";
+          statusDiv.innerHTML =
+            this.currentLang === "es"
+              ? "❌ Error al enviar. Por favor verifica tu conexión e intenta de nuevo."
+              : "❌ Error sending. Please check your connection and try again.";
         }
       } finally {
         // Re-enable button
         const submitBtn = document.querySelector("#submit-feedback");
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = this.currentLang === "es"
-            ? '<span class="lang-es">📤 Enviar Comentarios</span>'
-            : '<span class="lang-en">📤 Send Feedback</span>';
+          submitBtn.innerHTML =
+            this.currentLang === "es"
+              ? '<span class="lang-es">📤 Enviar Comentarios</span>'
+              : '<span class="lang-en">📤 Send Feedback</span>';
         }
       }
     }
     /* ==== ✨ BILINGUAL LANGUAGE SYSTEM ==== */
-    
+
     toggleLanguage() {
       try {
         this.currentLang = this.currentLang === "en" ? "es" : "en";
-        
+
         const enElements = document.querySelectorAll(".lang-en");
         const esElements = document.querySelectorAll(".lang-es");
-        
+
         if (this.currentLang === "es") {
-          enElements.forEach(el => el.hidden = true);
-          esElements.forEach(el => el.hidden = false);
-          
+          enElements.forEach((el) => (el.hidden = true));
+          esElements.forEach((el) => (el.hidden = false));
+
           const langBtn = document.querySelector("#lang-toggle");
           if (langBtn) langBtn.textContent = "🌐 English";
-          
+
           document.documentElement.lang = "es";
           a11y.announce("Idioma cambiado a español");
-          
         } else {
-          enElements.forEach(el => el.hidden = false);
-          esElements.forEach(el => el.hidden = true);
-          
+          enElements.forEach((el) => (el.hidden = false));
+          esElements.forEach((el) => (el.hidden = true));
+
           const langBtn = document.querySelector("#lang-toggle");
           if (langBtn) langBtn.textContent = "🌐 Spanish";
-          
+
           document.documentElement.lang = "en";
           a11y.announce("Language changed to English");
         }
-        
+
         this.updateDynamicText();
         this.updateDifficultyOptions();
         storage.setItem(CONFIG.STORAGE_KEYS.LANGUAGE, this.currentLang);
-        
+
         const enInstructions = document.querySelector("#instructions-en");
         const esInstructions = document.querySelector("#instructions-es");
-        
+
         if (enInstructions && esInstructions) {
           if (this.currentLang === "es") {
             enInstructions.hidden = true;
@@ -1175,25 +1190,24 @@ document.addEventListener("DOMContentLoaded", () => {
             esInstructions.hidden = true;
           }
         }
-        
       } catch (err) {
-        console.error('Toggle language error:', err);
+        console.error("Toggle language error:", err);
       }
     }
 
     updateDifficultyOptions() {
       try {
         if (!this.diffSelect) return;
-        
-        const options = this.diffSelect.querySelectorAll('option');
-        const key = this.currentLang === 'es' ? 'data-es' : 'data-en';
-        
-        options.forEach(opt => {
+
+        const options = this.diffSelect.querySelectorAll("option");
+        const key = this.currentLang === "es" ? "data-es" : "data-en";
+
+        options.forEach((opt) => {
           const text = opt.getAttribute(key);
           if (text) opt.textContent = text;
         });
       } catch (err) {
-        console.error('Update difficulty options error:', err);
+        console.error("Update difficulty options error:", err);
       }
     }
 
@@ -1202,10 +1216,12 @@ document.addEventListener("DOMContentLoaded", () => {
         this.updateBadge();
         this.updateScoreDisplay(this.score);
         this.updateLevelDisplay(this.level);
-        const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
+        const currentHighScore = this.playerName
+          ? this.pbMap[this.playerName] || 0
+          : 0;
         this.updateHighScoreDisplay(currentHighScore);
       } catch (err) {
-        console.error('Update dynamic text error:', err);
+        console.error("Update dynamic text error:", err);
       }
     }
 
@@ -1219,7 +1235,7 @@ document.addEventListener("DOMContentLoaded", () => {
           scoreEs.textContent = score;
         }
       } catch (err) {
-        console.error('Update score display error:', err);
+        console.error("Update score display error:", err);
       }
     }
 
@@ -1233,7 +1249,7 @@ document.addEventListener("DOMContentLoaded", () => {
           levelEs.textContent = level;
         }
       } catch (err) {
-        console.error('Update level display error:', err);
+        console.error("Update level display error:", err);
       }
     }
 
@@ -1247,7 +1263,7 @@ document.addEventListener("DOMContentLoaded", () => {
           highScoreEs.textContent = score;
         }
       } catch (err) {
-        console.error('Update high score display error:', err);
+        console.error("Update high score display error:", err);
       }
     }
 
@@ -1256,14 +1272,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const savedLang = storage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
         if (savedLang && (savedLang === "en" || savedLang === "es")) {
           this.currentLang = savedLang;
-          
+
           if (savedLang === "es") {
             this.currentLang = "en";
             this.toggleLanguage();
           }
         }
       } catch (err) {
-        console.error('Restore language error:', err);
+        console.error("Restore language error:", err);
       }
     }
 
@@ -1272,27 +1288,27 @@ document.addEventListener("DOMContentLoaded", () => {
     handleKeyboard(e) {
       // ✅ FIX: Check if user is typing or in a modal
       const activeElement = document.activeElement;
-      
+
       // Check if user is typing in any input field
-      const isTyping = activeElement && (
-        activeElement.tagName === 'INPUT' ||
-        activeElement.tagName === 'TEXTAREA' ||
-        activeElement.tagName === 'SELECT' ||
-        activeElement.isContentEditable
-      );
-      
+      const isTyping =
+        activeElement &&
+        (activeElement.tagName === "INPUT" ||
+          activeElement.tagName === "TEXTAREA" ||
+          activeElement.tagName === "SELECT" ||
+          activeElement.isContentEditable);
+
       // Check if any modal is open
-      const feedbackModalOpen = this.feedbackModal && 
-        this.feedbackModal.style.display === 'flex';
-      const infoModalOpen = this.infoModal && 
-        this.infoModal.style.display === 'flex';
+      const feedbackModalOpen =
+        this.feedbackModal && this.feedbackModal.style.display === "flex";
+      const infoModalOpen =
+        this.infoModal && this.infoModal.style.display === "flex";
       const anyModalOpen = feedbackModalOpen || infoModalOpen;
-      
+
       // If user is typing or a modal is open, don't handle game controls
       if (isTyping || anyModalOpen) {
         return; // Let the browser handle the keyboard event normally
       }
-    
+
       if (!this.isPlaying || this.isPaused) {
         if (e.key === "p" || e.key === "P") {
           if (this.isPlaying && this.isPaused) {
@@ -1302,10 +1318,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return;
       }
-    
+
       try {
         const key = e.key;
-    
+
         if (
           [
             "ArrowLeft",
@@ -1319,7 +1335,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           e.preventDefault();
         }
-    
+
         if (key === "ArrowLeft") this.moveLeft();
         if (key === "ArrowRight") this.moveRight();
         if (key === "ArrowUp") this.rotate();
@@ -1329,8 +1345,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (err) {
         errorHandler.handleError(err, "handleKeyboard");
       }
-      
-    }    setupTouchControls() {
+    }
+    setupTouchControls() {
       if (!this.grid) return;
 
       try {
@@ -1346,20 +1362,43 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         };
 
+        // ✅ FIXED: Prevent zoom on touchstart
         this.grid.addEventListener(
           "touchstart",
           (e) => {
+            // Prevent default during gameplay to stop zoom
+            if (this.isPlaying && !this.isPaused) {
+              e.preventDefault();
+            }
+
             const touch = e.changedTouches[0];
             touchStartX = touch.clientX;
             touchStartY = touch.clientY;
             touchStartTime = Date.now();
           },
-          { passive: true }
+          { passive: false } // ✅ Changed from true to false
         );
 
+        // ✅ FIXED: Prevent scroll on touchmove
+        this.grid.addEventListener(
+          "touchmove",
+          (e) => {
+            if (this.isPlaying && !this.isPaused) {
+              e.preventDefault(); // Prevents scrolling while swiping
+            }
+          },
+          { passive: false } // ✅ Changed from true to false
+        );
+
+        // ✅ FIXED: Prevent zoom on touchend
         this.grid.addEventListener(
           "touchend",
           (e) => {
+            // Prevent default to stop double-tap zoom
+            if (this.isPlaying && !this.isPaused) {
+              e.preventDefault();
+            }
+
             if (!this.isPlaying || this.isPaused) return;
 
             try {
@@ -1402,13 +1441,12 @@ document.addEventListener("DOMContentLoaded", () => {
               console.error("Touch handler error:", err);
             }
           },
-          { passive: true }
+          { passive: false } // ✅ Changed from true to false
         );
       } catch (err) {
         console.error("Touch setup failed:", err);
       }
     }
-
     /* ==== Game Logic ==== */
     draw() {
       try {
@@ -1735,9 +1773,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const points =
           lines === 1 ? 100 : lines === 2 ? 300 : lines === 3 ? 500 : 800;
         this.score += points;
-        
+
         this.updateScoreDisplay(this.score);
-        
+
         this.recalcLevel();
         this.saveState();
 
@@ -1757,7 +1795,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (newLevel !== this.level) {
           this.level = newLevel;
-          
+
           this.updateLevelDisplay(this.level);
 
           if (!a11y.shouldReduceMotion()) {
@@ -1851,7 +1889,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.playerName = Utils.sanitizeName(input || "Player 1");
         storage.setItem(CONFIG.STORAGE_KEYS.PLAYER_NAME, this.playerName);
         this.updateBadge();
-        
+
         const currentHighScore = this.pbMap[this.playerName] || 0;
         this.updateHighScoreDisplay(currentHighScore);
 
@@ -2051,11 +2089,11 @@ document.addEventListener("DOMContentLoaded", () => {
     reset() {
       try {
         this.score = 0;
-        
+
         this.updateScoreDisplay(0);
-        
+
         this.level = 1;
-        
+
         this.updateLevelDisplay(1);
 
         if (this.squares) {
@@ -2245,10 +2283,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.score = s.score || 0;
         this.updateScoreDisplay(this.score);
-        
+
         this.level = s.level || 1;
         this.updateLevelDisplay(this.level);
-        
+
         this.baseSpeed = s.baseSpeed || CONFIG.SPEEDS.EASY;
         this.speed = s.speed || this.baseSpeed;
         this.currentPos = s.currentPos ?? 4;
@@ -2268,8 +2306,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (s.name) this.playerName = Utils.sanitizeName(s.name);
         this.updateBadge();
-        
-        const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
+
+        const currentHighScore = this.playerName
+          ? this.pbMap[this.playerName] || 0
+          : 0;
         this.updateHighScoreDisplay(currentHighScore);
 
         this.showPopup(
@@ -2360,7 +2400,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.lbList.appendChild(fragment);
 
-        const currentHighScore = this.playerName ? (this.pbMap[this.playerName] || 0) : 0;
+        const currentHighScore = this.playerName
+          ? this.pbMap[this.playerName] || 0
+          : 0;
         this.updateHighScoreDisplay(currentHighScore);
       } catch (err) {
         console.error("Failed to render leaderboard:", err);
@@ -2385,7 +2427,7 @@ document.addEventListener("DOMContentLoaded", () => {
           this.showPopup(`👑 New Personal Best: ${this.score}!`, 4000);
           a11y.announce(`New personal best: ${this.score}!`, "assertive");
         }
-        
+
         this.updateHighScoreDisplay(this.pbMap[this.playerName] || 0);
       } catch (err) {
         console.error("Update personal best error:", err);
@@ -2439,7 +2481,7 @@ document.addEventListener("DOMContentLoaded", () => {
     difficultyLabel(lang = null) {
       const diff = Number(this.diffSelect?.value || 1);
       const targetLang = lang || this.currentLang;
-      
+
       if (targetLang === "es") {
         return { 1: "Fácil", 2: "Medio", 3: "Difícil" }[diff] || "Fácil";
       } else {
@@ -2451,17 +2493,21 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         if (this.badgeEl) {
           this.badgeEl.innerHTML = "";
-          
+
           const enSpan = document.createElement("span");
           enSpan.className = "lang-en";
-          enSpan.textContent = `👤 Player: ${this.playerName || "—"} — Level: ${this.difficultyLabel("en")}`;
+          enSpan.textContent = `👤 Player: ${
+            this.playerName || "—"
+          } — Level: ${this.difficultyLabel("en")}`;
           enSpan.hidden = this.currentLang !== "en";
-          
+
           const esSpan = document.createElement("span");
           esSpan.className = "lang-es";
-          esSpan.textContent = `👤 Jugador: ${this.playerName || "—"} — Nivel: ${this.difficultyLabel("es")}`;
+          esSpan.textContent = `👤 Jugador: ${
+            this.playerName || "—"
+          } — Nivel: ${this.difficultyLabel("es")}`;
           esSpan.hidden = this.currentLang !== "es";
-          
+
           this.badgeEl.appendChild(enSpan);
           this.badgeEl.appendChild(esSpan);
         }
@@ -2475,11 +2521,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.toggle("dark");
         const isDark = document.body.classList.contains("dark");
         storage.setItem(CONFIG.STORAGE_KEYS.THEME, isDark ? "dark" : "light");
-        
+
         if (this.themeToggle) {
           const enSpan = this.themeToggle.querySelector(".lang-en");
           const esSpan = this.themeToggle.querySelector(".lang-es");
-          
+
           if (isDark) {
             if (enSpan) enSpan.textContent = "☀️ SunLight";
             if (esSpan) esSpan.textContent = "☀️ Sol";
@@ -2488,7 +2534,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (esSpan) esSpan.textContent = "🌙 Luna";
           }
         }
-        
+
         a11y.announce(`Theme switched to ${isDark ? "dark" : "light"} mode`);
       } catch (err) {
         errorHandler.handleError(err, "toggleTheme");
@@ -2501,12 +2547,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (savedTheme === "dark") {
           document.body.classList.add("dark");
         }
-        
+
         const isDark = document.body.classList.contains("dark");
         if (this.themeToggle) {
           const enSpan = this.themeToggle.querySelector(".lang-en");
           const esSpan = this.themeToggle.querySelector(".lang-es");
-          
+
           if (isDark) {
             if (enSpan) enSpan.textContent = "☀️ SunLight";
             if (esSpan) esSpan.textContent = "☀️ Sol";
@@ -2535,7 +2581,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
                 .catch((err) => {
                   console.log("Music play failed:", err);
-                  this.showPopup("🔇 Music blocked by browser. Click Start to enable.");
+                  this.showPopup(
+                    "🔇 Music blocked by browser. Click Start to enable."
+                  );
                 });
             }
           }
