@@ -1031,6 +1031,7 @@ audio { display: none; }
     width: 260px;
     max-width: 260px;
   }
+}
   
 /* Force hide mobile controls in landscape */
 #mobile-controls {
