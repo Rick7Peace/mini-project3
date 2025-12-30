@@ -866,26 +866,27 @@ audio { display: none; }
 
 /* ==== Responsive ==== */
 
-/* Desktop: Hide mobile controls */
-@media (min-width: 769px) {
-  #mobile-controls { display: none !important; }
+/* ===== DESKTOP: Always hide mobile controls ===== */
+@media (min-width: 1025px) {
+  #mobile-controls { 
+    display: none !important; 
+  }
 }
 
-/* ✅ NEW: Landscape mode on tablets and phones = Desktop layout */
-@media (max-height: 768px) and (orientation: landscape) {
-  /* Use desktop horizontal layout */
+/* ===== LANDSCAPE MODE: Desktop layout for phones & tablets ===== */
+@media (orientation: landscape) and (max-width: 1024px) {
   .game-container {
     flex-direction: row !important;
     justify-content: center;
     align-items: flex-start;
-    gap: 20px;
+    gap: 30px;
     margin-top: 20px;
-    padding: 0 10px;
+    padding: 0 15px;
   }
   
   .controls-panel {
-    width: 200px !important;
-    max-width: 200px !important;
+    width: 220px !important;
+    max-width: 220px !important;
     order: 1;
     padding: 15px;
   }
@@ -895,8 +896,8 @@ audio { display: none; }
   }
   
   aside.info {
-    width: 200px !important;
-    max-width: 200px !important;
+    width: 220px !important;
+    max-width: 220px !important;
     order: 3;
     padding: 15px;
   }
@@ -906,56 +907,81 @@ audio { display: none; }
     display: none !important;
   }
   
-  /* Optimize grid size */
+  /* Optimize sizes for landscape */
   :root {
-    --square-size: 24px;
+    --square-size: 26px;
   }
   
   #next-grid .square { 
-    width: 20px; 
-    height: 20px; 
+    width: 22px; 
+    height: 22px; 
   }
   
   #next-grid {
-    grid-template-columns: repeat(var(--next-grid-size), 20px);
-    grid-template-rows: repeat(var(--next-grid-size), 20px);
+    grid-template-columns: repeat(var(--next-grid-size), 22px);
+    grid-template-rows: repeat(var(--next-grid-size), 22px);
   }
   
   /* Compact header */
   header {
-    padding: 12px;
-    margin: 10px 10px 15px 10px;
+    padding: 15px;
+    margin: 12px 12px 20px 12px;
   }
   
   h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
   
   .header-buttons {
-    gap: 8px;
+    gap: 10px;
   }
   
   /* Compact buttons */
   button, select {
-    padding: 8px 12px;
-    font-size: 0.85rem;
+    padding: 10px 14px;
+    font-size: 0.9rem;
   }
   
   /* Compact leaderboard */
   #leaderboard-list {
-    max-height: 200px;
+    max-height: 220px;
   }
   
-  /* Adjust modals for landscape */
+  /* Modals adjusted for landscape */
   .info-modal-content,
   .feedback-content {
-    max-height: 70vh;
-    width: 80%;
+    max-height: 75vh;
+    width: 85%;
   }
 }
 
-/* Tablet Portrait */
-@media (max-width: 1024px) and (orientation: portrait) {
+/* ===== LARGE TABLETS in Portrait: Desktop layout ===== */
+@media (min-width: 1024px) and (orientation: portrait) {
+  .game-container {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+  }
+  
+  .controls-panel {
+    width: 260px;
+    max-width: 260px;
+  }
+  
+  aside.info {
+    width: 260px;
+    max-width: 260px;
+  }
+  
+  /* Hide mobile controls on large tablets */
+  #mobile-controls {
+    display: none !important;
+  }
+}
+
+/* ===== TABLETS & SMALL LAPTOPS in Portrait ===== */
+@media (max-width: 1023px) and (orientation: portrait) {
   .game-container {
     flex-direction: column;
     align-items: center;
@@ -963,7 +989,7 @@ audio { display: none; }
   
   .controls-panel {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     order: 1;
   }
   
@@ -973,18 +999,21 @@ audio { display: none; }
   
   aside.info {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     order: 3;
   }
 }
 
-/* Mobile Portrait */
+/* ===== MOBILE PORTRAIT ===== */
 @media (max-width: 768px) and (orientation: portrait) {
   html { font-size: 14px; }
   
   h1 { font-size: 2.2rem; }
   
-  header { padding: 20px; margin: 15px; }
+  header { 
+    padding: 20px; 
+    margin: 15px; 
+  }
   
   .controls-panel,
   aside.info {
@@ -994,22 +1023,33 @@ audio { display: none; }
   
   :root { --square-size: 26px; }
   
-  #next-grid .square { width: 24px; height: 24px; }
+  #next-grid .square { 
+    width: 24px; 
+    height: 24px; 
+  }
+  
   #next-grid {
     grid-template-columns: repeat(var(--next-grid-size), 24px);
     grid-template-rows: repeat(var(--next-grid-size), 24px);
   }
 }
 
-/* Small Mobile Portrait */
+/* ===== SMALL MOBILE PORTRAIT ===== */
 @media (max-width: 480px) and (orientation: portrait) {
   :root { --square-size: 22px; }
   
   h1 { font-size: 1.8rem; }
   
-  button { padding: 12px 18px; font-size: 0.9rem; }
+  button { 
+    padding: 12px 18px; 
+    font-size: 0.9rem; 
+  }
   
-  #next-grid .square { width: 20px; height: 20px; }
+  #next-grid .square { 
+    width: 20px; 
+    height: 20px; 
+  }
+  
   #next-grid {
     grid-template-columns: repeat(var(--next-grid-size), 20px);
     grid-template-rows: repeat(var(--next-grid-size), 20px);
@@ -1025,8 +1065,7 @@ audio { display: none; }
     font-size: 1.6rem;
     padding: 15px;
   }
-}
-/* ==== Custom Scrollbar ==== */
+}/* ==== Custom Scrollbar ==== */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: 10px; }
 ::-webkit-scrollbar-thumb { background: var(--accent-gradient); border-radius: 10px; }
