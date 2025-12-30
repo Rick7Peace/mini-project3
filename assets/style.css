@@ -1123,6 +1123,35 @@ audio { display: none; }
     font-size: 1.6rem;
     padding: 15px;
   }
+
+  /* Safari landscape reminder */
+@media (orientation: landscape) and (max-width: 1024px) {
+  /* Show helpful message on first load */
+  body::after {
+    content: "Rotate device for best experience";
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-gradient);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeInOut 3s ease-in-out;
+  }
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 }/* ==== Custom Scrollbar ==== */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: 10px; }
