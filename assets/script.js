@@ -1893,6 +1893,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentHighScore = this.pbMap[this.playerName] || 0;
         this.updateHighScoreDisplay(currentHighScore);
 
+        //Smooth scroll to game grid after entering name
+        if  (this.grid) {
+          this.grid.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+        }
+
         if (!this.timer) {
           if (!this.current || !this.current.length) {
             this.typeIdx = this.drawFromBag();
