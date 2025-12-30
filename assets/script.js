@@ -1270,6 +1270,29 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ==== END BILINGUAL SYSTEM ==== */
 
     handleKeyboard(e) {
+      // ✅ FIX: Check if user is typing or in a modal
+      const activeElement = document.activeElement;
+      
+      // Check if user is typing in any input field
+      const isTyping = activeElement && (
+        activeElement.tagName === 'INPUT' ||
+        activeElement.tagName === 'TEXTAREA' ||
+        activeElement.tagName === 'SELECT' ||
+        activeElement.isContentEditable
+      );
+      
+      // Check if any modal is open
+      const feedbackModalOpen = this.feedbackModal && 
+        this.feedbackModal.style.display === 'flex';
+      const infoModalOpen = this.infoModal && 
+        this.infoModal.style.display === 'flex';
+      const anyModalOpen = feedbackModalOpen || infoModalOpen;
+      
+      // If user is typing or a modal is open, don't handle game controls
+      if (isTyping || anyModalOpen) {
+        return; // Let the browser handle the keyboard event normally
+      }
+    
       if (!this.isPlaying || this.isPaused) {
         if (e.key === "p" || e.key === "P") {
           if (this.isPlaying && this.isPaused) {
@@ -1279,10 +1302,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return;
       }
-
+    
       try {
         const key = e.key;
-
+    
         if (
           [
             "ArrowLeft",
@@ -1296,7 +1319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           e.preventDefault();
         }
-
+    
         if (key === "ArrowLeft") this.moveLeft();
         if (key === "ArrowRight") this.moveRight();
         if (key === "ArrowUp") this.rotate();
@@ -1306,9 +1329,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (err) {
         errorHandler.handleError(err, "handleKeyboard");
       }
-    }
-
-    setupTouchControls() {
+      
+    }    setupTouchControls() {
       if (!this.grid) return;
 
       try {
