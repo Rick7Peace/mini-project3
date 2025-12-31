@@ -230,17 +230,20 @@ h1 {
 /* ==== Main Game Area ==== */
 .game-container {
   display: flex;
+  display: -webkit-flex; /* Safari prefix */
   flex-direction: row;
+  -webkit-flex-direction: row; /* Safari prefix */
   justify-content: center;
+  -webkit-justify-content: center; /* Safari prefix */
   align-items: flex-start;
-  gap: 200px;
+  -webkit-align-items: flex-start; /* Safari prefix */
+  gap: 200px !important; /* Force it with !important */
   margin-top: 50px;
   padding: 0 25px;
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
-}
-/* ==== LEFT PANEL: Controls ==== */
+}/* ==== LEFT PANEL: Controls ==== */
 .controls-panel {
   width: 280px;
   display: flex;
@@ -888,15 +891,17 @@ audio { display: none; }
   
   .game-container {
     flex-direction: row !important;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 40px;
+    -webkit-flex-direction: row !important; /* Safari prefix */
+    justify-content: center !important;
+    -webkit-justify-content: center !important; /* Safari prefix */
+    align-items: flex-start !important;
+    -webkit-align-items: flex-start !important; /* Safari prefix */
+    gap: 30px !important; /* Force gap with !important */
     margin-top: 15px;
     padding: 0 10px;
     max-width: 100vw;
     -webkit-overflow-scrolling: touch;
-  }
-  
+  }  
   .controls-panel {
     width: 180px !important;
     max-width: 180px !important;
