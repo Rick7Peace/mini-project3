@@ -1907,14 +1907,25 @@ document.addEventListener("DOMContentLoaded", () => {
         this.updateHighScoreDisplay(currentHighScore);
 
         //Smooth scroll to game grid after entering name
-        if  (this.grid) {
-          this.grid.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-            inline: 'nearest'
-          });
-        }
-
+// Smooth scroll to game grid after entering name
+if (this.grid) {
+  // Use grid-wrapper to include mobile controls in the scroll
+  const gridWrapper = document.querySelector('.grid-wrapper');
+  if (gridWrapper) {
+    gridWrapper.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'nearest'
+    });
+  } else {
+    // Fallback to grid if wrapper not found
+    this.grid.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'nearest'
+    });
+  }
+}
         if (!this.timer) {
           if (!this.current || !this.current.length) {
             this.typeIdx = this.drawFromBag();
