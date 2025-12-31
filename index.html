@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
     <meta
       name="description"
       content="FallingBlocks+ - A free, open-source falling block puzzle game with bilingual support, custom themes, and accessibility features."
@@ -31,7 +34,6 @@
   </head>
 
   <body class="dark">
-
     <!-- HEADER -->
     <header>
       <h1>FallingBlocks+</h1>
@@ -49,7 +51,8 @@
       </div>
     </header>
 
-\    <!-- MAIN GAME AREA -->
+    \
+    <!-- MAIN GAME AREA -->
     <div class="game-container">
       <!-- LEFT PANEL: Controls -->
       <aside class="controls-panel">
@@ -143,53 +146,58 @@
         </div>
       </div>
 
-      <!-- RIGHT PANEL: Stats -->
-      <aside class="info">
-        <h2>
-          <span class="lang-en">Score: <span id="score">0</span></span>
-          <span class="lang-es" hidden
-            >Puntuación: <span id="score-es">0</span></span
-          >
-        </h2>
+<!-- RIGHT PANEL: Stats -->
+<aside class="info">
+  <!-- 1. Player Badge -->
+  <p id="player-badge">
+    <span class="lang-en">👤 Player: —</span>
+    <span class="lang-es" hidden>👤 Jugador: —</span>
+  </p>
 
-        <p id="player-badge">
-          <span class="lang-en">👤 Player: —</span>
-          <span class="lang-es" hidden>👤 Jugador: —</span>
-        </p>
+  <!-- 2. Next Piece Preview -->
+  <div id="next-wrapper">
+    <h4>
+      <span class="lang-en">Next</span>
+      <span class="lang-es" hidden>Siguiente</span>
+    </h4>
+    <div id="next-grid"></div>
+  </div>
 
-        <h3>
-          <span class="lang-en"
-            >🏆 High Score: <span id="high-score">0</span></span
-          >
-          <span class="lang-es" hidden
-            >🏆 Puntuación Máxima: <span id="high-score-es">0</span></span
-          >
-        </h3>
+  <!-- 3. Score -->
+  <h2>
+    <span class="lang-en">Score: <span id="score">0</span></span>
+    <span class="lang-es" hidden
+      >Puntuación: <span id="score-es">0</span></span
+    >
+  </h2>
 
-        <h3>
-          <span class="lang-en">Level: <span id="level">1</span></span>
-          <span class="lang-es" hidden
-            >Nivel: <span id="level-es">1</span></span
-          >
-        </h3>
+  <!-- 4. Level -->
+  <h3>
+    <span class="lang-en">Level: <span id="level">1</span></span>
+    <span class="lang-es" hidden
+      >Nivel: <span id="level-es">1</span></span
+    >
+  </h3>
 
-        <div id="next-wrapper">
-          <h4>
-            <span class="lang-en">Next</span>
-            <span class="lang-es" hidden>Siguiente</span>
-          </h4>
-          <div id="next-grid"></div>
-        </div>
+  <!-- 5. High Score -->
+  <h3>
+    <span class="lang-en"
+      >🏆 High Score: <span id="high-score">0</span></span
+    >
+    <span class="lang-es" hidden
+      >🏆 Puntuación Máxima: <span id="high-score-es">0</span></span
+    >
+  </h3>
 
-        <div id="leaderboard">
-          <h4>
-            <span class="lang-en">Top 10 Players</span>
-            <span class="lang-es" hidden>Top 10 Jugadores</span>
-          </h4>
-          <ol id="leaderboard-list"></ol>
-        </div>
-      </aside>
-    </div>
+  <!-- 6. Leaderboard -->
+  <div id="leaderboard">
+    <h4>
+      <span class="lang-en">Top 10 Players</span>
+      <span class="lang-es" hidden>Top 10 Jugadores</span>
+    </h4>
+    <ol id="leaderboard-list"></ol>
+  </div>
+</aside>    </div>
     <!-- FOOTER -->
     <footer>
       <div class="footer-main">
