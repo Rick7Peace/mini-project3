@@ -231,12 +231,12 @@ h1 {
 .game-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between; /* Changed from center to space-between for Safari */
   align-items: flex-start;
   gap: 150px; /* Spacing between left panel, grid, and right panel */
   margin-top: 50px;
   padding: 0 25px;
-  max-width: 1600px;
+  max-width: 1400px; /* Reduced from 1600px to force tighter layout */
   margin-left: auto;
   margin-right: auto;
 }
@@ -245,10 +245,12 @@ h1 {
 /* Safari sometimes doesn't respect gap property properly, so we add margins as a backup */
 .controls-panel {
   margin-right: 30px; /* Add spacing on right side of left panel for Safari */
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 aside.info {
   margin-left: 30px; /* Add spacing on left side of right panel for Safari */
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 /* ==== LEFT PANEL: Controls ==== */

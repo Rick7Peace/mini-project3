@@ -2127,28 +2127,44 @@ if (this.grid) {
     reset() {
       try {
         this.score = 0;
-
         this.updateScoreDisplay(0);
-
+    
         this.level = 1;
-
         this.updateLevelDisplay(1);
-
-        if (this.squares) {
-          this.squares.forEach((s) => {
+    
+        // Safari nuclear option: Completely rebuild the grid
+        if (this.squares && this.grid) {
+          // Method 1: Clear all classes aggressively
+          this.squares.forEach((s, index) => {
             if (s) {
-              s.classList.remove(
-                "block",
-                "taken",
-                "clear-anim",
-                "grid-flash",
-                "active",
-                ...this.colors
-              );
+              // Remove all possible classes
+              s.className = '';
+              // Force re-add only the base class
+              s.className = 'square';
+              // Set ARIA label again
+              s.setAttribute('role', 'gridcell');
+              s.setAttribute('aria-label', `Cell ${index + 1}`);
             }
           });
+          
+          // Method 2: Force complete DOM repaint (Safari fix)
+          const parent = this.grid.parentNode;
+          const nextSibling = this.grid.nextSibling;
+          
+          // Remove grid from DOM
+          parent.removeChild(this.grid);
+          
+          // Force reflow
+          void this.grid.offsetHeight;
+          
+          // Re-insert grid
+          if (nextSibling) {
+            parent.insertBefore(this.grid, nextSibling);
+          } else {
+            parent.appendChild(this.grid);
+          }
         }
-
+    
         this.currentPos = 4;
         this.currentRot = 0;
         this.drawPreview();
@@ -2156,7 +2172,6 @@ if (this.grid) {
         errorHandler.handleError(err, "reset");
       }
     }
-
     /* ==== Error Recovery ==== */
     handleCriticalError() {
       try {
