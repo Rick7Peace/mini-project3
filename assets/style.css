@@ -179,7 +179,7 @@ header {
   position: relative;
   overflow: hidden;
   animation: slideDown 0.6s var(--bounce);
-  margin: 25px 25px 40px 25px; /* ← Changed: added 40px bottom margin */
+  margin: 25px 25px 40px 25px;
 }
 header::before {
   content: '';
@@ -233,10 +233,10 @@ h1 {
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  gap: 60px; /* ← Changed from 30px to 60px */
-  margin-top: 50px; /* ← Changed from 20px to 50px */
+  gap: 60px;
+  margin-top: 50px;
   padding: 0 25px;
-  max-width: 1600px; /* ← Changed from 1400px to 1600px for more spread */
+  max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -944,10 +944,25 @@ audio { display: none; }
 #right-btn { grid-column: 3; grid-row: 1; }
 #down-btn { grid-column: 4; grid-row: 1; }
 
-  /* Optimize grid for landscape */
+  /* Optimize grid for landscape - VIEWPORT HEIGHT BASED */
   :root {
     --square-size: calc(1.8vh);
-  }  
+  }
+  
+  /* Fix border cutting off blocks and force responsive grid */
+  #grid {
+    grid-template-columns: repeat(12, calc(1.8vh)) !important;
+    grid-template-rows: repeat(20, calc(1.8vh)) !important;
+    overflow: hidden !important;
+    border-width: 3px !important;
+    border-radius: 4px !important; /* Minimal radius to prevent block overflow */
+  }
+  
+  .square {
+    width: calc(1.8vh) !important;
+    height: calc(1.8vh) !important;
+  }
+  
   #next-grid .square { 
     width: 18px; 
     height: 18px; 
@@ -1027,6 +1042,19 @@ audio { display: none; }
     font-size: 1rem;
   }
 }  
+
+/* ===== ADDITIONAL LANDSCAPE FIX FOR CHROME ===== */
+@media (max-height: 500px) {
+  :root {
+    --square-size: calc(1.8vh) !important;
+  }
+  
+  #grid {
+    grid-template-columns: repeat(12, calc(1.8vh)) !important;
+    grid-template-rows: repeat(20, calc(1.8vh)) !important;
+  }
+}
+
 /* ===== SAFARI iOS LANDSCAPE MOBILE CONTROLS FIX ===== */
 /* Safari-specific fix using @supports for webkit detection */
 @supports (-webkit-touch-callout: none) {
@@ -1402,4 +1430,5 @@ select,
    - Skip-link accessibility
    - CSS variables for grid dimensions
    - Performance improvements
+   - Viewport-height responsive landscape mode
    ======================================== */
