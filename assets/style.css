@@ -281,6 +281,10 @@ aside.info {
   align-items: center;
   gap: 20px;
   flex-shrink: 0;
+  
+  /* Safari spacing fix - add horizontal padding to create gap */
+  padding-left: 30px; /* Creates space from left panel */
+  padding-right: 30px; /* Creates space from right panel */
 }
 /* ==== Game Grid ==== */
 #grid {
@@ -930,6 +934,10 @@ audio { display: none; }
   .grid-wrapper {
     order: 2;
     flex-shrink: 0;
+    
+    /* Safari spacing fix for landscape - add horizontal padding */
+    padding-left: 15px !important; /* Creates space from left panel */
+    padding-right: 15px !important; /* Creates space from right panel */
   }
   
   aside.info {
