@@ -1906,26 +1906,32 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentHighScore = this.pbMap[this.playerName] || 0;
         this.updateHighScoreDisplay(currentHighScore);
 
-     // Smooth scroll to game grid after entering name
+// Smooth scroll to game grid after entering name
 if (this.grid) {
-  // Use grid-wrapper to include mobile controls in the scroll
   const gridWrapper = document.querySelector('.grid-wrapper');
   if (gridWrapper) {
-    gridWrapper.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-      inline: 'nearest'
-    });
+    // Cross-browser scroll fix
+    setTimeout(() => {
+      const rect = gridWrapper.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const targetPosition = rect.top + scrollTop - 80; // 80px from top
+      
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    }, 300); // Delay to ensure modal is closed
   } else {
-    // Fallback to grid if wrapper not found
-    this.grid.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-      inline: 'nearest'
-    });
+    // Fallback
+    setTimeout(() => {
+      this.grid.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      });
+    }, 300);
   }
-}
-        if (!this.timer) {
+}        if (!this.timer) {
           if (!this.current || !this.current.length) {
             this.typeIdx = this.drawFromBag();
             this.nextTypeIdx = this.drawFromBag();
