@@ -946,9 +946,8 @@ audio { display: none; }
 
   /* Optimize grid for landscape */
   :root {
-    --square-size: 22px;
-  }
-  
+    --square-size: calc(1.8vh);
+  }  
   #next-grid .square { 
     width: 18px; 
     height: 18px; 
@@ -1191,7 +1190,7 @@ audio { display: none; }
 
 /* ===== SMALL MOBILE PORTRAIT ===== */
 @media (max-width: 480px) and (orientation: portrait) {
-  :root { --square-size: 18px; }
+  :root { --square-size: 22px; }
   
   h1 { font-size: 1.8rem; }
   
@@ -1201,13 +1200,13 @@ audio { display: none; }
   }
   
   #next-grid .square { 
-    width: 15px; 
-    height: 15px; 
+    width: 20px; 
+    height: 20px; 
   }
   
   #next-grid {
-    grid-template-columns: repeat(var(--next-grid-size), 15px);
-    grid-template-rows: repeat(var(--next-grid-size), 15px);
+    grid-template-columns: repeat(var(--next-grid-size), 20px);
+    grid-template-rows: repeat(var(--next-grid-size), 20px);
   }
   
   #mobile-controls {
