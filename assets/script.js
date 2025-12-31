@@ -1906,22 +1906,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentHighScore = this.pbMap[this.playerName] || 0;
         this.updateHighScoreDisplay(currentHighScore);
 
-        //Smooth scroll to game grid after entering name
-// Smooth scroll to game grid after entering name
+     // Smooth scroll to game grid after entering name
 if (this.grid) {
   // Use grid-wrapper to include mobile controls in the scroll
   const gridWrapper = document.querySelector('.grid-wrapper');
   if (gridWrapper) {
     gridWrapper.scrollIntoView({
       behavior: 'smooth',
-      block: 'center',
+      block: 'start',
       inline: 'nearest'
     });
   } else {
     // Fallback to grid if wrapper not found
     this.grid.scrollIntoView({
       behavior: 'smooth',
-      block: 'center',
+      block: 'start',
       inline: 'nearest'
     });
   }
