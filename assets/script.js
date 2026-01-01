@@ -1975,14 +1975,28 @@ if (this.grid) {
           modal.setAttribute("role", "dialog");
           modal.setAttribute("aria-labelledby", "modal-title");
           modal.setAttribute("aria-modal", "true");
-
+    
           const modalContent = document.createElement("div");
           modalContent.className = "modal-content";
-
+    
+          // ✅ BILINGUAL TITLE
           const title = document.createElement("h3");
           title.id = "modal-title";
-          title.textContent = "Enter Your Name";
-
+          
+          const titleEn = document.createElement("span");
+          titleEn.className = "lang-en";
+          titleEn.textContent = "Enter Your Name";
+          titleEn.hidden = this.currentLang !== "en";
+          
+          const titleEs = document.createElement("span");
+          titleEs.className = "lang-es";
+          titleEs.textContent = "Ingresa Tu Nombre";
+          titleEs.hidden = this.currentLang !== "es";
+          
+          title.appendChild(titleEn);
+          title.appendChild(titleEs);
+    
+          // Input field
           const input = document.createElement("input");
           input.type = "text";
           input.id = "name-input";
@@ -1990,50 +2004,76 @@ if (this.grid) {
           input.value = defaultName || "";
           input.setAttribute("aria-label", "Player name");
           input.setAttribute("autocomplete", "off");
-
+    
           const buttonContainer = document.createElement("div");
           buttonContainer.className = "modal-buttons";
-
+    
+          // ✅ BILINGUAL START BUTTON
           const okBtn = document.createElement("button");
           okBtn.id = "name-ok";
           okBtn.className = "btn-primary";
-          okBtn.textContent = "Start Game";
-
+          
+          const okEn = document.createElement("span");
+          okEn.className = "lang-en";
+          okEn.textContent = "Start Game";
+          okEn.hidden = this.currentLang !== "en";
+          
+          const okEs = document.createElement("span");
+          okEs.className = "lang-es";
+          okEs.textContent = "Comenzar";
+          okEs.hidden = this.currentLang !== "es";
+          
+          okBtn.appendChild(okEn);
+          okBtn.appendChild(okEs);
+    
+          // ✅ BILINGUAL CANCEL BUTTON
           const cancelBtn = document.createElement("button");
           cancelBtn.id = "name-cancel";
           cancelBtn.className = "btn-secondary";
-          cancelBtn.textContent = "Cancel";
-
+          
+          const cancelEn = document.createElement("span");
+          cancelEn.className = "lang-en";
+          cancelEn.textContent = "Cancel";
+          cancelEn.hidden = this.currentLang !== "en";
+          
+          const cancelEs = document.createElement("span");
+          cancelEs.className = "lang-es";
+          cancelEs.textContent = "Cancelar";
+          cancelEs.hidden = this.currentLang !== "es";
+          
+          cancelBtn.appendChild(cancelEn);
+          cancelBtn.appendChild(cancelEs);
+    
           buttonContainer.appendChild(okBtn);
           buttonContainer.appendChild(cancelBtn);
-
+    
           modalContent.appendChild(title);
           modalContent.appendChild(input);
           modalContent.appendChild(buttonContainer);
-
+    
           const overlay = document.createElement("div");
           overlay.className = "modal-overlay";
-
+    
           modal.appendChild(overlay);
           modal.appendChild(modalContent);
-
+    
           document.body.appendChild(modal);
-
+    
           const cleanupFocus = a11y.trapFocus(modal);
-
+    
           input.focus();
           input.select();
-
+    
           const cleanup = (value) => {
             if (cleanupFocus) cleanupFocus();
             modal.remove();
             resolve(value);
           };
-
+    
           okBtn.onclick = () => cleanup(input.value);
           cancelBtn.onclick = () => cleanup(null);
           overlay.onclick = () => cleanup(null);
-
+    
           input.onkeydown = (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
@@ -2052,7 +2092,6 @@ if (this.grid) {
         }
       });
     }
-
     togglePause() {
       if (!this.isPlaying) return;
 

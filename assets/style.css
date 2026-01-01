@@ -956,7 +956,7 @@ audio { display: none; }
   display: grid !important;
   grid-template-columns: repeat(3, 50px) !important; /* Changed from 4 to 3 columns */
   grid-template-rows: repeat(2, 50px) !important; /* Changed from 1 to 2 rows */
-  gap: 8px !important;
+  gap: 20px !important;
   margin: 10px auto 0 !important;
   padding: 0 !important;
   width: fit-content !important;
