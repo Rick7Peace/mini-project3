@@ -609,26 +609,35 @@ label {
     -webkit-tap-highlight-color: transparent;
   }
 
-#mobile-controls button {
-  padding: 20px;
-  font-size: 2rem;
-  border-radius: 16px;
-  background: var(--accent-gradient);
-  color: white;
-  border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  
-  /* Faster touch response */
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
+/* Show mobile controls in landscape - T-shape layout */
+#mobile-controls {
+  display: grid !important;
+  grid-template-columns: repeat(3, 50px) !important; /* Changed from 4 to 3 columns */
+  grid-template-rows: repeat(2, 50px) !important; /* Changed from 1 to 2 rows */
+  gap: 8px !important;
+  margin: 10px auto 0 !important;
+  padding: 0 !important;
+  width: fit-content !important;
 }
 
-#left-btn { grid-column: 1; grid-row: 2; }
-#right-btn { grid-column: 3; grid-row: 2; }
-#rotate-btn { grid-column: 2; grid-row: 1; }
-#down-btn { grid-column: 2; grid-row: 2; }
+#mobile-controls button {
+  font-size: 1.2rem !important;
+  padding: 10px !important;
+  width: 50px !important;
+  height: 50px !important;
+}
 
+/* Landscape button layout - T-shape (rotate on top, others on bottom) */
+#rotate-btn { grid-column: 2; grid-row: 1; } /* Centered top */
+#left-btn { grid-column: 1; grid-row: 2; } /* Bottom left */
+#down-btn { grid-column: 2; grid-row: 2; } /* Bottom center */
+#right-btn { grid-column: 3; grid-row: 2; } /* Bottom right */
+```
+
+**This creates a T-shape layout:**
+```
+    🔄
+⬅️ ⬇️ ➡️
 /* ==== Modals ==== */
 .info-modal {
   position: fixed;
