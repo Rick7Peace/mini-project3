@@ -432,10 +432,10 @@ aside.info h4 {
   display: grid;
   grid-template-columns: repeat(var(--next-grid-size), 28px);
   grid-template-rows: repeat(var(--next-grid-size), 28px);
-  gap: 2px;
+  gap: 0; /* ✅ FIX: Remove separation between blocks */
   background: var(--grid-bg);
   border: 2px solid var(--grid-border);
-  border-radius: 12px;
+  border-radius: 6px; /* ✅ FIX: More square border (was 12px) */
   margin: 10px auto 0;
   width: fit-content;
   padding: 8px;
@@ -445,9 +445,8 @@ aside.info h4 {
 #next-grid .square {
   width: 28px;
   height: 28px;
-  border-radius: 4px;
+  border-radius: 2px; /* ✅ FIX: Match main grid (was 4px) */
 }
-
 /* ==== Leaderboard ==== */
 #leaderboard {
   background: var(--bg-tertiary);
