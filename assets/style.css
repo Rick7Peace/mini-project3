@@ -974,30 +974,41 @@ audio { display: none; }
 #down-btn { grid-column: 2; grid-row: 2; } /* Bottom center */
 #right-btn { grid-column: 3; grid-row: 2; } /* Bottom right */
 
-  /* Optimize grid for landscape - VIEWPORT HEIGHT BASED */
-  :root {
-    --square-size: calc(1.8vh);
-  }
-  
-  /* Fix border cutting off blocks and force responsive grid */
-  #grid {
-    grid-template-columns: repeat(12, calc(1.8vh)) !important;
-    grid-template-rows: repeat(20, calc(1.8vh)) !important;
-    overflow: hidden !important;
-    border-width: 3px !important;
-    border-radius: 4px !important; /* Minimal radius to prevent block overflow */
-  }
-  
-  .square {
-    width: calc(1.8vh) !important;
-    height: calc(1.8vh) !important;
-  }
-  
-  #next-grid .square { 
-    width: 18px; 
-    height: 18px; 
-  }
-  
+/* Optimize grid for landscape - VIEWPORT HEIGHT BASED */
+:root {
+  --square-size: calc(1.8vh);
+}
+
+/* Fix border cutting off blocks and force responsive grid */
+#grid {
+  grid-template-columns: repeat(12, calc(1.8vh)) !important;
+  grid-template-rows: repeat(20, calc(1.8vh)) !important;
+  overflow: hidden !important;
+  border-width: 3px !important;
+  border-radius: 4px !important;
+}
+
+.square {
+  width: calc(1.8vh) !important;
+  height: calc(1.8vh) !important;
+}
+
+/* ✅ Make next-grid a PERFECT MIRROR of main grid */
+#next-grid {
+  grid-template-columns: repeat(var(--next-grid-size), calc(1.8vh)) !important;
+  grid-template-rows: repeat(var(--next-grid-size), calc(1.8vh)) !important;
+  gap: 0 !important;
+  padding: 6px;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}
+
+#next-grid .square { 
+  width: calc(1.8vh) !important;
+  height: calc(1.8vh) !important;
+  border-radius: calc(0.15vh) !important;
+  border: 1px solid rgba(71, 85, 105, 0.4);
+}  
   #next-grid {
     grid-template-columns: repeat(var(--next-grid-size), 18px);
     grid-template-rows: repeat(var(--next-grid-size), 18px);
