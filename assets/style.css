@@ -233,7 +233,7 @@ h1 {
   flex-direction: row;
   justify-content: space-between; /* Changed from center to space-between for Safari */
   align-items: flex-start;
-  gap: 150px; /* Spacing between left panel, grid, and right panel */
+  gap: 60px; /* Spacing between left panel, grid, and right panel */
   margin-top: 50px;
   padding: 0 25px;
   max-width: 1400px; /* Reduced from 1600px to force tighter layout */
@@ -609,29 +609,26 @@ label {
     -webkit-tap-highlight-color: transparent;
   }
 
-/* Show mobile controls in landscape - T-shape layout */
-#mobile-controls {
-  display: grid !important;
-  grid-template-columns: repeat(3, 50px) !important; /* Changed from 4 to 3 columns */
-  grid-template-rows: repeat(2, 50px) !important; /* Changed from 1 to 2 rows */
-  gap: 8px !important;
-  margin: 10px auto 0 !important;
-  padding: 0 !important;
-  width: fit-content !important;
-}
-
 #mobile-controls button {
-  font-size: 1.2rem !important;
-  padding: 10px !important;
-  width: 50px !important;
-  height: 50px !important;
+  padding: 20px;
+  font-size: 2rem;
+  border-radius: 16px;
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  
+  /* Faster touch response */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
-/* Landscape button layout - T-shape (rotate on top, others on bottom) */
-#rotate-btn { grid-column: 2; grid-row: 1; } /* Centered top */
-#left-btn { grid-column: 1; grid-row: 2; } /* Bottom left */
-#down-btn { grid-column: 2; grid-row: 2; } /* Bottom center */
-#right-btn { grid-column: 3; grid-row: 2; } /* Bottom right */
+#left-btn { grid-column: 1; grid-row: 2; }
+#right-btn { grid-column: 3; grid-row: 2; }
+#rotate-btn { grid-column: 2; grid-row: 1; }
+#down-btn { grid-column: 2; grid-row: 2; }
+
 /* ==== Modals ==== */
 .info-modal {
   position: fixed;
@@ -910,7 +907,7 @@ audio { display: none; }
     flex-direction: row !important;
     justify-content: center;
     align-items: flex-start;
-    gap: 40px; /* Tighter spacing for landscape mobile view */
+    gap: 20px; /* Tighter spacing for landscape mobile view */
     margin-top: 15px;
     padding: 0 10px;
     max-width: 100vw;
@@ -1095,21 +1092,21 @@ audio { display: none; }
   /* Target Safari in landscape mode */
   @media (orientation: landscape) and (max-width: 1024px) {
     
-    /* Force mobile controls to show */
+    /* Force mobile controls to show in T-shape layout */
     #mobile-controls {
       display: -webkit-grid !important;
       display: grid !important;
-      -webkit-grid-template-columns: 50px 50px 50px 50px !important;
-      grid-template-columns: 50px 50px 50px 50px !important;
-      -webkit-grid-template-rows: 50px !important;
-      grid-template-rows: 50px !important;
+      -webkit-grid-template-columns: 50px 50px 50px !important; /* Changed to 3 columns */
+      grid-template-columns: 50px 50px 50px !important;
+      -webkit-grid-template-rows: 50px 50px !important; /* Changed to 2 rows */
+      grid-template-rows: 50px 50px !important;
       gap: 8px !important;
       -webkit-gap: 8px !important;
       margin: 10px auto 0 !important;
       padding: 0 !important;
-      width: 216px !important;
-      max-width: 216px !important;
-      min-width: 216px !important;
+      width: 166px !important; /* Adjusted width for 3 columns: (50px * 3) + (8px * 2) = 166px */
+      max-width: 166px !important;
+      min-width: 166px !important;
       visibility: visible !important;
       -webkit-visibility: visible !important;
       opacity: 1 !important;
@@ -1147,26 +1144,26 @@ audio { display: none; }
       border-radius: 12px !important;
     }
 
-    /* Position buttons using grid-area for Safari compatibility */
-    #left-btn { 
-      -webkit-grid-column: 1;
-      -webkit-grid-row: 1;
-      grid-area: 1 / 1 / 2 / 2 !important; 
-    }
+    /* Position buttons using grid-area for Safari compatibility - T-shape */
     #rotate-btn { 
       -webkit-grid-column: 2;
       -webkit-grid-row: 1;
-      grid-area: 1 / 2 / 2 / 3 !important; 
+      grid-area: 1 / 2 / 2 / 3 !important; /* Row 1, Column 2 (centered top) */
+    }
+    #left-btn { 
+      -webkit-grid-column: 1;
+      -webkit-grid-row: 2;
+      grid-area: 2 / 1 / 3 / 2 !important; /* Row 2, Column 1 (bottom left) */
+    }
+    #down-btn { 
+      -webkit-grid-column: 2;
+      -webkit-grid-row: 2;
+      grid-area: 2 / 2 / 3 / 3 !important; /* Row 2, Column 2 (bottom center) */
     }
     #right-btn { 
       -webkit-grid-column: 3;
-      -webkit-grid-row: 1;
-      grid-area: 1 / 3 / 2 / 4 !important; 
-    }
-    #down-btn { 
-      -webkit-grid-column: 4;
-      -webkit-grid-row: 1;
-      grid-area: 1 / 4 / 2 / 5 !important; 
+      -webkit-grid-row: 2;
+      grid-area: 2 / 3 / 3 / 4 !important; /* Row 2, Column 3 (bottom right) */
     }
   }
 }
