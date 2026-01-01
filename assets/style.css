@@ -632,12 +632,6 @@ label {
 #left-btn { grid-column: 1; grid-row: 2; } /* Bottom left */
 #down-btn { grid-column: 2; grid-row: 2; } /* Bottom center */
 #right-btn { grid-column: 3; grid-row: 2; } /* Bottom right */
-```
-
-**This creates a T-shape layout:**
-```
-    🔄
-⬅️ ⬇️ ➡️
 /* ==== Modals ==== */
 .info-modal {
   position: fixed;
