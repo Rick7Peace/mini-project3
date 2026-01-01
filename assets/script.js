@@ -1957,11 +1957,18 @@ if (this.grid) {
           }
 
           if (this.sound) this.sound.resumeCtx();
-          this.showPopup(`🎮 Welcome, ${this.playerName}!`);
-          a11y.announce(
-            `Game started. Welcome ${this.playerName}! Use arrow keys to play.`
-          );
-        }
+
+          // ✅ Bilingual welcome message
+          const welcomeMsg = this.currentLang === "es"
+            ? `🎮 ¡Bienvenido, ${this.playerName}!`
+            : `🎮 Welcome, ${this.playerName}!`;
+          
+          const announceMsg = this.currentLang === "es"
+            ? `Juego iniciado. ¡Bienvenido ${this.playerName}! Usa las flechas para jugar.`
+            : `Game started. Welcome ${this.playerName}! Use arrow keys to play.`;
+          
+          this.showPopup(welcomeMsg);
+          a11y.announce(announceMsg);        }
       } catch (err) {
         errorHandler.handleError(err, "startGame");
       }
@@ -2101,8 +2108,14 @@ if (this.grid) {
         if (this.isPaused) {
           this.stopLoop();
           if (this.bgMusic) this.bgMusic.pause();
-          this.showPopup("⏸️ Paused (Press P to resume)");
-          a11y.announce("Game paused. Press P to resume.");
+          
+          // ✅ Bilingual pause message
+          const pauseMsg = this.currentLang === "es" 
+            ? "⏸️ Pausado (Presiona P para reanudar)" 
+            : "⏸️ Paused (Press P to resume)";
+          
+          this.showPopup(pauseMsg);
+          a11y.announce(pauseMsg);
         } else {
           this.startLoop();
           if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
@@ -2113,8 +2126,14 @@ if (this.grid) {
               );
             }
           }
-          this.showPopup("▶️ Resumed");
-          a11y.announce("Game resumed");
+          
+          // ✅ Bilingual resume message
+          const resumeMsg = this.currentLang === "es" 
+            ? "▶️ Reanudado" 
+            : "▶️ Resumed";
+          
+          this.showPopup(resumeMsg);
+          a11y.announce(resumeMsg);
         }
       } catch (err) {
         errorHandler.handleError(err, "togglePause");
