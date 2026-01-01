@@ -951,11 +951,11 @@ audio { display: none; }
     gap: 12px;
   }
   
-/* Show mobile controls in landscape (compact version) */
+/* Show mobile controls in landscape - T-shape layout */
 #mobile-controls {
   display: grid !important;
-  grid-template-columns: repeat(4, 50px) !important;
-  grid-template-rows: repeat(1, 50px) !important;
+  grid-template-columns: repeat(3, 50px) !important; /* Changed from 4 to 3 columns */
+  grid-template-rows: repeat(2, 50px) !important; /* Changed from 1 to 2 rows */
   gap: 8px !important;
   margin: 10px auto 0 !important;
   padding: 0 !important;
@@ -969,11 +969,11 @@ audio { display: none; }
   height: 50px !important;
 }
 
-/* Landscape button layout - horizontal row */
-#left-btn { grid-column: 1; grid-row: 1; }
-#rotate-btn { grid-column: 2; grid-row: 1; }
-#right-btn { grid-column: 3; grid-row: 1; }
-#down-btn { grid-column: 4; grid-row: 1; }
+/* Landscape button layout - T-shape (rotate on top, others on bottom) */
+#rotate-btn { grid-column: 2; grid-row: 1; } /* Centered top */
+#left-btn { grid-column: 1; grid-row: 2; } /* Bottom left */
+#down-btn { grid-column: 2; grid-row: 2; } /* Bottom center */
+#right-btn { grid-column: 3; grid-row: 2; } /* Bottom right */
 
   /* Optimize grid for landscape - VIEWPORT HEIGHT BASED */
   :root {
