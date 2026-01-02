@@ -480,7 +480,7 @@ document.addEventListener("DOMContentLoaded", () => {
     constructor() {
       try {
         this.cleanupHandlers = [];
-        
+
         // ✅ NEW: Track if action is in progress to prevent double-execution
         this.actionInProgress = new Set();
 
@@ -799,62 +799,66 @@ document.addEventListener("DOMContentLoaded", () => {
         this.cleanupHandlers.push(() =>
           document.removeEventListener("keydown", keyHandler)
         );
-    
+
         // ✅ Safari orientation fix
         const handleOrientationChange = () => {
           setTimeout(() => {
-            window.dispatchEvent(new Event('resize'));
+            window.dispatchEvent(new Event("resize"));
           }, 100);
         };
-        
-        window.addEventListener('orientationchange', handleOrientationChange);
+
+        window.addEventListener("orientationchange", handleOrientationChange);
         this.cleanupHandlers.push(() =>
-          window.removeEventListener('orientationchange', handleOrientationChange)
+          window.removeEventListener(
+            "orientationchange",
+            handleOrientationChange
+          )
         );
-    
+
         // ✅ FIX: Use addEventListener with action locking instead of onclick
         const addClickHandler = (element, method, debounceTime = 0) => {
           if (!element) return;
-          
+
           let handler = (e) => {
             e.preventDefault();
             e.stopPropagation();
-            
+
             // ✅ Prevent rapid double-clicks
             if (this.actionInProgress.has(method)) {
               return;
             }
-            
+
             this.actionInProgress.add(method);
             this.safeCall(method);
-            
+
             // Release lock after a short delay
             setTimeout(() => {
               this.actionInProgress.delete(method);
             }, debounceTime || 300);
           };
-          
-          element.addEventListener('click', handler, { passive: false });
-          element.addEventListener('touchend', handler, { passive: false });
-          
+
+          element.addEventListener("click", handler, { passive: false });
+          element.addEventListener("touchend", handler, { passive: false });
+
           this.cleanupHandlers.push(() => {
-            element.removeEventListener('click', handler);
-            element.removeEventListener('touchend', handler);
+            element.removeEventListener("click", handler);
+            element.removeEventListener("touchend", handler);
           });
         };
 
         // Main game buttons
-        addClickHandler(this.startBtn, "startGame", 500);
-        addClickHandler(this.pauseBtn, "togglePause", 300);
-        addClickHandler(this.quitBtn, "quitGame", 300);
-        addClickHandler(this.resetScoresBtn, "resetScores", 500);
-        addClickHandler(this.themeToggle, "toggleTheme", 300);
-        addClickHandler(this.musicBtn, "toggleMusic", 300);
-        
+        addClickHandler(this.startBtn, "startGame", 1500);
+        addClickHandler(this.pauseBtn, "togglePause", 1500); // ✅ FIXED
+        addClickHandler(this.quitBtn, "quitGame", 1500);
+        addClickHandler(this.resetScoresBtn, "resetScores", 1500);
+        addClickHandler(this.themeToggle, "toggleTheme", 1000);
+        addClickHandler(this.musicBtn, "toggleMusic", 1000);
         if (this.diffSelect) {
           const diffHandler = () => this.safeCall("changeDifficulty");
-          this.diffSelect.addEventListener('change', diffHandler);
-          this.cleanupHandlers.push(() => this.diffSelect.removeEventListener('change', diffHandler));
+          this.diffSelect.addEventListener("change", diffHandler);
+          this.cleanupHandlers.push(() =>
+            this.diffSelect.removeEventListener("change", diffHandler)
+          );
         }
 
         // Mobile control buttons - shorter debounce for gameplay
@@ -875,9 +879,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (this.closeInfoBtn) {
           addClickHandler(this.closeInfoBtn, "closeInfoModal", 300);
         }
-        
+
         if (this.infoModal) {
-          this.infoModal.addEventListener('click', (e) => {
+          this.infoModal.addEventListener("click", (e) => {
             if (e.target === this.infoModal) {
               e.preventDefault();
               this.closeInfoModal();
@@ -893,7 +897,7 @@ document.addEventListener("DOMContentLoaded", () => {
           addClickHandler(this.closeFeedbackBtn, "closeFeedbackModal", 300);
         }
         if (this.feedbackModal) {
-          this.feedbackModal.addEventListener('click', (e) => {
+          this.feedbackModal.addEventListener("click", (e) => {
             if (e.target === this.feedbackModal) {
               e.preventDefault();
               this.closeFeedbackModal();
@@ -1940,32 +1944,34 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentHighScore = this.pbMap[this.playerName] || 0;
         this.updateHighScoreDisplay(currentHighScore);
 
-// Smooth scroll to game grid after entering name
-if (this.grid) {
-  const gridWrapper = document.querySelector('.grid-wrapper');
-  if (gridWrapper) {
-    // Cross-browser scroll fix
-    setTimeout(() => {
-      const rect = gridWrapper.getBoundingClientRect();
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const targetPosition = rect.top + scrollTop - 80; // 80px from top
-      
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
-    }, 300); // Delay to ensure modal is closed
-  } else {
-    // Fallback
-    setTimeout(() => {
-      this.grid.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest'
-      });
-    }, 300);
-  }
-}        if (!this.timer) {
+        // Smooth scroll to game grid after entering name
+        if (this.grid) {
+          const gridWrapper = document.querySelector(".grid-wrapper");
+          if (gridWrapper) {
+            // Cross-browser scroll fix
+            setTimeout(() => {
+              const rect = gridWrapper.getBoundingClientRect();
+              const scrollTop =
+                window.pageYOffset || document.documentElement.scrollTop;
+              const targetPosition = rect.top + scrollTop - 80; // 80px from top
+
+              window.scrollTo({
+                top: targetPosition,
+                behavior: "smooth",
+              });
+            }, 300); // Delay to ensure modal is closed
+          } else {
+            // Fallback
+            setTimeout(() => {
+              this.grid.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest",
+              });
+            }, 300);
+          }
+        }
+        if (!this.timer) {
           if (!this.current || !this.current.length) {
             this.typeIdx = this.drawFromBag();
             this.nextTypeIdx = this.drawFromBag();
@@ -1993,16 +1999,19 @@ if (this.grid) {
           if (this.sound) this.sound.resumeCtx();
 
           // ✅ Bilingual welcome message
-          const welcomeMsg = this.currentLang === "es"
-            ? `🎮 ¡Bienvenido, ${this.playerName}!`
-            : `🎮 Welcome, ${this.playerName}!`;
-          
-          const announceMsg = this.currentLang === "es"
-            ? `Juego iniciado. ¡Bienvenido ${this.playerName}! Usa las flechas para jugar.`
-            : `Game started. Welcome ${this.playerName}! Use arrow keys to play.`;
-          
+          const welcomeMsg =
+            this.currentLang === "es"
+              ? `🎮 ¡Bienvenido, ${this.playerName}!`
+              : `🎮 Welcome, ${this.playerName}!`;
+
+          const announceMsg =
+            this.currentLang === "es"
+              ? `Juego iniciado. ¡Bienvenido ${this.playerName}! Usa las flechas para jugar.`
+              : `Game started. Welcome ${this.playerName}! Use arrow keys to play.`;
+
           this.showPopup(welcomeMsg);
-          a11y.announce(announceMsg);        }
+          a11y.announce(announceMsg);
+        }
       } catch (err) {
         errorHandler.handleError(err, "startGame");
       }
@@ -2016,27 +2025,27 @@ if (this.grid) {
           modal.setAttribute("role", "dialog");
           modal.setAttribute("aria-labelledby", "modal-title");
           modal.setAttribute("aria-modal", "true");
-    
+
           const modalContent = document.createElement("div");
           modalContent.className = "modal-content";
-    
+
           // ✅ BILINGUAL TITLE
           const title = document.createElement("h3");
           title.id = "modal-title";
-          
+
           const titleEn = document.createElement("span");
           titleEn.className = "lang-en";
           titleEn.textContent = "Enter Your Name";
           titleEn.hidden = this.currentLang !== "en";
-          
+
           const titleEs = document.createElement("span");
           titleEs.className = "lang-es";
           titleEs.textContent = "Ingresa Tu Nombre";
           titleEs.hidden = this.currentLang !== "es";
-          
+
           title.appendChild(titleEn);
           title.appendChild(titleEs);
-    
+
           // Input field
           const input = document.createElement("input");
           input.type = "text";
@@ -2045,76 +2054,76 @@ if (this.grid) {
           input.value = defaultName || "";
           input.setAttribute("aria-label", "Player name");
           input.setAttribute("autocomplete", "off");
-    
+
           const buttonContainer = document.createElement("div");
           buttonContainer.className = "modal-buttons";
-    
+
           // ✅ BILINGUAL START BUTTON
           const okBtn = document.createElement("button");
           okBtn.id = "name-ok";
           okBtn.className = "btn-primary";
-          
+
           const okEn = document.createElement("span");
           okEn.className = "lang-en";
           okEn.textContent = "Start Game";
           okEn.hidden = this.currentLang !== "en";
-          
+
           const okEs = document.createElement("span");
           okEs.className = "lang-es";
           okEs.textContent = "Comenzar";
           okEs.hidden = this.currentLang !== "es";
-          
+
           okBtn.appendChild(okEn);
           okBtn.appendChild(okEs);
-    
+
           // ✅ BILINGUAL CANCEL BUTTON
           const cancelBtn = document.createElement("button");
           cancelBtn.id = "name-cancel";
           cancelBtn.className = "btn-secondary";
-          
+
           const cancelEn = document.createElement("span");
           cancelEn.className = "lang-en";
           cancelEn.textContent = "Cancel";
           cancelEn.hidden = this.currentLang !== "en";
-          
+
           const cancelEs = document.createElement("span");
           cancelEs.className = "lang-es";
           cancelEs.textContent = "Cancelar";
           cancelEs.hidden = this.currentLang !== "es";
-          
+
           cancelBtn.appendChild(cancelEn);
           cancelBtn.appendChild(cancelEs);
-    
+
           buttonContainer.appendChild(okBtn);
           buttonContainer.appendChild(cancelBtn);
-    
+
           modalContent.appendChild(title);
           modalContent.appendChild(input);
           modalContent.appendChild(buttonContainer);
-    
+
           const overlay = document.createElement("div");
           overlay.className = "modal-overlay";
-    
+
           modal.appendChild(overlay);
           modal.appendChild(modalContent);
-    
+
           document.body.appendChild(modal);
-    
+
           const cleanupFocus = a11y.trapFocus(modal);
-    
+
           input.focus();
           input.select();
-    
+
           const cleanup = (value) => {
             if (cleanupFocus) cleanupFocus();
             modal.remove();
             resolve(value);
           };
-    
+
           okBtn.onclick = () => cleanup(input.value);
           cancelBtn.onclick = () => cleanup(null);
           overlay.onclick = () => cleanup(null);
-    
+
           input.onkeydown = (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
@@ -2142,12 +2151,13 @@ if (this.grid) {
         if (this.isPaused) {
           this.stopLoop();
           if (this.bgMusic) this.bgMusic.pause();
-          
+
           // ✅ Bilingual pause message
-          const pauseMsg = this.currentLang === "es" 
-            ? "⏸️ Pausado (Presiona P para reanudar)" 
-            : "⏸️ Paused (Press P to resume)";
-          
+          const pauseMsg =
+            this.currentLang === "es"
+              ? "⏸️ Pausado (Presiona P para reanudar)"
+              : "⏸️ Paused (Press P to resume)";
+
           this.showPopup(pauseMsg);
           a11y.announce(pauseMsg);
         } else {
@@ -2160,12 +2170,11 @@ if (this.grid) {
               );
             }
           }
-          
+
           // ✅ Bilingual resume message
-          const resumeMsg = this.currentLang === "es" 
-            ? "▶️ Reanudado" 
-            : "▶️ Resumed";
-          
+          const resumeMsg =
+            this.currentLang === "es" ? "▶️ Reanudado" : "▶️ Resumed";
+
           this.showPopup(resumeMsg);
           a11y.announce(resumeMsg);
         }
@@ -2220,35 +2229,35 @@ if (this.grid) {
       try {
         this.score = 0;
         this.updateScoreDisplay(0);
-    
+
         this.level = 1;
         this.updateLevelDisplay(1);
-    
+
         // Safari nuclear option: Completely rebuild the grid
         if (this.squares && this.grid) {
           // Method 1: Clear all classes aggressively
           this.squares.forEach((s, index) => {
             if (s) {
               // Remove all possible classes
-              s.className = '';
+              s.className = "";
               // Force re-add only the base class
-              s.className = 'square';
+              s.className = "square";
               // Set ARIA label again
-              s.setAttribute('role', 'gridcell');
-              s.setAttribute('aria-label', `Cell ${index + 1}`);
+              s.setAttribute("role", "gridcell");
+              s.setAttribute("aria-label", `Cell ${index + 1}`);
             }
           });
-          
+
           // Method 2: Force complete DOM repaint (Safari fix)
           const parent = this.grid.parentNode;
           const nextSibling = this.grid.nextSibling;
-          
+
           // Remove grid from DOM
           parent.removeChild(this.grid);
-          
+
           // Force reflow
           void this.grid.offsetHeight;
-          
+
           // Re-insert grid
           if (nextSibling) {
             parent.insertBefore(this.grid, nextSibling);
@@ -2256,7 +2265,7 @@ if (this.grid) {
             parent.appendChild(this.grid);
           }
         }
-    
+
         this.currentPos = 4;
         this.currentRot = 0;
         this.drawPreview();
@@ -2457,18 +2466,21 @@ if (this.grid) {
           : 0;
         this.updateHighScoreDisplay(currentHighScore);
 
-// ✅ Bilingual restore message
-const restoreMsg = this.currentLang === "es"
-  ? "🔄 Juego anterior restaurado (presiona ▶️ Comenzar para continuar)"
-  : "🔄 Restored previous game (press ▶️ Start to continue)";
+        // ✅ Bilingual restore message
+        const restoreMsg =
+          this.currentLang === "es"
+            ? "🔄 Juego anterior restaurado (presiona ▶️ Comenzar para continuar)"
+            : "🔄 Restored previous game (press ▶️ Start to continue)";
 
-const announceMsg = this.currentLang === "es"
-  ? "Juego anterior restaurado. Presiona Comenzar para continuar."
-  : "Previous game restored. Press Start to continue.";
+        const announceMsg =
+          this.currentLang === "es"
+            ? "Juego anterior restaurado. Presiona Comenzar para continuar."
+            : "Previous game restored. Press Start to continue.";
 
-this.showPopup(restoreMsg, 4000);
-a11y.announce(announceMsg);
-return true;      } catch (err) {
+        this.showPopup(restoreMsg, 4000);
+        a11y.announce(announceMsg);
+        return true;
+      } catch (err) {
         console.error("Failed to restore save:", err);
         this.clearState();
         return false;
