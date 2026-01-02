@@ -2423,13 +2423,18 @@ if (this.grid) {
           : 0;
         this.updateHighScoreDisplay(currentHighScore);
 
-        this.showPopup(
-          "🔄 Restored previous game (press ▶️ Start to continue)",
-          4000
-        );
-        a11y.announce("Previous game restored. Press Start to continue.");
-        return true;
-      } catch (err) {
+// ✅ Bilingual restore message
+const restoreMsg = this.currentLang === "es"
+  ? "🔄 Juego anterior restaurado (presiona ▶️ Comenzar para continuar)"
+  : "🔄 Restored previous game (press ▶️ Start to continue)";
+
+const announceMsg = this.currentLang === "es"
+  ? "Juego anterior restaurado. Presiona Comenzar para continuar."
+  : "Previous game restored. Press Start to continue.";
+
+this.showPopup(restoreMsg, 4000);
+a11y.announce(announceMsg);
+return true;      } catch (err) {
         console.error("Failed to restore save:", err);
         this.clearState();
         return false;
