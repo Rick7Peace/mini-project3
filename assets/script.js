@@ -59,7 +59,7 @@ const CONFIG = {
   VISITOR_NAMESPACE: "fallingblocks-plus-v10",
 
   // Version for save compatibility
-  VERSION: "10.3.0",
+  VERSION: "10.3.1",
 
   // Debug mode (set to false for production)
   DEBUG: false,
@@ -316,18 +316,17 @@ const Utils = {
 
     return { valid: true, error: null };
   },
-  debounce(func, wait) {
+  debounce(func, wait = 300) {
     let timeout;
     return function executedFunction(...args) {
       const later = () => {
         clearTimeout(timeout);
-        func(...args);
+        func.apply(this, args);
       };
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
     };
   },
-
   async fetchWithRetry(url, options = {}, retries = CONFIG.API_RETRY_ATTEMPTS) {
     for (let i = 0; i <= retries; i++) {
       try {
@@ -481,6 +480,9 @@ document.addEventListener("DOMContentLoaded", () => {
     constructor() {
       try {
         this.cleanupHandlers = [];
+        
+        // ✅ NEW: Track if action is in progress to prevent double-execution
+        this.actionInProgress = new Set();
 
         this.initializeDOM();
         this.initializeState();
@@ -798,9 +800,8 @@ document.addEventListener("DOMContentLoaded", () => {
           document.removeEventListener("keydown", keyHandler)
         );
     
-        // ✅ NEW: Safari orientation fix
+        // ✅ Safari orientation fix
         const handleOrientationChange = () => {
-          // Force Safari to recalculate layout
           setTimeout(() => {
             window.dispatchEvent(new Event('resize'));
           }, 100);
@@ -811,59 +812,93 @@ document.addEventListener("DOMContentLoaded", () => {
           window.removeEventListener('orientationchange', handleOrientationChange)
         );
     
-        if (this.startBtn)
-          this.startBtn.onclick = () => this.safeCall("startGame");
-        if (this.pauseBtn)
-          this.pauseBtn.onclick = () => this.safeCall("togglePause");
-        if (this.quitBtn)
-          this.quitBtn.onclick = () => this.safeCall("quitGame");
-        if (this.resetScoresBtn)
-          this.resetScoresBtn.onclick = () => this.safeCall("resetScores");
-        if (this.diffSelect)
-          this.diffSelect.onchange = () => this.safeCall("changeDifficulty");
-        if (this.themeToggle)
-          this.themeToggle.onclick = () => this.safeCall("toggleTheme");
-        if (this.musicBtn)
-          this.musicBtn.onclick = () => this.safeCall("toggleMusic");
+        // ✅ FIX: Use addEventListener with action locking instead of onclick
+        const addClickHandler = (element, method, debounceTime = 0) => {
+          if (!element) return;
+          
+          let handler = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // ✅ Prevent rapid double-clicks
+            if (this.actionInProgress.has(method)) {
+              return;
+            }
+            
+            this.actionInProgress.add(method);
+            this.safeCall(method);
+            
+            // Release lock after a short delay
+            setTimeout(() => {
+              this.actionInProgress.delete(method);
+            }, debounceTime || 300);
+          };
+          
+          element.addEventListener('click', handler, { passive: false });
+          element.addEventListener('touchend', handler, { passive: false });
+          
+          this.cleanupHandlers.push(() => {
+            element.removeEventListener('click', handler);
+            element.removeEventListener('touchend', handler);
+          });
+        };
 
-        if (this.leftBtn)
-          this.leftBtn.onclick = () => this.safeCall("moveLeft");
-        if (this.rightBtn)
-          this.rightBtn.onclick = () => this.safeCall("moveRight");
-        if (this.rotateBtn)
-          this.rotateBtn.onclick = () => this.safeCall("rotate");
-        if (this.downBtn)
-          this.downBtn.onclick = () => this.safeCall("moveDown");
+        // Main game buttons
+        addClickHandler(this.startBtn, "startGame", 500);
+        addClickHandler(this.pauseBtn, "togglePause", 300);
+        addClickHandler(this.quitBtn, "quitGame", 300);
+        addClickHandler(this.resetScoresBtn, "resetScores", 500);
+        addClickHandler(this.themeToggle, "toggleTheme", 300);
+        addClickHandler(this.musicBtn, "toggleMusic", 300);
+        
+        if (this.diffSelect) {
+          const diffHandler = () => this.safeCall("changeDifficulty");
+          this.diffSelect.addEventListener('change', diffHandler);
+          this.cleanupHandlers.push(() => this.diffSelect.removeEventListener('change', diffHandler));
+        }
+
+        // Mobile control buttons - shorter debounce for gameplay
+        addClickHandler(this.leftBtn, "moveLeft", 100);
+        addClickHandler(this.rightBtn, "moveRight", 100);
+        addClickHandler(this.rotateBtn, "rotate", 100);
+        addClickHandler(this.downBtn, "moveDown", 100);
 
         if (this.infoBtn) {
-          this.infoBtn.onclick = () => this.openInfoModal();
+          addClickHandler(this.infoBtn, "openInfoModal", 300);
         }
 
         const langToggle = document.querySelector("#lang-toggle");
         if (langToggle) {
-          langToggle.onclick = () => this.toggleLanguage();
+          addClickHandler(langToggle, "toggleLanguage", 300);
         }
 
         if (this.closeInfoBtn) {
-          this.closeInfoBtn.onclick = () => this.closeInfoModal();
+          addClickHandler(this.closeInfoBtn, "closeInfoModal", 300);
         }
+        
         if (this.infoModal) {
-          this.infoModal.onclick = (e) => {
-            if (e.target === this.infoModal) this.closeInfoModal();
-          };
+          this.infoModal.addEventListener('click', (e) => {
+            if (e.target === this.infoModal) {
+              e.preventDefault();
+              this.closeInfoModal();
+            }
+          });
         }
 
         // Feedback modal
         if (this.feedbackBtn) {
-          this.feedbackBtn.onclick = () => this.openFeedbackModal();
+          addClickHandler(this.feedbackBtn, "openFeedbackModal", 300);
         }
         if (this.closeFeedbackBtn) {
-          this.closeFeedbackBtn.onclick = () => this.closeFeedbackModal();
+          addClickHandler(this.closeFeedbackBtn, "closeFeedbackModal", 300);
         }
         if (this.feedbackModal) {
-          this.feedbackModal.onclick = (e) => {
-            if (e.target === this.feedbackModal) this.closeFeedbackModal();
-          };
+          this.feedbackModal.addEventListener('click', (e) => {
+            if (e.target === this.feedbackModal) {
+              e.preventDefault();
+              this.closeFeedbackModal();
+            }
+          });
         }
 
         // Feedback form handlers
@@ -872,7 +907,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const charCount = document.querySelector("#char-count");
 
         if (submitFeedbackBtn) {
-          submitFeedbackBtn.onclick = () => this.submitFeedback();
+          addClickHandler(submitFeedbackBtn, "submitFeedback", 1000);
         }
 
         if (feedbackMessage && charCount) {
@@ -896,7 +931,6 @@ document.addEventListener("DOMContentLoaded", () => {
         errorHandler.handleError(err, "setupEventListeners");
       }
     }
-
     safeCall(methodName) {
       try {
         if (typeof this[methodName] === "function") {
