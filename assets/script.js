@@ -2146,52 +2146,52 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
-    togglePause() {
-      if (!this.isPlaying) return;
+togglePause() {
+  if (!this.isPlaying) return;
+
+  try {
+    console.log(`[PAUSE] togglePause called. Current isPaused: ${this.isPaused}`);
     
-      try {
-        console.log(`[PAUSE] togglePause called. Current isPaused: ${this.isPaused}`);
-        
-        this.isPaused = !this.isPaused;
-        
-        console.log(`[PAUSE] New isPaused value: ${this.isPaused}`);
+    this.isPaused = !this.isPaused;
     
-        if (this.isPaused) {
-          console.log("[PAUSE] Entering PAUSED state");
-          this.stopLoop();
-          if (this.bgMusic) this.bgMusic.pause();
-          
-          const pauseMsg = this.currentLang === "es" 
-            ? "⏸️ Pausado (Presiona P para reanudar)" 
-            : "⏸️ Paused (Press P to resume)";
-          
-          console.log(`[PAUSE] About to show popup: "${pauseMsg}"`);
-          this.showPopup(pauseMsg);
-          a11y.announce(pauseMsg);
-        } else {
-          console.log("[PAUSE] Entering RESUMED state");
-          this.startLoop();
-          if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
-            const playPromise = this.bgMusic.play();
-            if (playPromise && typeof playPromise.catch === "function") {
-              playPromise.catch((err) =>
-                console.log("Music resume failed:", err)
-              );
-            }
-          }
-          
-          const resumeMsg = this.currentLang === "es" 
-            ? "▶️ Reanudado" 
-            : "▶️ Resumed";
-          
-          console.log(`[PAUSE] About to show popup: "${resumeMsg}"`);
-          this.showPopup(resumeMsg);
-          a11y.announce(resumeMsg);
+    console.log(`[PAUSE] New isPaused value: ${this.isPaused}`);
+
+    if (this.isPaused) {
+      console.log("[PAUSE] Entering PAUSED state");
+      this.stopLoop();
+      if (this.bgMusic) this.bgMusic.pause();
+      
+      const pauseMsg = this.currentLang === "es" 
+        ? "⏸️ Pausado (Presiona P para reanudar)" 
+        : "⏸️ Paused (Press P to resume)";
+      
+      console.log(`[PAUSE] About to show popup: "${pauseMsg}"`);
+      this.showPopup(pauseMsg);
+      a11y.announce(pauseMsg);
+    } else {
+      console.log("[PAUSE] Entering RESUMED state");
+      this.startLoop();
+      if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
+        const playPromise = this.bgMusic.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch((err) =>
+            console.log("Music resume failed:", err)
+          );
         }
-      } catch (err) {
-        errorHandler.handleError(err, "togglePause");
       }
+      
+      const resumeMsg = this.currentLang === "es" 
+        ? "▶️ Reanudado" 
+        : "▶️ Resumed";
+      
+      console.log(`[PAUSE] About to show popup: "${resumeMsg}"`);
+      this.showPopup(resumeMsg);
+      a11y.announce(resumeMsg);
     }
+  } catch (err) {
+    errorHandler.handleError(err, "togglePause");
+  }
+}
     quitGame() {
       if (!this.isPlaying && !this.isPaused) return;
 
