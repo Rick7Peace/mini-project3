@@ -814,46 +814,82 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         );
 
-// ✅ FIXED: Smart handler that prevents double-firing
+// ✅ CROSS-BROWSER BULLETPROOF (Chrome + Safari iOS/macOS)
 const addClickHandler = (element, method, debounceTime = 0) => {
   if (!element) return;
   
-  let isProcessing = false;  // ✅ NEW: Prevents same handler from running twice
+  // ✅ Shared timestamp across ALL event types
+  let lastExecutionTime = 0;
   
-  let handler = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // ✅ Safari iOS fix: Track if touchend fired to prevent click
+  let touchendFired = false;
+  let touchendTimeout = null;
+  
+  const handler = (e) => {
+    const now = Date.now();
+    const timeSinceLastExecution = now - lastExecutionTime;
+    const eventType = e.type;
     
-    // ✅ NEW: Check if already processing this exact click
-    if (isProcessing) return;
+    // ✅ DEBUG: Remove after testing
+    console.log(`[${method}] Event: ${eventType}, Time since last: ${timeSinceLastExecution}ms`);
     
-    // ✅ Prevent rapid double-clicks
-    if (this.actionInProgress.has(method)) {
+    // ✅ SAFARI iOS FIX: If touchend just fired, block the subsequent click
+    if (eventType === 'click' && touchendFired) {
+      console.log(`[${method}] BLOCKED - click after touchend`);
       return;
     }
     
-    isProcessing = true;  // ✅ Lock this handler
+    // ✅ CHROME/SAFARI: Block any event within 400ms
+    if (timeSinceLastExecution < 400) {
+      console.log(`[${method}] BLOCKED - too soon (${timeSinceLastExecution}ms)`);
+      return;
+    }
+    
+    // ✅ Action lock check (second layer of protection)
+    if (this.actionInProgress.has(method)) {
+      console.log(`[${method}] BLOCKED - action in progress`);
+      return;
+    }
+    
+    // ✅ Prevent default browser behavior
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // ✅ EXECUTE THE ACTION
+    console.log(`[${method}] ✅ EXECUTING`);
+    lastExecutionTime = now;
     this.actionInProgress.add(method);
+    
+    // ✅ Safari iOS: Mark touchend as fired
+    if (eventType === 'touchend') {
+      touchendFired = true;
+      
+      // Clear the flag after 500ms
+      if (touchendTimeout) clearTimeout(touchendTimeout);
+      touchendTimeout = setTimeout(() => {
+        touchendFired = false;
+      }, 500);
+    }
+    
     this.safeCall(method);
     
-    // Release locks after delay
+    // ✅ Release action lock
     setTimeout(() => {
       this.actionInProgress.delete(method);
-      isProcessing = false;  // ✅ Unlock this handler
-    }, debounceTime || 300);
+      console.log(`[${method}] Lock released`);
+    }, Math.max(debounceTime, 400));
   };
 
-  // ✅ NEW: Only attach ONE listener based on device type
-  const isTouchDevice = Utils.isTouchDevice();
-  const eventType = isTouchDevice ? "touchend" : "click";
-  
-  element.addEventListener(eventType, handler, { passive: false });
+  // ✅ ATTACH BOTH EVENTS (Works on all devices)
+  element.addEventListener("touchend", handler, { passive: false });
+  element.addEventListener("click", handler, { passive: false });
   
   this.cleanupHandlers.push(() => {
-    element.removeEventListener(eventType, handler);
+    element.removeEventListener("touchend", handler);
+    element.removeEventListener("click", handler);
+    if (touchendTimeout) clearTimeout(touchendTimeout);
   });
-};
-        // Main game buttons
+};        // Main game buttons
         addClickHandler(this.startBtn, "startGame", 1500);
         addClickHandler(this.pauseBtn, "togglePause", 1500); // ✅ FIXED
         addClickHandler(this.quitBtn, "quitGame", 1500);
