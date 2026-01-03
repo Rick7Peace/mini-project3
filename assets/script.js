@@ -815,81 +815,89 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 // ✅ CROSS-BROWSER BULLETPROOF (Chrome + Safari iOS/macOS)
+// ✅ ULTRA-SAFE: Deduplicated event handling for Safari iOS + Chrome
 const addClickHandler = (element, method, debounceTime = 0) => {
   if (!element) return;
   
-  // ✅ Shared timestamp across ALL event types
-  let lastExecutionTime = 0;
+  // ✅ Use a WeakMap to track execution by element+method combo
+  if (!this.eventExecutionTracker) {
+    this.eventExecutionTracker = new Map();
+  }
   
-  // ✅ Safari iOS fix: Track if touchend fired to prevent click
-  let touchendFired = false;
-  let touchendTimeout = null;
+  const trackingKey = `${element.id || 'element'}_${method}`;
   
   const handler = (e) => {
     const now = Date.now();
-    const timeSinceLastExecution = now - lastExecutionTime;
-    const eventType = e.type;
+    const lastExecution = this.eventExecutionTracker.get(trackingKey) || 0;
+    const timeSinceLastExecution = now - lastExecution;
     
-    // ✅ DEBUG: Remove after testing
-    console.log(`[${method}] Event: ${eventType}, Time since last: ${timeSinceLastExecution}ms`);
+    console.log(`[${method}] Event: ${e.type}, Time since last: ${timeSinceLastExecution}ms`);
     
-    // ✅ SAFARI iOS FIX: If touchend just fired, block the subsequent click
-    if (eventType === 'click' && touchendFired) {
-      console.log(`[${method}] BLOCKED - click after touchend`);
+    // ✅ CRITICAL: Block ANY event within 500ms (increased from 400ms)
+    if (timeSinceLastExecution < 500) {
+      console.log(`[${method}] ❌ BLOCKED - too soon`);
+      e.preventDefault();
+      e.stopPropagation();
       return;
     }
     
-    // ✅ CHROME/SAFARI: Block any event within 400ms
-    if (timeSinceLastExecution < 400) {
-      console.log(`[${method}] BLOCKED - too soon (${timeSinceLastExecution}ms)`);
-      return;
-    }
-    
-    // ✅ Action lock check (second layer of protection)
+    // ✅ Also check action lock
     if (this.actionInProgress.has(method)) {
-      console.log(`[${method}] BLOCKED - action in progress`);
+      console.log(`[${method}] ❌ BLOCKED - action in progress`);
+      e.preventDefault();
+      e.stopPropagation();
       return;
     }
     
-    // ✅ Prevent default browser behavior
+    // ✅ Prevent browser defaults
     e.preventDefault();
     e.stopPropagation();
+    e.stopImmediatePropagation(); // ✅ NEW: Stop other handlers on same element
     
-    // ✅ EXECUTE THE ACTION
+    // ✅ EXECUTE
     console.log(`[${method}] ✅ EXECUTING`);
-    lastExecutionTime = now;
+    this.eventExecutionTracker.set(trackingKey, now);
     this.actionInProgress.add(method);
-    
-    // ✅ Safari iOS: Mark touchend as fired
-    if (eventType === 'touchend') {
-      touchendFired = true;
-      
-      // Clear the flag after 500ms
-      if (touchendTimeout) clearTimeout(touchendTimeout);
-      touchendTimeout = setTimeout(() => {
-        touchendFired = false;
-      }, 500);
-    }
-    
     this.safeCall(method);
     
-    // ✅ Release action lock
+    // ✅ Release lock after minimum 500ms
     setTimeout(() => {
       this.actionInProgress.delete(method);
       console.log(`[${method}] Lock released`);
-    }, Math.max(debounceTime, 400));
+    }, Math.max(debounceTime, 500)); // ✅ Increased to 500ms
   };
 
-  // ✅ ATTACH BOTH EVENTS (Works on all devices)
-  element.addEventListener("touchend", handler, { passive: false });
-  element.addEventListener("click", handler, { passive: false });
+  // ✅ Detect device type
+  const isTouchDevice = Utils.isTouchDevice();
   
-  this.cleanupHandlers.push(() => {
-    element.removeEventListener("touchend", handler);
-    element.removeEventListener("click", handler);
-    if (touchendTimeout) clearTimeout(touchendTimeout);
-  });
-};        // Main game buttons
+  if (isTouchDevice) {
+    // ✅ Mobile: Attach BOTH events but block duplicates via timestamp
+    element.addEventListener("touchend", handler, { 
+      passive: false,
+      capture: true // ✅ NEW: Capture phase to run before other handlers
+    });
+    
+    element.addEventListener("click", handler, { 
+      passive: false,
+      capture: true
+    });
+    
+    this.cleanupHandlers.push(() => {
+      element.removeEventListener("touchend", handler, { capture: true });
+      element.removeEventListener("click", handler, { capture: true });
+    });
+  } else {
+    // ✅ Desktop: Only click
+    element.addEventListener("click", handler, { 
+      passive: false,
+      capture: true
+    });
+    
+    this.cleanupHandlers.push(() => {
+      element.removeEventListener("click", handler, { capture: true });
+    });
+  }
+};  // Main game buttons
         addClickHandler(this.startBtn, "startGame", 1500);
         addClickHandler(this.pauseBtn, "togglePause", 1500); // ✅ FIXED
         addClickHandler(this.quitBtn, "quitGame", 1500);
