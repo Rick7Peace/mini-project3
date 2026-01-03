@@ -779,18 +779,59 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!this.popup || !msg) return;
     
       try {
-        this.popup.textContent = String(msg);
+        // ✅ CRITICAL FIX: Prevent duplicate popups
+        const now = Date.now();
+        const msgKey = String(msg).trim();
+        
+        // Initialize global popup tracker
+        if (!window._lastPopup) {
+          window._lastPopup = { message: '', time: 0 };
+        }
+        
+        // ✅ BLOCK if exact same message within 800ms
+        if (window._lastPopup.message === msgKey && 
+            now - window._lastPopup.time < 800) {
+          console.log(`[POPUP BLOCKED] Duplicate: "${msgKey}" (${now - window._lastPopup.time}ms ago)`);
+          return; // EXIT - Don't show duplicate
+        }
+        
+        console.log(`[POPUP SHOWING] "${msgKey}"`);
+        
+        // Update tracker BEFORE showing (prevents race condition)
+        window._lastPopup.message = msgKey;
+        window._lastPopup.time = now;
+        
+        // Clear any existing timeout
+        if (this._popupTimeout) {
+          clearTimeout(this._popupTimeout);
+          this._popupTimeout = null;
+        }
+        
+        // Remove show class to reset animation
+        this.popup.classList.remove("show");
+        
+        // Force browser to recalculate styles (restart animation)
+        void this.popup.offsetWidth;
+        
+        // Set message and show
+        this.popup.textContent = msgKey;
         this.popup.classList.add("show");
-        a11y.announce(msg);
-    
-        setTimeout(() => {
-          this.popup.classList.remove("show");
+        
+        // Accessibility announcement
+        a11y.announce(msgKey);
+        
+        // Schedule hide
+        this._popupTimeout = setTimeout(() => {
+          if (this.popup) {
+            this.popup.classList.remove("show");
+          }
+          this._popupTimeout = null;
         }, ms);
+        
       } catch (err) {
         console.error("showPopup error:", err);
       }
-    }    
-    /* ==== Event Listeners ==== */
+    }    /* ==== Event Listeners ==== */
     setupEventListeners() {
       try {
         const keyHandler = this.handleKeyboard.bind(this);
