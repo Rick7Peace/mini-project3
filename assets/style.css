@@ -1217,29 +1217,37 @@ audio { display: none; }
   .game-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 0 20px;
+    align-items: stretch; /* ✅ CHANGE: Use stretch instead of center */
+    padding: 0;
     width: 100%;
-    box-sizing: border-box; /* ✅ ADD: Ensures padding doesn't overflow */
+    box-sizing: border-box;
   }
   
   .controls-panel {
-    width: 100%;
+    width: 100%; /* ✅ CHANGE: Full width */
     max-width: 500px;
     order: 1;
-    box-sizing: border-box; /* ✅ ADD */
+    margin: 0 auto; /* ✅ This centers it */
+    padding-left: 25px; /* ✅ Keep original padding */
+    padding-right: 25px;
+    box-sizing: border-box;
   }
   
   .grid-wrapper {
     order: 2;
-    width: fit-content; /* ✅ CHANGE: Only as wide as grid */
+    width: 100%; /* ✅ CHANGE: Full width */
+    display: flex; /* ✅ ADD: Make it a flex container */
+    justify-content: center; /* ✅ ADD: Center the grid inside */
   }
   
   aside.info {
-    width: 100%;
+    width: 100%; /* ✅ CHANGE: Full width */
     max-width: 500px;
     order: 3;
-    box-sizing: border-box; /* ✅ ADD */
+    margin: 0 auto; /* ✅ This centers it */
+    padding-left: 25px; /* ✅ Keep original padding */
+    padding-right: 25px;
+    box-sizing: border-box;
   }
 }
 
@@ -1255,20 +1263,26 @@ audio { display: none; }
   }
   
   .game-container {
-    padding: 0 15px;
+    padding: 0;
     width: 100%;
-    box-sizing: border-box; /* ✅ ADD */
+    box-sizing: border-box;
+    align-items: stretch; /* ✅ CHANGE */
   }
   
   .controls-panel,
   aside.info {
-    width: 100%;
+    width: 100%; /* ✅ CHANGE: Full width */
     max-width: 100%;
-    box-sizing: border-box; /* ✅ ADD */
+    margin: 0 auto; /* ✅ Centers it */
+    padding-left: 25px; /* ✅ Keep original padding */
+    padding-right: 25px;
+    box-sizing: border-box;
   }
   
   .grid-wrapper {
-    width: fit-content; /* ✅ CHANGE: Only as wide as grid */
+    width: 100%; /* ✅ CHANGE: Full width */
+    display: flex; /* ✅ ADD */
+    justify-content: center; /* ✅ ADD: Center grid */
   }
   
   :root { --square-size: 26px; }
@@ -1291,21 +1305,25 @@ audio { display: none; }
   h1 { font-size: 1.8rem; }
   
   .game-container {
-    padding: 0 10px;
+    padding: 0;
     width: 100%;
-    box-sizing: border-box; /* ✅ ADD */
+    box-sizing: border-box;
+    align-items: stretch; /* ✅ CHANGE */
   }
   
   .controls-panel,
   aside.info {
-    width: 100%;
+    width: 100%; /* ✅ CHANGE: Full width */
     max-width: 100%;
+    margin: 0 auto; /* ✅ Centers it */
     padding: 20px 15px;
-    box-sizing: border-box; /* ✅ ADD */
+    box-sizing: border-box;
   }
   
   .grid-wrapper {
-    width: fit-content; /* ✅ CHANGE: Only as wide as grid */
+    width: 100%; /* ✅ CHANGE: Full width */
+    display: flex; /* ✅ ADD */
+    justify-content: center; /* ✅ ADD: Center grid */
   }
   
   button { 
