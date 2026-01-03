@@ -1216,23 +1216,29 @@ audio { display: none; }
 @media (max-width: 1023px) and (orientation: portrait) {
   .game-container {
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* ✅ This is correct */
+    padding: 0 20px; /* ✅ ADD: Consistent padding on both sides */
   }
   
   .controls-panel {
     width: 100%;
     max-width: 500px;
     order: 1;
+    margin: 0 auto; /* ✅ ADD: Center the panel */
   }
   
   .grid-wrapper {
     order: 2;
+    margin: 0 auto; /* ✅ ADD: Center the wrapper */
+    width: 100%; /* ✅ ADD: Full width */
+    max-width: fit-content; /* ✅ ADD: Only as wide as content */
   }
   
   aside.info {
     width: 100%;
     max-width: 500px;
     order: 3;
+    margin: 0 auto; /* ✅ ADD: Center the panel */
   }
 }
 
@@ -1247,10 +1253,21 @@ audio { display: none; }
     margin: 15px; 
   }
   
+  .game-container {
+    padding: 0 15px; /* ✅ CHANGE: Consistent horizontal padding */
+  }
+  
   .controls-panel,
   aside.info {
     width: 100%;
-    max-width: 100%;
+    max-width: 100%; /* ✅ CHANGE: Use full available width */
+    margin: 0 auto; /* ✅ ADD: Ensure centering */
+  }
+  
+  .grid-wrapper {
+    margin: 0 auto; /* ✅ ADD: Center the grid */
+    width: 100%;
+    max-width: fit-content;
   }
   
   :root { --square-size: 26px; }
@@ -1272,6 +1289,24 @@ audio { display: none; }
   
   h1 { font-size: 1.8rem; }
   
+  .game-container {
+    padding: 0 10px; /* ✅ CHANGE: Smaller padding for tiny screens */
+  }
+  
+  .controls-panel,
+  aside.info {
+    width: 100%;
+    max-width: 100%; /* ✅ Full width on small screens */
+    margin: 0 auto; /* ✅ Centered */
+    padding: 20px 15px; /* ✅ ADD: Slightly reduce internal padding */
+  }
+  
+  .grid-wrapper {
+    margin: 0 auto; /* ✅ Centered */
+    width: 100%;
+    max-width: fit-content;
+  }
+  
   button { 
     padding: 12px 18px; 
     font-size: 0.9rem; 
@@ -1291,6 +1326,7 @@ audio { display: none; }
     grid-template-columns: repeat(3, 70px);
     grid-template-rows: repeat(2, 70px);
     gap: 12px;
+    margin: 20px auto 0; /* ✅ ADD: Center mobile controls */
   }
   
   #mobile-controls button {
@@ -1298,7 +1334,6 @@ audio { display: none; }
     padding: 15px;
   }
 }
-
 /* ==================================================================
    MOBILE ROTATION REMINDER
    ================================================================== */
