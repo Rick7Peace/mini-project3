@@ -814,12 +814,11 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         );
 
-// ✅ CROSS-BROWSER BULLETPROOF (Chrome + Safari iOS/macOS)
-// ✅ ULTRA-SAFE: Deduplicated event handling for Safari iOS + Chrome
+// ✅ CORRECTED: Only ONE event listener per device type
 const addClickHandler = (element, method, debounceTime = 0) => {
   if (!element) return;
   
-  // ✅ Use a WeakMap to track execution by element+method combo
+  // ✅ Use a Map to track execution by element+method combo
   if (!this.eventExecutionTracker) {
     this.eventExecutionTracker = new Map();
   }
@@ -831,11 +830,9 @@ const addClickHandler = (element, method, debounceTime = 0) => {
     const lastExecution = this.eventExecutionTracker.get(trackingKey) || 0;
     const timeSinceLastExecution = now - lastExecution;
     
-    console.log(`[${method}] Event: ${e.type}, Time since last: ${timeSinceLastExecution}ms`);
-    
-    // ✅ CRITICAL: Block ANY event within 500ms (increased from 400ms)
+    // ✅ CRITICAL: Block ANY event within 500ms
     if (timeSinceLastExecution < 500) {
-      console.log(`[${method}] ❌ BLOCKED - too soon`);
+      console.log(`[${method}] ❌ BLOCKED - too soon (${timeSinceLastExecution}ms)`);
       e.preventDefault();
       e.stopPropagation();
       return;
@@ -852,10 +849,9 @@ const addClickHandler = (element, method, debounceTime = 0) => {
     // ✅ Prevent browser defaults
     e.preventDefault();
     e.stopPropagation();
-    e.stopImmediatePropagation(); // ✅ NEW: Stop other handlers on same element
     
     // ✅ EXECUTE
-    console.log(`[${method}] ✅ EXECUTING`);
+    console.log(`[${method}] ✅ EXECUTING at ${now}`);
     this.eventExecutionTracker.set(trackingKey, now);
     this.actionInProgress.add(method);
     this.safeCall(method);
@@ -864,37 +860,31 @@ const addClickHandler = (element, method, debounceTime = 0) => {
     setTimeout(() => {
       this.actionInProgress.delete(method);
       console.log(`[${method}] Lock released`);
-    }, Math.max(debounceTime, 500)); // ✅ Increased to 500ms
+    }, Math.max(debounceTime, 500));
   };
 
-  // ✅ Detect device type
+  // ✅ FIXED: Only attach ONE event type per device
   const isTouchDevice = Utils.isTouchDevice();
   
   if (isTouchDevice) {
-    // ✅ Mobile: Attach BOTH events but block duplicates via timestamp
+    // ✅ Mobile: ONLY touchend (NOT click!)
     element.addEventListener("touchend", handler, { 
       passive: false,
-      capture: true // ✅ NEW: Capture phase to run before other handlers
-    });
-    
-    element.addEventListener("click", handler, { 
-      passive: false,
-      capture: true
+      capture: false  // ✅ Changed to false - no need for capture
     });
     
     this.cleanupHandlers.push(() => {
-      element.removeEventListener("touchend", handler, { capture: true });
-      element.removeEventListener("click", handler, { capture: true });
+      element.removeEventListener("touchend", handler, { capture: false });
     });
   } else {
-    // ✅ Desktop: Only click
+    // ✅ Desktop: ONLY click
     element.addEventListener("click", handler, { 
       passive: false,
-      capture: true
+      capture: false
     });
     
     this.cleanupHandlers.push(() => {
-      element.removeEventListener("click", handler, { capture: true });
+      element.removeEventListener("click", handler, { capture: false });
     });
   }
 };  // Main game buttons
