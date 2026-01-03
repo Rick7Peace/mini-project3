@@ -2239,24 +2239,26 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
     togglePause() {
-      if (!this.isPlaying) return; // ✅ ADD THIS LINE
-
+      if (!this.isPlaying) return;
+    
       try {
-        this.isPaused = !this.isPaused; // ✅ ADD THIS LINE
-
+        this.isPaused = !this.isPaused;
+    
         if (this.isPaused) {
           this.stopLoop();
           if (this.bgMusic) this.bgMusic.pause();
-
+    
           const pauseMsg =
             this.currentLang === "es"
               ? "Pausado. Presiona P para reanudar"
               : "Paused. Press P to resume";
-
+    
           a11y.announce(pauseMsg);
         } else {
           this.startLoop();
-          if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
+          
+          // ✅ IMPROVED: Only resume if music was playing
+          if (this.sound && !this.sound.musicMuted && this.bgMusic) {
             const playPromise = this.bgMusic.play();
             if (playPromise && typeof playPromise.catch === "function") {
               playPromise.catch((err) =>
@@ -2264,21 +2266,26 @@ document.addEventListener("DOMContentLoaded", () => {
               );
             }
           }
-
+    
           const resumeMsg = this.currentLang === "es" ? "Reanudado" : "Resumed";
-
+    
           a11y.announce(resumeMsg);
         }
       } catch (err) {
         errorHandler.handleError(err, "togglePause");
       }
-    }
-    quitGame() {
+    }    quitGame() {
       if (!this.isPlaying && !this.isPaused) return;
-
+    
       try {
         this.stopLoop();
-        if (this.bgMusic) this.bgMusic.pause();
+        
+        // ✅ FIX: Reset music to beginning, not just pause
+        if (this.bgMusic) {
+          this.bgMusic.pause();
+          this.bgMusic.currentTime = 0; // ← ADD THIS LINE
+        }
+        
         this.isPlaying = false;
         this.isPaused = false;
         this.isFreezing = false;
@@ -2289,32 +2296,34 @@ document.addEventListener("DOMContentLoaded", () => {
         errorHandler.handleError(err, "quitGame");
       }
     }
-
     gameOver() {
       try {
         this.stopLoop();
         this.isFreezing = false;
-        if (this.bgMusic) this.bgMusic.pause();
-
+        
+        // ✅ FIX: Reset music to beginning
+        if (this.bgMusic) {
+          this.bgMusic.pause();
+          this.bgMusic.currentTime = 0; // ← ADD THIS LINE
+        }
+    
         this.showPopup("💀 Game Over!");
         a11y.announce(`Game over! Final score: ${this.score}`, "assertive");
-
+    
         const entry = this.saveScore();
         this.renderLeaderboard();
         this.updatePersonalBest();
-
+    
         setTimeout(() => {
           this.showPopup(`✅ ${entry.name} scored ${entry.score}!`, 4000);
         }, 2000);
-
+    
         this.clearState();
         this.reset();
       } catch (err) {
         errorHandler.handleError(err, "gameOver");
       }
-    }
-
-    reset() {
+    }    reset() {
       try {
         this.score = 0;
         this.updateScoreDisplay(0);

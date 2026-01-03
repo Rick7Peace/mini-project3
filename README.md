@@ -1,7 +1,7 @@
 # FallingBlocks+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-11.0-green.svg)](https://github.com/Rick7Peace/mini-project3)
+[![Version](https://img.shields.io/badge/version-11.1-green.svg)](https://github.com/Rick7Peace/mini-project3)
 [![Bilingual](https://img.shields.io/badge/languages-EN%20|%20ES-orange.svg)](https://github.com/Rick7Peace/mini-project3)
 [![Security](https://img.shields.io/badge/security-hardened-red.svg)](https://github.com/Rick7Peace/mini-project3)
 
@@ -28,7 +28,7 @@ A production-ready falling block puzzle game built with vanilla JavaScript, feat
 - **Wall Kicks** — Intelligent SRS-style piece rotation system
 - **Next Piece Preview** — See upcoming pieces for strategic planning
 
-### 📱 Mobile Optimization (NEW in v11.0)
+### 📱 Mobile Optimization
 - **Complete Zoom Prevention** — Triple-layer defense system
   - HTML viewport meta configuration (`maximum-scale=1.0`, `user-scalable=no`)
   - CSS touch-action properties (`touch-action: none` on game grid)
@@ -99,6 +99,7 @@ A production-ready falling block puzzle game built with vanilla JavaScript, feat
 - **Touch Gestures** — Swipe to move/rotate pieces on mobile
 - **Custom Scrollbars** — Themed scrollbar styling
 - **Loading States** — User feedback for all async operations
+- **Clean Game Flow** — Minimal popup interruptions (v11.1)
 
 ### 📊 Game Features
 - **Personal Best Tracking** — Per-player high scores with timestamps
@@ -169,7 +170,7 @@ No installation required! Works on:
 - **Swipe Up** — Rotate clockwise
 - **Swipe Down** — Soft drop
 
-### Landscape Mode (NEW!)
+### Landscape Mode
 **For best mobile experience:** Rotate your phone/tablet sideways!
 - Activates desktop 3-column layout
 - Larger game grid
@@ -185,7 +186,7 @@ No installation required! Works on:
 | 3 Lines | 500 pts | Triple |
 | 4 Lines | 800 pts | Tetris! |
 
-**Level Up:** Score 500+ points to advance levels and increase speed!
+**Level Up:** Score 500 points to advance levels and increase speed!
 
 ---
 
@@ -242,6 +243,12 @@ No installation required! Works on:
 ✅ **Form Input Compatibility** — Keyboard handler respects inputs  
 ✅ **Cross-Device Testing** — iPhone, iPad, Android verified  
 
+### UX Improvements (v11.1)
+✅ **Clean Game Flow** — Removed intrusive popup notifications  
+✅ **Maintained Critical Feedback** — Kept important game messages  
+✅ **Preserved Accessibility** — All screen reader announcements active  
+✅ **Cross-Browser Tested** — Works on all major browsers  
+
 ### Security Features (10/10 Score)
 ✅ **XSS Prevention** — All user input sanitized with HTML escaping  
 ✅ **CSP Headers** — Blocks inline scripts and unauthorized resources  
@@ -278,6 +285,7 @@ No installation required! Works on:
 ✅ **Consistent Naming** — camelCase for variables, UPPER_CASE for constants  
 ✅ **No Global Pollution** — Single global instance pattern  
 ✅ **Separation of Concerns** — Modular, maintainable code  
+✅ **Clean UX Design** — Minimal popup interruptions (v11.1)  
 
 ---
 
@@ -403,7 +411,34 @@ SOFTWARE.
 
 ## 📈 Version History
 
-### v11.0 (Current - Production Ready)
+### v11.1 (Current - UX Improvements)
+**Released:** January 2025
+
+**🎨 User Experience Enhancements:**
+
+**Popup Message Removal:**
+- ✅ **Cleaner Game Flow** — Removed 8 intrusive popup notifications
+  - Removed: Start Game welcome message
+  - Removed: Pause/Resume notifications
+  - Removed: Quit game notification
+  - Removed: Reset Scores confirmation popups
+  - Removed: Music toggle notifications
+  - Removed: Difficulty change notifications
+  - Removed: Game restore notifications
+- ✅ **Maintained Critical Feedback** — Kept important notifications:
+  - Game Over messages
+  - New Personal Best achievements
+  - Feedback submission confirmations
+  - Error recovery messages
+- ✅ **Preserved Accessibility** — All screen reader announcements maintained
+- ✅ **Cross-Browser Tested** — Works on Chrome, Safari, Firefox, Edge (desktop & mobile)
+
+**Bug Fixes:**
+- ✅ Fixed: Excessive popup interruptions during gameplay
+- ✅ Fixed: Popup messages appearing on mobile devices
+- ✅ Improved: Overall user experience with less visual clutter
+
+### v11.0 (Production Ready)
 **Released:** December 2024
 
 **🎉 Major Mobile Optimization Overhaul:**
@@ -545,6 +580,7 @@ Want to see a feature? [Submit a request](mailto:marmolejo.ricardo@gmail.com?sub
 - ✅ Cross-browser compatibility (Chrome, Firefox, Safari, Edge)
 - ✅ Mobile testing (iOS Safari, Chrome Mobile)
 - ✅ Tablet testing (iPad, Android tablets)
+- ✅ No intrusive popup messages during gameplay
 
 ### Security Testing
 - ✅ XSS attempts blocked (input sanitization)
@@ -692,7 +728,6 @@ Contributions are welcome! Here's how you can help:
 ---
 
 ### Built with 💙 by Ricardo Marmolejo
-
 
 [📧 Email](mailto:marmolejo.ricardo@gmail.com) • [🐙 GitHub](https://github.com/Rick7Peace) • [💼 LinkedIn](https://linkedin.com/in/ricardo-marmolejo)
 
