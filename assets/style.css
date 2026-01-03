@@ -1215,42 +1215,31 @@ audio { display: none; }
 /* ===== TABLETS & SMALL LAPTOPS in Portrait ===== */
 @media (max-width: 1023px) and (orientation: portrait) {
   .game-container {
+    display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0 20px;
-    /* ✅ ADD: Safari flexbox fix */
     width: 100%;
-    max-width: 100%;
+    box-sizing: border-box; /* ✅ ADD: Ensures padding doesn't overflow */
   }
   
   .controls-panel {
-    width: calc(100% - 40px); /* ✅ CHANGE: Account for container padding */
+    width: 100%;
     max-width: 500px;
     order: 1;
-    margin: 0 auto;
-    /* ✅ ADD: Safari-specific centering */
-    align-self: center;
-    -webkit-align-self: center;
+    box-sizing: border-box; /* ✅ ADD */
   }
   
   .grid-wrapper {
     order: 2;
-    margin: 0 auto;
-    width: 100%;
-    max-width: fit-content;
-    /* ✅ ADD: Safari-specific centering */
-    align-self: center;
-    -webkit-align-self: center;
+    width: fit-content; /* ✅ CHANGE: Only as wide as grid */
   }
   
   aside.info {
-    width: calc(100% - 40px); /* ✅ CHANGE: Account for container padding */
+    width: 100%;
     max-width: 500px;
     order: 3;
-    margin: 0 auto;
-    /* ✅ ADD: Safari-specific centering */
-    align-self: center;
-    -webkit-align-self: center;
+    box-sizing: border-box; /* ✅ ADD */
   }
 }
 
@@ -1267,28 +1256,19 @@ audio { display: none; }
   
   .game-container {
     padding: 0 15px;
-    /* ✅ ADD: Safari flexbox fix */
     width: 100%;
-    max-width: 100%;
+    box-sizing: border-box; /* ✅ ADD */
   }
   
   .controls-panel,
   aside.info {
-    width: calc(100% - 30px); /* ✅ CHANGE: Account for container padding */
+    width: 100%;
     max-width: 100%;
-    margin: 0 auto;
-    /* ✅ ADD: Safari-specific centering */
-    align-self: center;
-    -webkit-align-self: center;
+    box-sizing: border-box; /* ✅ ADD */
   }
   
   .grid-wrapper {
-    margin: 0 auto;
-    width: 100%;
-    max-width: fit-content;
-    /* ✅ ADD: Safari-specific centering */
-    align-self: center;
-    -webkit-align-self: center;
+    width: fit-content; /* ✅ CHANGE: Only as wide as grid */
   }
   
   :root { --square-size: 26px; }
@@ -1312,29 +1292,20 @@ audio { display: none; }
   
   .game-container {
     padding: 0 10px;
-    /* ✅ ADD: Safari flexbox fix */
     width: 100%;
-    max-width: 100%;
+    box-sizing: border-box; /* ✅ ADD */
   }
   
   .controls-panel,
   aside.info {
-    width: calc(100% - 20px); /* ✅ CHANGE: Account for container padding */
+    width: 100%;
     max-width: 100%;
-    margin: 0 auto;
     padding: 20px 15px;
-    /* ✅ ADD: Safari-specific centering */
-    align-self: center;
-    -webkit-align-self: center;
+    box-sizing: border-box; /* ✅ ADD */
   }
   
   .grid-wrapper {
-    margin: 0 auto;
-    width: 100%;
-    max-width: fit-content;
-    /* ✅ ADD: Safari-specific centering */
-    align-self: center;
-    -webkit-align-self: center;
+    width: fit-content; /* ✅ CHANGE: Only as wide as grid */
   }
   
   button { 
@@ -1357,9 +1328,6 @@ audio { display: none; }
     grid-template-rows: repeat(2, 70px);
     gap: 12px;
     margin: 20px auto 0;
-    /* ✅ ADD: Safari-specific centering */
-    justify-self: center;
-    -webkit-justify-self: center;
   }
   
   #mobile-controls button {
@@ -1539,9 +1507,6 @@ select,
     transition: none !important;
   }
 }
-/* ===== Safari iOS Specific Fixes ===== */
-@supports (-webkit-touch-callout: none) {
-  /* Target Safari specifically */
   
   @media (max-width: 1023px) and (orientation: portrait) {
     .game-container {
