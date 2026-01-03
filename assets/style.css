@@ -793,7 +793,7 @@ label {
 #popup-msg.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
-  animation: popupBounce 0.5s var(--bounce);
+  animation: popupBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ==== Footer ==== */
@@ -859,10 +859,19 @@ audio { display: none; }
   50% { border-color: var(--color-o); box-shadow: 0 0 60px var(--color-o-glow); transform: scale(1.02); }
 }
 
+/* ✅ FIXED: Smooth popup animation - NO double bounce */
 @keyframes popupBounce {
-  0% { transform: translateX(-50%) translateY(-100px) scale(0.8); }
-  60% { transform: translateX(-50%) translateY(10px) scale(1.05); }
-  100% { transform: translateX(-50%) translateY(0) scale(1); }
+  0% { 
+    transform: translateX(-50%) translateY(-40px) scale(0.9); 
+    opacity: 0;
+  }
+  70% { 
+    transform: translateX(-50%) translateY(3px) scale(1.01); 
+  }
+  100% { 
+    transform: translateX(-50%) translateY(0) scale(1); 
+    opacity: 1;
+  }
 }
 
 @keyframes modalFadeIn {
@@ -1472,4 +1481,5 @@ select,
    - CSS variables for grid dimensions
    - Performance improvements
    - Viewport-height responsive landscape mode
+   - ✅ FIXED: Smooth popup animation (no double bounce)
    ======================================== */
