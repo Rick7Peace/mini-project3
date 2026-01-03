@@ -2100,18 +2100,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (this.sound) this.sound.resumeCtx();
 
-          // ✅ Bilingual welcome message
-          const welcomeMsg =
-            this.currentLang === "es"
-              ? `🎮 ¡Bienvenido, ${this.playerName}!`
-              : `🎮 Welcome, ${this.playerName}!`;
-
+          // ✅ Only announce for screen readers, no popup
           const announceMsg =
             this.currentLang === "es"
               ? `Juego iniciado. ¡Bienvenido ${this.playerName}! Usa las flechas para jugar.`
               : `Game started. Welcome ${this.playerName}! Use arrow keys to play.`;
 
-          this.showPopup(welcomeMsg);
           a11y.announce(announceMsg);
         }
       } catch (err) {
@@ -2245,10 +2239,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
     togglePause() {
-      if (!this.isPlaying) return;
+      if (!this.isPlaying) return; // ✅ ADD THIS LINE
 
       try {
-        this.isPaused = !this.isPaused;
+        this.isPaused = !this.isPaused; // ✅ ADD THIS LINE
 
         if (this.isPaused) {
           this.stopLoop();
@@ -2256,10 +2250,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const pauseMsg =
             this.currentLang === "es"
-              ? "⏸️ Pausado (Presiona P para reanudar)"
-              : "⏸️ Paused (Press P to resume)";
+              ? "Pausado. Presiona P para reanudar"
+              : "Paused. Press P to resume";
 
-          this.showPopup(pauseMsg);
           a11y.announce(pauseMsg);
         } else {
           this.startLoop();
@@ -2272,10 +2265,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
 
-          const resumeMsg =
-            this.currentLang === "es" ? "▶️ Reanudado" : "▶️ Resumed";
+          const resumeMsg = this.currentLang === "es" ? "Reanudado" : "Resumed";
 
-          this.showPopup(resumeMsg);
           a11y.announce(resumeMsg);
         }
       } catch (err) {
@@ -2293,7 +2284,6 @@ document.addEventListener("DOMContentLoaded", () => {
         this.isFreezing = false;
         this.clearState();
         this.reset();
-        this.showPopup("❌ Game Quit");
         a11y.announce("Game quit. Press Start to play again.");
       } catch (err) {
         errorHandler.handleError(err, "quitGame");
@@ -2565,18 +2555,12 @@ document.addEventListener("DOMContentLoaded", () => {
           : 0;
         this.updateHighScoreDisplay(currentHighScore);
 
-        // ✅ Bilingual restore message
-        const restoreMsg =
-          this.currentLang === "es"
-            ? "🔄 Juego anterior restaurado (presiona ▶️ Comenzar para continuar)"
-            : "🔄 Restored previous game (press ▶️ Start to continue)";
-
+        // ✅ Only announce for screen readers, no popup
         const announceMsg =
           this.currentLang === "es"
             ? "Juego anterior restaurado. Presiona Comenzar para continuar."
             : "Previous game restored. Press Start to continue.";
 
-        this.showPopup(restoreMsg, 4000);
         a11y.announce(announceMsg);
         return true;
       } catch (err) {
@@ -2704,7 +2688,6 @@ document.addEventListener("DOMContentLoaded", () => {
         this.leaderboard = [];
         this.pbMap = {};
         this.renderLeaderboard();
-        this.showPopup("🔁 Scores Reset");
         a11y.announce("All scores reset");
       } catch (err) {
         console.error("Failed to reset scores:", err);
@@ -2732,13 +2715,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         this.recalcLevel();
         this.updateBadge();
-        this.showPopup(`⚙️ Difficulty: ${this.difficultyLabel()}`);
         a11y.announce(`Difficulty changed to ${this.difficultyLabel()}`);
       } catch (err) {
         errorHandler.handleError(err, "changeDifficulty");
       }
     }
-
     difficultyLabel(lang = null) {
       const diff = Number(this.diffSelect?.value || 1);
       const targetLang = lang || this.currentLang;
@@ -2837,27 +2818,24 @@ document.addEventListener("DOMContentLoaded", () => {
             if (playPromise && typeof playPromise.catch === "function") {
               playPromise
                 .then(() => {
-                  this.showPopup("🎵 Music On");
                   a11y.announce("Music turned on");
                 })
                 .catch((err) => {
                   console.log("Music play failed:", err);
-                  this.showPopup(
-                    "🔇 Music blocked by browser. Click Start to enable."
+                  a11y.announce(
+                    "Music blocked by browser. Click Start to enable."
                   );
                 });
             }
           }
         } else {
           this.bgMusic.pause();
-          this.showPopup("🔇 Music Off");
           a11y.announce("Music turned off");
         }
       } catch (err) {
         errorHandler.handleError(err, "toggleMusic");
       }
     }
-
     /* ==== Cleanup ==== */
     destroy() {
       try {
