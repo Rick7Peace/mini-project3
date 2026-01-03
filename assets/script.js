@@ -777,12 +777,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     showPopup(msg, ms = 3000) {
       if (!this.popup || !msg) return;
-
+    
       try {
+        // ✅ ADD DEBUG LOGGING
+        console.log(`[POPUP] showPopup called with: "${msg}"`);
+        console.trace(); // Shows the call stack
+        
         this.popup.textContent = String(msg);
         this.popup.classList.add("show");
         a11y.announce(msg);
-
+    
         setTimeout(() => {
           this.popup.classList.remove("show");
         }, ms);
@@ -790,7 +794,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("showPopup error:", err);
       }
     }
-
+    
     /* ==== Event Listeners ==== */
     setupEventListeners() {
       try {
@@ -818,49 +822,51 @@ document.addEventListener("DOMContentLoaded", () => {
         // ✅ FIX: Use addEventListener with action locking instead of onclick
         const addClickHandler = (element, method, debounceTime = 0) => {
           if (!element) return;
-
+          
+          let lastExecutionTime = 0; // ✅ Track last execution time per handler
+          
           let handler = (e) => {
+            console.log(`[HANDLER] ${method} triggered by ${e.type} event`);
+            
             e.preventDefault();
             e.stopPropagation();
-
-            // ✅ Prevent rapid double-clicks
-            if (this.actionInProgress.has(method)) {
+            
+            // ✅ Time-based check (prevents events fired close together)
+            const now = Date.now();
+            const timeSinceLastExecution = now - lastExecutionTime;
+            
+            if (timeSinceLastExecution < (debounceTime || 300)) {
+              console.log(`[HANDLER] ${method} BLOCKED - too soon (${timeSinceLastExecution}ms since last)`);
               return;
             }
-
+            
+            // ✅ Action lock check
+            if (this.actionInProgress.has(method)) {
+              console.log(`[HANDLER] ${method} BLOCKED - action in progress`);
+              return;
+            }
+            
+            console.log(`[HANDLER] ${method} EXECUTING`);
+            lastExecutionTime = now;
             this.actionInProgress.add(method);
             this.safeCall(method);
-
-            // Release lock after a short delay
+            
+            // Release lock after delay
             setTimeout(() => {
+              console.log(`[HANDLER] ${method} lock released`);
               this.actionInProgress.delete(method);
             }, debounceTime || 300);
           };
-
-          element.addEventListener("click", handler, { passive: false });
-          element.addEventListener("touchend", handler, { passive: false });
-
+          
+          element.addEventListener('click', handler, { passive: false });
+          element.addEventListener('touchend', handler, { passive: false });
+          
           this.cleanupHandlers.push(() => {
-            element.removeEventListener("click", handler);
-            element.removeEventListener("touchend", handler);
+            element.removeEventListener('click', handler);
+            element.removeEventListener('touchend', handler);
           });
         };
-
-        // Main game buttons
-        addClickHandler(this.startBtn, "startGame", 1500);
-        addClickHandler(this.pauseBtn, "togglePause", 1500); // ✅ FIXED
-        addClickHandler(this.quitBtn, "quitGame", 1500);
-        addClickHandler(this.resetScoresBtn, "resetScores", 1500);
-        addClickHandler(this.themeToggle, "toggleTheme", 1000);
-        addClickHandler(this.musicBtn, "toggleMusic", 1000);
-        if (this.diffSelect) {
-          const diffHandler = () => this.safeCall("changeDifficulty");
-          this.diffSelect.addEventListener("change", diffHandler);
-          this.cleanupHandlers.push(() =>
-            this.diffSelect.removeEventListener("change", diffHandler)
-          );
-        }
-
+        
         // Mobile control buttons - shorter debounce for gameplay
         addClickHandler(this.leftBtn, "moveLeft", 100);
         addClickHandler(this.rightBtn, "moveRight", 100);
@@ -2144,23 +2150,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     togglePause() {
       if (!this.isPlaying) return;
-
+    
       try {
+        console.log(`[PAUSE] togglePause called. Current isPaused: ${this.isPaused}`);
+        
         this.isPaused = !this.isPaused;
-
+        
+        console.log(`[PAUSE] New isPaused value: ${this.isPaused}`);
+    
         if (this.isPaused) {
+          console.log("[PAUSE] Entering PAUSED state");
           this.stopLoop();
           if (this.bgMusic) this.bgMusic.pause();
-
-          // ✅ Bilingual pause message
-          const pauseMsg =
-            this.currentLang === "es"
-              ? "⏸️ Pausado (Presiona P para reanudar)"
-              : "⏸️ Paused (Press P to resume)";
-
+          
+          const pauseMsg = this.currentLang === "es" 
+            ? "⏸️ Pausado (Presiona P para reanudar)" 
+            : "⏸️ Paused (Press P to resume)";
+          
+          console.log(`[PAUSE] About to show popup: "${pauseMsg}"`);
           this.showPopup(pauseMsg);
           a11y.announce(pauseMsg);
         } else {
+          console.log("[PAUSE] Entering RESUMED state");
           this.startLoop();
           if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
             const playPromise = this.bgMusic.play();
@@ -2170,11 +2181,12 @@ document.addEventListener("DOMContentLoaded", () => {
               );
             }
           }
-
-          // ✅ Bilingual resume message
-          const resumeMsg =
-            this.currentLang === "es" ? "▶️ Reanudado" : "▶️ Resumed";
-
+          
+          const resumeMsg = this.currentLang === "es" 
+            ? "▶️ Reanudado" 
+            : "▶️ Resumed";
+          
+          console.log(`[PAUSE] About to show popup: "${resumeMsg}"`);
           this.showPopup(resumeMsg);
           a11y.announce(resumeMsg);
         }
@@ -2182,7 +2194,6 @@ document.addEventListener("DOMContentLoaded", () => {
         errorHandler.handleError(err, "togglePause");
       }
     }
-
     quitGame() {
       if (!this.isPlaying && !this.isPaused) return;
 
