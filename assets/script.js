@@ -822,51 +822,49 @@ document.addEventListener("DOMContentLoaded", () => {
         // ✅ FIX: Use addEventListener with action locking instead of onclick
         const addClickHandler = (element, method, debounceTime = 0) => {
           if (!element) return;
-          
-          let lastExecutionTime = 0; // ✅ Track last execution time per handler
-          
+
           let handler = (e) => {
-            console.log(`[HANDLER] ${method} triggered by ${e.type} event`);
-            
             e.preventDefault();
             e.stopPropagation();
-            
-            // ✅ Time-based check (prevents events fired close together)
-            const now = Date.now();
-            const timeSinceLastExecution = now - lastExecutionTime;
-            
-            if (timeSinceLastExecution < (debounceTime || 300)) {
-              console.log(`[HANDLER] ${method} BLOCKED - too soon (${timeSinceLastExecution}ms since last)`);
-              return;
-            }
-            
-            // ✅ Action lock check
+
+            // ✅ Prevent rapid double-clicks
             if (this.actionInProgress.has(method)) {
-              console.log(`[HANDLER] ${method} BLOCKED - action in progress`);
               return;
             }
-            
-            console.log(`[HANDLER] ${method} EXECUTING`);
-            lastExecutionTime = now;
+
             this.actionInProgress.add(method);
             this.safeCall(method);
-            
-            // Release lock after delay
+
+            // Release lock after a short delay
             setTimeout(() => {
-              console.log(`[HANDLER] ${method} lock released`);
               this.actionInProgress.delete(method);
             }, debounceTime || 300);
           };
-          
-          element.addEventListener('click', handler, { passive: false });
-          element.addEventListener('touchend', handler, { passive: false });
-          
+
+          element.addEventListener("click", handler, { passive: false });
+          element.addEventListener("touchend", handler, { passive: false });
+
           this.cleanupHandlers.push(() => {
-            element.removeEventListener('click', handler);
-            element.removeEventListener('touchend', handler);
+            element.removeEventListener("click", handler);
+            element.removeEventListener("touchend", handler);
           });
         };
-        
+
+        // Main game buttons
+        addClickHandler(this.startBtn, "startGame", 1500);
+        addClickHandler(this.pauseBtn, "togglePause", 1500); // ✅ FIXED
+        addClickHandler(this.quitBtn, "quitGame", 1500);
+        addClickHandler(this.resetScoresBtn, "resetScores", 1500);
+        addClickHandler(this.themeToggle, "toggleTheme", 1000);
+        addClickHandler(this.musicBtn, "toggleMusic", 1000);
+        if (this.diffSelect) {
+          const diffHandler = () => this.safeCall("changeDifficulty");
+          this.diffSelect.addEventListener("change", diffHandler);
+          this.cleanupHandlers.push(() =>
+            this.diffSelect.removeEventListener("change", diffHandler)
+          );
+        }
+
         // Mobile control buttons - shorter debounce for gameplay
         addClickHandler(this.leftBtn, "moveLeft", 100);
         addClickHandler(this.rightBtn, "moveRight", 100);
