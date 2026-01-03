@@ -793,7 +793,7 @@ label {
 #popup-msg.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
-  animation: popupBounce 0.5s var(--bounce);
+  animation: popupBounce 0.4s var(--bounce);
 }
 
 /* ==== Footer ==== */
@@ -860,16 +860,19 @@ audio { display: none; }
 }
 
 @keyframes popupBounce {
-  from { 
-    transform: translateX(-50%) translateY(-30px); 
+  0% { 
+    transform: translateX(-50%) translateY(-25px); 
     opacity: 0;
   }
-  to { 
+  60% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  100% { 
     transform: translateX(-50%) translateY(0); 
     opacity: 1;
   }
-}
-@keyframes modalFadeIn {
+}@keyframes modalFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
