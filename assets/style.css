@@ -523,14 +523,13 @@ button::before {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  transition: width 0.3s, height 0.3s; /* ← Changed from 0.6s to 0.3s */
 }
 
 button:active::before {
   width: 300px;
   height: 300px;
 }
-
 button {
   background: var(--accent-gradient);
   color: white;
