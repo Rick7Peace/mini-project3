@@ -777,49 +777,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
     showPopup(msg, ms = 3000) {
       if (!this.popup || !msg) return;
-    
+
       try {
         // ✅ CRITICAL FIX: Prevent duplicate popups
         const now = Date.now();
         const msgKey = String(msg).trim();
-        
+
         // Initialize global popup tracker
         if (!window._lastPopup) {
-          window._lastPopup = { message: '', time: 0 };
+          window._lastPopup = { message: "", time: 0 };
         }
-        
+
         // ✅ BLOCK if exact same message within 800ms
-        if (window._lastPopup.message === msgKey && 
-            now - window._lastPopup.time < 800) {
-          console.log(`[POPUP BLOCKED] Duplicate: "${msgKey}" (${now - window._lastPopup.time}ms ago)`);
+        if (
+          window._lastPopup.message === msgKey &&
+          now - window._lastPopup.time < 800
+        ) {
+          console.log(
+            `[POPUP BLOCKED] Duplicate: "${msgKey}" (${
+              now - window._lastPopup.time
+            }ms ago)`
+          );
           return; // EXIT - Don't show duplicate
         }
-        
+
         console.log(`[POPUP SHOWING] "${msgKey}"`);
-        
+
         // Update tracker BEFORE showing (prevents race condition)
         window._lastPopup.message = msgKey;
         window._lastPopup.time = now;
-        
+
         // Clear any existing timeout
         if (this._popupTimeout) {
           clearTimeout(this._popupTimeout);
           this._popupTimeout = null;
         }
-        
+
         // Remove show class to reset animation
         this.popup.classList.remove("show");
-        
+
         // Force browser to recalculate styles (restart animation)
         void this.popup.offsetWidth;
-        
+
         // Set message and show
         this.popup.textContent = msgKey;
         this.popup.classList.add("show");
-        
+
         // Accessibility announcement
         a11y.announce(msgKey);
-        
+
         // Schedule hide
         this._popupTimeout = setTimeout(() => {
           if (this.popup) {
@@ -827,11 +833,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           this._popupTimeout = null;
         }, ms);
-        
       } catch (err) {
         console.error("showPopup error:", err);
       }
-    }    /* ==== Event Listeners ==== */
+    } /* ==== Event Listeners ==== */
     setupEventListeners() {
       try {
         const keyHandler = this.handleKeyboard.bind(this);
@@ -855,80 +860,95 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         );
 
-// ✅ CORRECTED: Only ONE event listener per device type
-const addClickHandler = (element, method, debounceTime = 0) => {
-  if (!element) return;
-  
-  // ✅ Use a Map to track execution by element+method combo
-  if (!this.eventExecutionTracker) {
-    this.eventExecutionTracker = new Map();
-  }
-  
-  const trackingKey = `${element.id || 'element'}_${method}`;
-  
-  const handler = (e) => {
-    const now = Date.now();
-    const lastExecution = this.eventExecutionTracker.get(trackingKey) || 0;
-    const timeSinceLastExecution = now - lastExecution;
-    
-    // ✅ CRITICAL: Block ANY event within 500ms
-    if (timeSinceLastExecution < 500) {
-      console.log(`[${method}] ❌ BLOCKED - too soon (${timeSinceLastExecution}ms)`);
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-    
-    // ✅ Also check action lock
-    if (this.actionInProgress.has(method)) {
-      console.log(`[${method}] ❌ BLOCKED - action in progress`);
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-    
-    // ✅ Prevent browser defaults
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // ✅ EXECUTE
-    console.log(`[${method}] ✅ EXECUTING at ${now}`);
-    this.eventExecutionTracker.set(trackingKey, now);
-    this.actionInProgress.add(method);
-    this.safeCall(method);
-    
-    // ✅ Release lock after minimum 500ms
-    setTimeout(() => {
-      this.actionInProgress.delete(method);
-      console.log(`[${method}] Lock released`);
-    }, Math.max(debounceTime, 500));
-  };
+        // ✅ Mobile-safe handler: blocks iOS "ghost click" duplicates
+        const addClickHandler = (element, method, debounceTime = 0) => {
+          if (!element) return;
 
-  // ✅ FIXED: Only attach ONE event type per device
-  const isTouchDevice = Utils.isTouchDevice();
-  
-  if (isTouchDevice) {
-    // ✅ Mobile: ONLY touchend (NOT click!)
-    element.addEventListener("touchend", handler, { 
-      passive: false,
-      capture: false  // ✅ Changed to false - no need for capture
-    });
-    
-    this.cleanupHandlers.push(() => {
-      element.removeEventListener("touchend", handler, { capture: false });
-    });
-  } else {
-    // ✅ Desktop: ONLY click
-    element.addEventListener("click", handler, { 
-      passive: false,
-      capture: false
-    });
-    
-    this.cleanupHandlers.push(() => {
-      element.removeEventListener("click", handler, { capture: false });
-    });
-  }
-};  // Main game buttons
+          if (!this.eventExecutionTracker)
+            this.eventExecutionTracker = new Map();
+
+          const trackingKey = `${element.id || "element"}_${method}`;
+          let lastTouchTime = 0;
+
+          const run = (e) => {
+            const now = Date.now();
+            const lastExecution =
+              this.eventExecutionTracker.get(trackingKey) || 0;
+            const timeSinceLastExecution = now - lastExecution;
+
+            // Block rapid double-fire (extra safety)
+            if (timeSinceLastExecution < 500) {
+              e.preventDefault?.();
+              e.stopPropagation?.();
+              return;
+            }
+
+            // Block if action locked
+            if (this.actionInProgress.has(method)) {
+              e.preventDefault?.();
+              e.stopPropagation?.();
+              return;
+            }
+
+            e.preventDefault?.();
+            e.stopPropagation?.();
+
+            this.eventExecutionTracker.set(trackingKey, now);
+            this.actionInProgress.add(method);
+
+            this.safeCall(method);
+
+            setTimeout(() => {
+              this.actionInProgress.delete(method);
+            }, Math.max(debounceTime, 500));
+          };
+
+          const isTouch = Utils.isTouchDevice();
+
+          if (isTouch) {
+            const onTouchStart = (e) => {
+              // ✅ THIS is what stops Safari from generating the ghost click most reliably
+              e.preventDefault();
+              lastTouchTime = Date.now();
+            };
+
+            const onTouchEnd = (e) => {
+              lastTouchTime = Date.now();
+              run(e);
+            };
+
+            const onClick = (e) => {
+              // ✅ Ignore synthetic click that follows a touch
+              if (Date.now() - lastTouchTime < 800) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+              }
+              run(e);
+            };
+
+            element.addEventListener("touchstart", onTouchStart, {
+              passive: false,
+            });
+            element.addEventListener("touchend", onTouchEnd, {
+              passive: false,
+            });
+            element.addEventListener("click", onClick, { passive: false });
+
+            this.cleanupHandlers.push(() => {
+              element.removeEventListener("touchstart", onTouchStart);
+              element.removeEventListener("touchend", onTouchEnd);
+              element.removeEventListener("click", onClick);
+            });
+          } else {
+            const onClick = (e) => run(e);
+            element.addEventListener("click", onClick, { passive: false });
+            this.cleanupHandlers.push(() =>
+              element.removeEventListener("click", onClick)
+            );
+          }
+        };
+        // Main game buttons
         addClickHandler(this.startBtn, "startGame", 1500);
         addClickHandler(this.pauseBtn, "togglePause", 1500); // ✅ FIXED
         addClickHandler(this.quitBtn, "quitGame", 1500);
@@ -2226,18 +2246,19 @@ const addClickHandler = (element, method, debounceTime = 0) => {
     }
     togglePause() {
       if (!this.isPlaying) return;
-    
+
       try {
         this.isPaused = !this.isPaused;
-    
+
         if (this.isPaused) {
           this.stopLoop();
           if (this.bgMusic) this.bgMusic.pause();
-          
-          const pauseMsg = this.currentLang === "es" 
-            ? "⏸️ Pausado (Presiona P para reanudar)" 
-            : "⏸️ Paused (Press P to resume)";
-          
+
+          const pauseMsg =
+            this.currentLang === "es"
+              ? "⏸️ Pausado (Presiona P para reanudar)"
+              : "⏸️ Paused (Press P to resume)";
+
           this.showPopup(pauseMsg);
           a11y.announce(pauseMsg);
         } else {
@@ -2250,18 +2271,18 @@ const addClickHandler = (element, method, debounceTime = 0) => {
               );
             }
           }
-          
-          const resumeMsg = this.currentLang === "es" 
-            ? "▶️ Reanudado" 
-            : "▶️ Resumed";
-          
+
+          const resumeMsg =
+            this.currentLang === "es" ? "▶️ Reanudado" : "▶️ Resumed";
+
           this.showPopup(resumeMsg);
           a11y.announce(resumeMsg);
         }
       } catch (err) {
         errorHandler.handleError(err, "togglePause");
       }
-    }    quitGame() {
+    }
+    quitGame() {
       if (!this.isPlaying && !this.isPaused) return;
 
       try {
