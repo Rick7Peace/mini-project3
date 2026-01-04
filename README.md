@@ -1,4 +1,4 @@
-# FallingBlocks+
+# Falling Blocks +
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-11.1-green.svg)](https://github.com/Rick7Peace/mini-project3)
@@ -401,7 +401,6 @@ SOFTWARE.
 
 - **Alexey Pajitnov** — Original Tetris creator (1984)
 - **The Tetris Company** — Modern Tetris guidelines and standards
-- **Columbia University** — Coding bootcamp education and support
 - **Formspree** — Form submission service
 - **Google reCAPTCHA** — Bot protection service
 - **MDN Web Docs** — Comprehensive web development documentation

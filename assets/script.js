@@ -2035,16 +2035,16 @@ document.addEventListener("DOMContentLoaded", () => {
           this.playerName ||
           "";
         const input = await this.showNameModal(lastName);
-
+    
         if (input === null) return;
-
+    
         this.playerName = Utils.sanitizeName(input || "Player 1");
         storage.setItem(CONFIG.STORAGE_KEYS.PLAYER_NAME, this.playerName);
         this.updateBadge();
-
+    
         const currentHighScore = this.pbMap[this.playerName] || 0;
         this.updateHighScoreDisplay(currentHighScore);
-
+    
         // Smooth scroll to game grid after entering name
         if (this.grid) {
           const gridWrapper = document.querySelector(".grid-wrapper");
@@ -2055,7 +2055,7 @@ document.addEventListener("DOMContentLoaded", () => {
               const scrollTop =
                 window.pageYOffset || document.documentElement.scrollTop;
               const targetPosition = rect.top + scrollTop - 80; // 80px from top
-
+    
               window.scrollTo({
                 top: targetPosition,
                 behavior: "smooth",
@@ -2073,6 +2073,14 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
         if (!this.timer) {
+          // ✅ NEW: If there's a pending save, restore it now
+          if (this._pendingSave) {
+            this.deserializeGrid(this._pendingSave.grid || []);
+            this.current = this.shapes[this.typeIdx][this.currentRot];
+            this.currentColor = this.colors[this.typeIdx];
+            this._pendingSave = null;  // Clear it after restoring
+          }
+          
           if (!this.current || !this.current.length) {
             this.typeIdx = this.drawFromBag();
             this.nextTypeIdx = this.drawFromBag();
@@ -2082,12 +2090,12 @@ document.addEventListener("DOMContentLoaded", () => {
             this.currentPos = 4;
             this.drawPreview();
           }
-
+    
           this.draw();
           this.isPlaying = true;
           this.recalcLevel();
           this.startLoop();
-
+    
           if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
             const playPromise = this.bgMusic.play();
             if (playPromise && typeof playPromise.catch === "function") {
@@ -2096,22 +2104,21 @@ document.addEventListener("DOMContentLoaded", () => {
               });
             }
           }
-
+    
           if (this.sound) this.sound.resumeCtx();
-
+    
           // ✅ Only announce for screen readers, no popup
           const announceMsg =
             this.currentLang === "es"
               ? `Juego iniciado. ¡Bienvenido ${this.playerName}! Usa las flechas para jugar.`
               : `Game started. Welcome ${this.playerName}! Use arrow keys to play.`;
-
+    
           a11y.announce(announceMsg);
         }
       } catch (err) {
         errorHandler.handleError(err, "startGame");
       }
     }
-
     showNameModal(defaultName) {
       return new Promise((resolve) => {
         try {
@@ -2512,65 +2519,70 @@ document.addEventListener("DOMContentLoaded", () => {
     tryRestore() {
       const raw = storage.getItem(CONFIG.STORAGE_KEYS.SAVE);
       if (!raw) return false;
-
+    
       try {
         const s = JSON.parse(raw);
-
+    
         if (typeof s.score !== "number" || s.score < 0)
           throw new Error("Invalid score");
         if (typeof s.level !== "number" || s.level < 1)
           throw new Error("Invalid level");
         if (!Array.isArray(s.grid)) throw new Error("Invalid grid");
-
+    
         if (s.version && s.version !== CONFIG.VERSION) {
           console.warn("Save version mismatch, clearing");
           this.clearState();
           return false;
         }
-
+    
         const maxAge = CONFIG.SAVE_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
         if (s.timestamp && Date.now() - s.timestamp > maxAge) {
           this.clearState();
           return false;
         }
-
+    
         this.score = s.score || 0;
         this.updateScoreDisplay(this.score);
-
+    
         this.level = s.level || 1;
         this.updateLevelDisplay(this.level);
-
+    
         this.baseSpeed = s.baseSpeed || CONFIG.SPEEDS.EASY;
         this.speed = s.speed || this.baseSpeed;
         this.currentPos = s.currentPos ?? 4;
         this.currentRot = s.currentRot ?? 0;
         this.typeIdx = s.typeIdx ?? this.drawFromBag();
         this.nextTypeIdx = s.nextTypeIdx ?? this.drawFromBag();
-
+    
         if (s.diff && [1, 2, 3].includes(s.diff) && this.diffSelect) {
           this.diffSelect.value = String(s.diff);
         }
-
-        this.deserializeGrid(s.grid || []);
-        this.current = this.shapes[this.typeIdx][this.currentRot];
-        this.currentColor = this.colors[this.typeIdx];
-        this.draw();
+    
+        // ✅ CHANGE: Store the save data but DON'T display grid blocks yet
+        this._pendingSave = s;  // ← NEW LINE: Save for later
+        
+        // ✅ CHANGE: Removed these 4 lines (don't show blocks until Start is pressed)
+        // this.deserializeGrid(s.grid || []);
+        // this.current = this.shapes[this.typeIdx][this.currentRot];
+        // this.currentColor = this.colors[this.typeIdx];
+        // this.draw();
+        
         this.drawPreview();
-
+    
         if (s.name) this.playerName = Utils.sanitizeName(s.name);
         this.updateBadge();
-
+    
         const currentHighScore = this.playerName
           ? this.pbMap[this.playerName] || 0
           : 0;
         this.updateHighScoreDisplay(currentHighScore);
-
+    
         // ✅ Only announce for screen readers, no popup
         const announceMsg =
           this.currentLang === "es"
             ? "Juego anterior restaurado. Presiona Comenzar para continuar."
             : "Previous game restored. Press Start to continue.";
-
+    
         a11y.announce(announceMsg);
         return true;
       } catch (err) {
@@ -2579,7 +2591,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return false;
       }
     }
-
     /* ==== Leaderboard ==== */
     loadLeaderboard() {
       const raw = storage.getItem(CONFIG.STORAGE_KEYS.LEADERBOARD);
