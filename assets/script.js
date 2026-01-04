@@ -875,14 +875,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const lastExecution =
               this.eventExecutionTracker.get(trackingKey) || 0;
             const timeSinceLastExecution = now - lastExecution;
-
-            // Block rapid double-fire (extra safety)
-            if (timeSinceLastExecution < 500) {
+          
+            // Block rapid double-fire (extra safety) - REDUCED for better responsiveness
+            if (timeSinceLastExecution < 100) { // ✅ CHANGE: 500 → 100
               e.preventDefault?.();
               e.stopPropagation?.();
               return;
             }
-
             // Block if action locked
             if (this.actionInProgress.has(method)) {
               e.preventDefault?.();
@@ -900,7 +899,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setTimeout(() => {
               this.actionInProgress.delete(method);
-            }, Math.max(debounceTime, 500));
+            }, Math.max(debounceTime, 100));
           };
 
           const isTouch = Utils.isTouchDevice();
@@ -948,27 +947,27 @@ document.addEventListener("DOMContentLoaded", () => {
             );
           }
         };
-// Main game buttons - REDUCED delays for better responsiveness
-addClickHandler(this.startBtn, "startGame", 300); // ✅ CHANGE: 1500 → 300
-addClickHandler(this.pauseBtn, "togglePause", 300); // ✅ CHANGE: 1500 → 300
-addClickHandler(this.quitBtn, "quitGame", 500); // ✅ CHANGE: 1500 → 500
-addClickHandler(this.resetScoresBtn, "resetScores", 500); // ✅ CHANGE: 1500 → 500
-addClickHandler(this.themeToggle, "toggleTheme", 200); // ✅ CHANGE: 1000 → 200
-addClickHandler(this.musicBtn, "toggleMusic", 200); // ✅ CHANGE: 1000 → 200
+        // Main game buttons - REDUCED delays for better responsiveness
+        addClickHandler(this.startBtn, "startGame", 300); // ✅ CHANGE: 1500 → 300
+        addClickHandler(this.pauseBtn, "togglePause", 300); // ✅ CHANGE: 1500 → 300
+        addClickHandler(this.quitBtn, "quitGame", 500); // ✅ CHANGE: 1500 → 500
+        addClickHandler(this.resetScoresBtn, "resetScores", 500); // ✅ CHANGE: 1500 → 500
+        addClickHandler(this.themeToggle, "toggleTheme", 200); // ✅ CHANGE: 1000 → 200
+        addClickHandler(this.musicBtn, "toggleMusic", 200); // ✅ CHANGE: 1000 → 200
 
-if (this.diffSelect) {
-  const diffHandler = () => this.safeCall("changeDifficulty");
-  this.diffSelect.addEventListener("change", diffHandler);
-  this.cleanupHandlers.push(() =>
-    this.diffSelect.removeEventListener("change", diffHandler)
-  );
-}
+        if (this.diffSelect) {
+          const diffHandler = () => this.safeCall("changeDifficulty");
+          this.diffSelect.addEventListener("change", diffHandler);
+          this.cleanupHandlers.push(() =>
+            this.diffSelect.removeEventListener("change", diffHandler)
+          );
+        }
 
-// Mobile control buttons - INSTANT response for gameplay
-addClickHandler(this.leftBtn, "moveLeft", 50); // ✅ CHANGE: 100 → 50
-addClickHandler(this.rightBtn, "moveRight", 50); // ✅ CHANGE: 100 → 50
-addClickHandler(this.rotateBtn, "rotate", 50); // ✅ CHANGE: 100 → 50
-addClickHandler(this.downBtn, "moveDown", 50); // ✅ CHANGE: 100 → 50
+        // Mobile control buttons - INSTANT response for gameplay
+        addClickHandler(this.leftBtn, "moveLeft", 50); // ✅ CHANGE: 100 → 50
+        addClickHandler(this.rightBtn, "moveRight", 50); // ✅ CHANGE: 100 → 50
+        addClickHandler(this.rotateBtn, "rotate", 50); // ✅ CHANGE: 100 → 50
+        addClickHandler(this.downBtn, "moveDown", 50); // ✅ CHANGE: 100 → 50
         if (this.infoBtn) {
           addClickHandler(this.infoBtn, "openInfoModal", 300);
         }
@@ -2240,23 +2239,23 @@ addClickHandler(this.downBtn, "moveDown", 50); // ✅ CHANGE: 100 → 50
     }
     togglePause() {
       if (!this.isPlaying) return;
-    
+
       try {
         this.isPaused = !this.isPaused;
-    
+
         if (this.isPaused) {
           this.stopLoop();
           if (this.bgMusic) this.bgMusic.pause();
-    
+
           const pauseMsg =
             this.currentLang === "es"
               ? "Pausado. Presiona P para reanudar"
               : "Paused. Press P to resume";
-    
+
           a11y.announce(pauseMsg);
         } else {
           this.startLoop();
-          
+
           // ✅ IMPROVED: Only resume if music was playing
           if (this.sound && !this.sound.musicMuted && this.bgMusic) {
             const playPromise = this.bgMusic.play();
@@ -2266,26 +2265,27 @@ addClickHandler(this.downBtn, "moveDown", 50); // ✅ CHANGE: 100 → 50
               );
             }
           }
-    
+
           const resumeMsg = this.currentLang === "es" ? "Reanudado" : "Resumed";
-    
+
           a11y.announce(resumeMsg);
         }
       } catch (err) {
         errorHandler.handleError(err, "togglePause");
       }
-    }    quitGame() {
+    }
+    quitGame() {
       if (!this.isPlaying && !this.isPaused) return;
-    
+
       try {
         this.stopLoop();
-        
+
         // ✅ FIX: Reset music to beginning, not just pause
         if (this.bgMusic) {
           this.bgMusic.pause();
           this.bgMusic.currentTime = 0; // ← ADD THIS LINE
         }
-        
+
         this.isPlaying = false;
         this.isPaused = false;
         this.isFreezing = false;
@@ -2300,30 +2300,31 @@ addClickHandler(this.downBtn, "moveDown", 50); // ✅ CHANGE: 100 → 50
       try {
         this.stopLoop();
         this.isFreezing = false;
-        
+
         // ✅ FIX: Reset music to beginning
         if (this.bgMusic) {
           this.bgMusic.pause();
           this.bgMusic.currentTime = 0; // ← ADD THIS LINE
         }
-    
+
         this.showPopup("💀 Game Over!");
         a11y.announce(`Game over! Final score: ${this.score}`, "assertive");
-    
+
         const entry = this.saveScore();
         this.renderLeaderboard();
         this.updatePersonalBest();
-    
+
         setTimeout(() => {
           this.showPopup(`✅ ${entry.name} scored ${entry.score}!`, 4000);
         }, 2000);
-    
+
         this.clearState();
         this.reset();
       } catch (err) {
         errorHandler.handleError(err, "gameOver");
       }
-    }    reset() {
+    }
+    reset() {
       try {
         this.score = 0;
         this.updateScoreDisplay(0);
