@@ -948,27 +948,27 @@ document.addEventListener("DOMContentLoaded", () => {
             );
           }
         };
-        // Main game buttons
-        addClickHandler(this.startBtn, "startGame", 1500);
-        addClickHandler(this.pauseBtn, "togglePause", 1500); // ✅ FIXED
-        addClickHandler(this.quitBtn, "quitGame", 1500);
-        addClickHandler(this.resetScoresBtn, "resetScores", 1500);
-        addClickHandler(this.themeToggle, "toggleTheme", 1000);
-        addClickHandler(this.musicBtn, "toggleMusic", 1000);
-        if (this.diffSelect) {
-          const diffHandler = () => this.safeCall("changeDifficulty");
-          this.diffSelect.addEventListener("change", diffHandler);
-          this.cleanupHandlers.push(() =>
-            this.diffSelect.removeEventListener("change", diffHandler)
-          );
-        }
+// Main game buttons - REDUCED delays for better responsiveness
+addClickHandler(this.startBtn, "startGame", 300); // ✅ CHANGE: 1500 → 300
+addClickHandler(this.pauseBtn, "togglePause", 300); // ✅ CHANGE: 1500 → 300
+addClickHandler(this.quitBtn, "quitGame", 500); // ✅ CHANGE: 1500 → 500
+addClickHandler(this.resetScoresBtn, "resetScores", 500); // ✅ CHANGE: 1500 → 500
+addClickHandler(this.themeToggle, "toggleTheme", 200); // ✅ CHANGE: 1000 → 200
+addClickHandler(this.musicBtn, "toggleMusic", 200); // ✅ CHANGE: 1000 → 200
 
-        // Mobile control buttons - shorter debounce for gameplay
-        addClickHandler(this.leftBtn, "moveLeft", 100);
-        addClickHandler(this.rightBtn, "moveRight", 100);
-        addClickHandler(this.rotateBtn, "rotate", 100);
-        addClickHandler(this.downBtn, "moveDown", 100);
+if (this.diffSelect) {
+  const diffHandler = () => this.safeCall("changeDifficulty");
+  this.diffSelect.addEventListener("change", diffHandler);
+  this.cleanupHandlers.push(() =>
+    this.diffSelect.removeEventListener("change", diffHandler)
+  );
+}
 
+// Mobile control buttons - INSTANT response for gameplay
+addClickHandler(this.leftBtn, "moveLeft", 50); // ✅ CHANGE: 100 → 50
+addClickHandler(this.rightBtn, "moveRight", 50); // ✅ CHANGE: 100 → 50
+addClickHandler(this.rotateBtn, "rotate", 50); // ✅ CHANGE: 100 → 50
+addClickHandler(this.downBtn, "moveDown", 50); // ✅ CHANGE: 100 → 50
         if (this.infoBtn) {
           addClickHandler(this.infoBtn, "openInfoModal", 300);
         }
