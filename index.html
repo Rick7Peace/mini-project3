@@ -444,7 +444,33 @@
       </div>
     </div>
 
-    <script src="./assets/script.js"></script>
-    <div id="rotation-reminder🔄 Rotate for best experience"></div>
-  </body>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCSt7AkEMW8ph5zlNtD35RShfLCnvZKETA",
+    authDomain: "falling-blocks-plus.firebaseapp.com",
+    projectId: "falling-blocks-plus",
+    storageBucket: "falling-blocks-plus.firebasestorage.app",
+    messagingSenderId: "260793370262",
+    appId: "1:260793370262:web:914459bc7e4f23ec3ce4b7"
+  };
+  
+  // Initialize Firebase
+  try {
+    firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+    console.log('✅ Firebase initialized successfully');
+  } catch (error) {
+    console.error('❌ Firebase initialization failed:', error);
+    window.db = null;
+  }
+</script>
+
+<script src="./assets/script.js"></script>
+<div id="rotation-reminder">🔄 Rotate for best experience</div>
+</body>
 </html>

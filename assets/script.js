@@ -493,8 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.restoreTheme();
         this.restoreLanguage();
         this.tryRestore();
-        this.renderLeaderboard();
-        this.updateBadge();
+        this.renderLeaderboard().catch(err => console.error('Render leaderboard error:', err));        this.updateBadge();
         this.drawPreview();
 
         window.game = this;
@@ -875,9 +874,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const lastExecution =
               this.eventExecutionTracker.get(trackingKey) || 0;
             const timeSinceLastExecution = now - lastExecution;
-          
+
             // Block rapid double-fire (extra safety) - REDUCED for better responsiveness
-            if (timeSinceLastExecution < 100) { // ✅ CHANGE: 500 → 100
+            if (timeSinceLastExecution < 100) {
+              // ✅ CHANGE: 500 → 100
               e.preventDefault?.();
               e.stopPropagation?.();
               return;
@@ -2035,16 +2035,16 @@ document.addEventListener("DOMContentLoaded", () => {
           this.playerName ||
           "";
         const input = await this.showNameModal(lastName);
-    
+
         if (input === null) return;
-    
+
         this.playerName = Utils.sanitizeName(input || "Player 1");
         storage.setItem(CONFIG.STORAGE_KEYS.PLAYER_NAME, this.playerName);
         this.updateBadge();
-    
+
         const currentHighScore = this.pbMap[this.playerName] || 0;
         this.updateHighScoreDisplay(currentHighScore);
-    
+
         // Smooth scroll to game grid after entering name
         if (this.grid) {
           const gridWrapper = document.querySelector(".grid-wrapper");
@@ -2055,7 +2055,7 @@ document.addEventListener("DOMContentLoaded", () => {
               const scrollTop =
                 window.pageYOffset || document.documentElement.scrollTop;
               const targetPosition = rect.top + scrollTop - 80; // 80px from top
-    
+
               window.scrollTo({
                 top: targetPosition,
                 behavior: "smooth",
@@ -2078,9 +2078,9 @@ document.addEventListener("DOMContentLoaded", () => {
             this.deserializeGrid(this._pendingSave.grid || []);
             this.current = this.shapes[this.typeIdx][this.currentRot];
             this.currentColor = this.colors[this.typeIdx];
-            this._pendingSave = null;  // Clear it after restoring
+            this._pendingSave = null; // Clear it after restoring
           }
-          
+
           if (!this.current || !this.current.length) {
             this.typeIdx = this.drawFromBag();
             this.nextTypeIdx = this.drawFromBag();
@@ -2090,12 +2090,12 @@ document.addEventListener("DOMContentLoaded", () => {
             this.currentPos = 4;
             this.drawPreview();
           }
-    
+
           this.draw();
           this.isPlaying = true;
           this.recalcLevel();
           this.startLoop();
-    
+
           if (this.sound && !this.sound.musicMuted && this.bgMusic?.paused) {
             const playPromise = this.bgMusic.play();
             if (playPromise && typeof playPromise.catch === "function") {
@@ -2104,15 +2104,15 @@ document.addEventListener("DOMContentLoaded", () => {
               });
             }
           }
-    
+
           if (this.sound) this.sound.resumeCtx();
-    
+
           // ✅ Only announce for screen readers, no popup
           const announceMsg =
             this.currentLang === "es"
               ? `Juego iniciado. ¡Bienvenido ${this.playerName}! Usa las flechas para jugar.`
               : `Game started. Welcome ${this.playerName}! Use arrow keys to play.`;
-    
+
           a11y.announce(announceMsg);
         }
       } catch (err) {
@@ -2519,70 +2519,70 @@ document.addEventListener("DOMContentLoaded", () => {
     tryRestore() {
       const raw = storage.getItem(CONFIG.STORAGE_KEYS.SAVE);
       if (!raw) return false;
-    
+
       try {
         const s = JSON.parse(raw);
-    
+
         if (typeof s.score !== "number" || s.score < 0)
           throw new Error("Invalid score");
         if (typeof s.level !== "number" || s.level < 1)
           throw new Error("Invalid level");
         if (!Array.isArray(s.grid)) throw new Error("Invalid grid");
-    
+
         if (s.version && s.version !== CONFIG.VERSION) {
           console.warn("Save version mismatch, clearing");
           this.clearState();
           return false;
         }
-    
+
         const maxAge = CONFIG.SAVE_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
         if (s.timestamp && Date.now() - s.timestamp > maxAge) {
           this.clearState();
           return false;
         }
-    
+
         this.score = s.score || 0;
         this.updateScoreDisplay(this.score);
-    
+
         this.level = s.level || 1;
         this.updateLevelDisplay(this.level);
-    
+
         this.baseSpeed = s.baseSpeed || CONFIG.SPEEDS.EASY;
         this.speed = s.speed || this.baseSpeed;
         this.currentPos = s.currentPos ?? 4;
         this.currentRot = s.currentRot ?? 0;
         this.typeIdx = s.typeIdx ?? this.drawFromBag();
         this.nextTypeIdx = s.nextTypeIdx ?? this.drawFromBag();
-    
+
         if (s.diff && [1, 2, 3].includes(s.diff) && this.diffSelect) {
           this.diffSelect.value = String(s.diff);
         }
-    
+
         // ✅ CHANGE: Store the save data but DON'T display grid blocks yet
-        this._pendingSave = s;  // ← NEW LINE: Save for later
-        
+        this._pendingSave = s; // ← NEW LINE: Save for later
+
         // ✅ CHANGE: Removed these 4 lines (don't show blocks until Start is pressed)
         // this.deserializeGrid(s.grid || []);
         // this.current = this.shapes[this.typeIdx][this.currentRot];
         // this.currentColor = this.colors[this.typeIdx];
         // this.draw();
-        
+
         this.drawPreview();
-    
+
         if (s.name) this.playerName = Utils.sanitizeName(s.name);
         this.updateBadge();
-    
+
         const currentHighScore = this.playerName
           ? this.pbMap[this.playerName] || 0
           : 0;
         this.updateHighScoreDisplay(currentHighScore);
-    
+
         // ✅ Only announce for screen readers, no popup
         const announceMsg =
           this.currentLang === "es"
             ? "Juego anterior restaurado. Presiona Comenzar para continuar."
             : "Previous game restored. Press Start to continue.";
-    
+
         a11y.announce(announceMsg);
         return true;
       } catch (err) {
@@ -2592,17 +2592,60 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     /* ==== Leaderboard ==== */
-    loadLeaderboard() {
+    async loadLeaderboard() {
+      // ✅ LOAD FROM FIREBASE (global leaderboard)
+      if (window.db) {
+        try {
+          const snapshot = await window.db
+            .collection("leaderboard")
+            .orderBy("score", "desc")
+            .limit(CONFIG.LEADERBOARD_SIZE)
+            .get();
+
+          this.leaderboard = snapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              name: data.name,
+              score: data.score,
+              date: data.date
+                ? new Date(data.date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                : "Unknown",
+            };
+          });
+
+          console.log(
+            `✅ Loaded ${this.leaderboard.length} scores from global leaderboard`
+          );
+          return this.leaderboard;
+        } catch (firebaseError) {
+          console.error("❌ Firebase load failed:", firebaseError);
+          // Fallback to local storage
+          return this.loadLeaderboardLocally();
+        }
+      }
+
+      // No Firebase, use local storage
+      console.warn("⚠️ Firebase not available, using local storage");
+      return this.loadLeaderboardLocally();
+    }
+
+    // ✅ NEW: Fallback method for local storage
+    loadLeaderboardLocally() {
       const raw = storage.getItem(CONFIG.STORAGE_KEYS.LEADERBOARD);
       try {
         const data = raw ? JSON.parse(raw) : [];
         if (!Array.isArray(data)) return [];
-        return data.filter(
+        this.leaderboard = data.filter(
           (entry) =>
             entry &&
             typeof entry.name === "string" &&
             typeof entry.score === "number"
         );
+        return this.leaderboard;
       } catch {
         return [];
       }
@@ -2619,25 +2662,34 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    saveScore() {
+    async saveScore() {
       try {
         const entry = {
           name: Utils.sanitizeName(this.playerName || "Anonymous"),
           score: Math.max(0, Math.floor(this.score || 0)),
-          date: new Date().toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          }),
+          date: new Date().toISOString(),
+          timestamp: Date.now(),
         };
 
-        this.leaderboard.push(entry);
-        this.leaderboard.sort((a, b) => b.score - a.score);
-        this.leaderboard = this.leaderboard.slice(0, CONFIG.LEADERBOARD_SIZE);
+        // ✅ SAVE TO FIREBASE (global leaderboard)
+        if (window.db) {
+          try {
+            await window.db.collection("leaderboard").add(entry);
+            console.log("✅ Score saved to global leaderboard:", entry);
+          } catch (firebaseError) {
+            console.error("❌ Firebase save failed:", firebaseError);
+            // Fallback to local storage if Firebase fails
+            this.saveScoreLocally(entry);
+          }
+        } else {
+          // No Firebase available, use local storage
+          console.warn("⚠️ Firebase not available, using local storage");
+          this.saveScoreLocally(entry);
+        }
 
-        const json = JSON.stringify(this.leaderboard);
-        storage.setItem(CONFIG.STORAGE_KEYS.LEADERBOARD, json);
-
+        // Reload and render leaderboard
+        await this.loadLeaderboard();
+        this.renderLeaderboard().catch(err => console.error('Render leaderboard error:', err));
         return entry;
       } catch (err) {
         console.error("Failed to save score:", err);
@@ -2649,7 +2701,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    renderLeaderboard() {
+    // ✅ NEW: Fallback method for local storage
+    saveScoreLocally(entry) {
+      const displayEntry = {
+        name: entry.name,
+        score: entry.score,
+        date: new Date(entry.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
+      };
+
+      this.leaderboard.push(displayEntry);
+      this.leaderboard.sort((a, b) => b.score - a.score);
+      this.leaderboard = this.leaderboard.slice(0, CONFIG.LEADERBOARD_SIZE);
+
+      const json = JSON.stringify(this.leaderboard);
+      storage.setItem(CONFIG.STORAGE_KEYS.LEADERBOARD, json);
+    }
+    async renderLeaderboard() {
+      // ✅ Reload from Firebase before rendering
+      await this.loadLeaderboard();
+
       try {
         if (!this.lbList) return;
 
