@@ -11,12 +11,12 @@ const CONFIG = {
 
   // Gameplay speeds (ms)
   SPEEDS: {
-    EASY: 700,
-    MEDIUM: 450,
-    HARD: 300,
+    EASY: 800,
+    MEDIUM: 500,
+    HARD: 350,
   },
   MIN_SPEED: 120,
-  SPEED_REDUCTION_PER_LEVEL: 60,
+  SPEED_REDUCTION_PER_LEVEL: 50,
 
   // Rate limiting
   FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions  MAX_MESSAGE_LENGTH: 1000,
