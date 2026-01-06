@@ -1,4 +1,4 @@
-// 🎮 FallingBlocks+ v11.1 — PRODUCTION-READY Edition
+// 🎮 FallingBlocks+ v11.2 — PRODUCTION-READY Edition
 // ✅ 10/10 Metrics: Security, Error Handling, Accessibility, Performance
 // ✨ BILINGUAL SYSTEM + Formspree Feedback + CC0 Music
 
@@ -59,7 +59,7 @@ const CONFIG = {
   VISITOR_NAMESPACE: "fallingblocks-plus-v10",
 
   // Version for save compatibility
-  VERSION: "11.1",
+  VERSION: "11.2",
 
   // Debug mode (set to false for production)
   DEBUG: false,
