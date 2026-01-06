@@ -14,19 +14,18 @@ A production-ready falling block puzzle game (v11.2) built with vanilla JavaScri
 ## 📸 Screenshots
 
 ### Desktop Experience
-![Desktop Gameplay](<img width="1512" height="982" alt="Image" src="https://github.com/user-attachments/assets/13830b40-d470-401b-88db-3299b7975e53" />)
+![Desktop Gameplay](https://github.com/user-attachments/assets/13830b40-d470-401b-88db-3299b7975e53)
 *Production-ready UI with glassmorphism effects and neon glow*
 
 ### Mobile Experience
 
 **Portrait Mode**
-![Mobile Portrait](<img width="645" height="1398" alt="Image" src="https://github.com/user-attachments/assets/d61a26be-9f1a-40da-986f-2555ccd6b19d" />)
+![Mobile Portrait](https://github.com/user-attachments/assets/d61a26be-9f1a-40da-986f-2555ccd6b19d)
 *Optimized touch controls with swipe gestures*
 
 **Landscape Mode** ⭐
-![Mobile Landscape](<img width="1398" height="645" alt="Image" src="https://github.com/user-attachments/assets/fc32bd6d-afdd-4509-9fee-52da98316441" />)
+![Mobile Landscape](https://github.com/user-attachments/assets/fc32bd6d-afdd-4509-9fee-52da98316441)
 *Desktop layout automatically activates in landscape orientation*
-
 ### Features
 
 **Bilingual Support (EN/ES)**
