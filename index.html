@@ -16,6 +16,11 @@
     />
     <meta name="author" content="Ricardo Marmolejo" />
 
+    <!-- Cache Control Headers -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <!-- Security Headers (will be set via netlify.toml instead) -->
     <!-- Removed: X-Frame-Options meta tag (doesn't work in meta) -->
 
@@ -30,7 +35,7 @@
     <!-- ✅ Added modern standard -->
 
     <title>Falling Blocks + v11.1</title>
-    <link rel="stylesheet" href="./assets/style.css" />
+    <link rel="stylesheet" href="./assets/style.css?v=11.1" />
   </head>
 
   <body class="dark">
@@ -470,7 +475,7 @@
   }
 </script>
 
-<script src="./assets/script.js"></script>
+<script src="./assets/script.js?v=11.1"></script>
 <div id="rotation-reminder">🔄 Rotate for best experience</div>
 </body>
 </html>
