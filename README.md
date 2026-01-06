@@ -14,29 +14,30 @@ A production-ready falling block puzzle game (v11.2) built with vanilla JavaScri
 ## 📸 Screenshots
 
 ### Desktop Experience
-![Desktop Gameplay](screenshot.png)
+![Desktop Gameplay](<img width="1512" height="982" alt="Image" src="https://github.com/user-attachments/assets/13830b40-d470-401b-88db-3299b7975e53" />)
 *Production-ready UI with glassmorphism effects and neon glow*
 
 ### Mobile Experience
 
 **Portrait Mode**
-![Mobile Portrait](screenshots/mobile-portrait.png)
+![Mobile Portrait](<img width="645" height="1398" alt="Image" src="https://github.com/user-attachments/assets/d61a26be-9f1a-40da-986f-2555ccd6b19d" />)
 *Optimized touch controls with swipe gestures*
 
 **Landscape Mode** ⭐
-![Mobile Landscape](screenshots/mobile-landscape.png)
+![Mobile Landscape](<img width="1398" height="645" alt="Image" src="https://github.com/user-attachments/assets/fc32bd6d-afdd-4509-9fee-52da98316441" />)
 *Desktop layout automatically activates in landscape orientation*
 
 ### Features
 
 **Bilingual Support (EN/ES)**
-![Bilingual Toggle](screenshots/bilingual.png)
+![Bilingual Toggle English](https://github.com/user-attachments/assets/6143a925-6012-4879-9444-365e1f3ef1e7)
+![Bilingual Toggle Spanish](https://github.com/user-attachments/assets/4a868b79-fa8c-41f8-816e-785b1de3e13e)
 *Seamless language switching with persistent preferences*
 
 **Dark/Light Themes**
-![Theme Toggle](screenshots/dark-mode.png)
+![Dark Theme](https://github.com/user-attachments/assets/91fbb6c8-1b83-4585-9e37-1624897d75e8)
+![Light Theme](https://github.com/user-attachments/assets/b1457285-6aa3-4f63-b6a3-a380a6efc601)
 *Accessible high-contrast modes*
-
 ---
 
 ## 🎮 Live Demo
