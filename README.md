@@ -1,11 +1,11 @@
 # Falling Blocks +
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-11.1-green.svg)](https://github.com/Rick7Peace/mini-project3)
+[![Version](https://img.shields.io/badge/version-11.2-green.svg)](https://github.com/Rick7Peace/mini-project3)
 [![Bilingual](https://img.shields.io/badge/languages-EN%20|%20ES-orange.svg)](https://github.com/Rick7Peace/mini-project3)
 [![Security](https://img.shields.io/badge/security-hardened-red.svg)](https://github.com/Rick7Peace/mini-project3)
 
-A production-ready falling block puzzle game built with vanilla JavaScript, featuring enterprise-grade security, bilingual support (English/Spanish), WCAG 2.1 AA accessibility compliance, complete mobile optimization with landscape support, global Firebase leaderboard, and a stunning neon-themed UI with glassmorphism effects.
+A production-ready falling block puzzle game (v11.2) built with vanilla JavaScript, featuring enterprise-grade security, bilingual support (English/Spanish), WCAG 2.1 AA accessibility compliance, complete mobile optimization with landscape support, global Firebase leaderboard, intelligent cache-busting for instant updates, and a stunning neon-themed UI with glassmorphism effects.
 
 ![FallingBlocks+ Screenshot](screenshot.png)
 
@@ -61,6 +61,14 @@ A production-ready falling block puzzle game built with vanilla JavaScript, feat
 - **Real-Time Updates** — See new high scores as they happen
 - **Secure Database Rules** — Protected against cheating and spam
 - **LocalStorage Fallback** — Works offline with graceful degradation
+
+### ⚡ Performance & Caching (v11.2)
+- **Smart Cache-Busting** — Version parameters ensure instant updates
+- **No Hard Refresh Required** — Users automatically get latest version
+- **Cache Control Headers** — Optimized browser caching strategy
+- **Version Query Parameters** — CSS/JS files tagged with `?v=11.2`
+- **Zero Stale Code** — Eliminates "old version" problems
+- **Deployment Ready** — Production-grade cache management
 
 ### 📱 Mobile Optimization
 - **Complete Zoom Prevention** — Triple-layer defense system
@@ -255,6 +263,12 @@ No installation required! Works on:
 - **Input Validation** — Type checking and length limits
 - **Error Boundaries** — Global error handling
 
+### Performance & Caching (v11.2)
+- **Cache-Busting Strategy** — Version query parameters on all assets
+- **Cache Control Headers** — Meta tags prevent stale content
+- **Smart Versioning** — Incremental version numbers for updates
+- **Zero Downtime Deploys** — Seamless version transitions
+
 ### Browser Support
 | Browser | Version | Mobile | Landscape | Firebase | Status |
 |---------|---------|--------|-----------|----------|--------|
@@ -269,6 +283,14 @@ No installation required! Works on:
 **Recommended:** Chrome (desktop or mobile) for optimal experience
 
 ## 🌟 Key Highlights
+
+### Cache Management (v11.2)
+✅ **Smart Cache-Busting** — Version parameters on CSS/JS files (`?v=11.2`)  
+✅ **Zero Hard Refresh** — Users automatically get updates  
+✅ **Cache Control Headers** — Meta tags prevent stale content  
+✅ **Production Ready** — Enterprise-grade cache strategy  
+✅ **Cross-Browser Support** — Works on all major browsers  
+✅ **Developer Friendly** — Simple version increment on deploy  
 
 ### Firebase Integration (v11.1)
 ✅ **Global Leaderboard** — Scores sync across all devices and browsers  
@@ -321,6 +343,7 @@ No installation required! Works on:
 ✅ **Lazy Loading** — Deferred audio loading  
 ✅ **60fps Gameplay** — Smooth animations on all devices  
 ✅ **Firebase Caching** — Offline persistence with cache  
+✅ **Smart Cache-Busting** — Instant updates without hard refresh (v11.2)  
 
 ### Code Quality
 ✅ **ES6+ Syntax** — Modern JavaScript features  
@@ -387,6 +410,7 @@ This project demonstrates professional-level web development skills with a focus
 - ✅ Mobile optimization (touch events, orientation, zoom prevention)
 - ✅ **Full-stack integration** (Firebase backend + frontend)
 - ✅ **Database design** (Firestore NoSQL schema)
+- ✅ **Cache management** (Version control, cache-busting strategies)
 - ✅ Accessibility compliance (WCAG 2.1 AA)
 - ✅ Security best practices (OWASP Top 10)
 - ✅ Cross-browser compatibility
@@ -403,6 +427,7 @@ This project demonstrates professional-level web development skills with a focus
 - ✅ Cross-platform testing
 - ✅ **Cloud database integration**
 - ✅ **Real-time data synchronization**
+- ✅ **Cache strategy implementation**
 
 ### Production Readiness
 This codebase demonstrates **enterprise-grade quality** with:
@@ -416,6 +441,7 @@ This codebase demonstrates **enterprise-grade quality** with:
 - Cross-device compatibility
 - **Scalable cloud backend**
 - **Real-time multiplayer infrastructure**
+- **Intelligent cache management**
 
 ## 📝 License
 
@@ -465,7 +491,28 @@ SOFTWARE.
 
 ## 📈 Recent Updates
 
-### v11.1 (Current - Firebase Integration)
+### v11.2 (Current - Cache Management)
+**Released:** January 2026
+
+**⚡ Cache Management & Performance:**
+- ✅ **Smart Cache-Busting** — Version query parameters on all assets (`?v=11.2`)
+- ✅ **No Hard Refresh Needed** — Users get updates automatically
+- ✅ **Cache Control Headers** — Meta tags prevent stale content
+- ✅ **Zero Downtime Updates** — Seamless version transitions
+- ✅ **Production-Ready Caching** — Enterprise-grade cache strategy
+
+**📚 Developer Experience:**
+- ✅ **Version Control** — All CSS/JS files tagged with version numbers
+- ✅ **Easy Updates** — Just increment version number on deploy
+- ✅ **No User Friction** — Updates happen transparently
+- ✅ **Cross-Browser Compatible** — Works on all major browsers
+
+**Bug Fixes:**
+- ✅ Fixed: Users seeing outdated code after updates
+- ✅ Fixed: Need for hard refresh (Cmd+Shift+R) on desktop
+- ✅ Improved: Deployment workflow for instant updates
+
+### v11.1 (Firebase Integration)
 **Released:** January 2026
 
 **🔥 Firebase Backend Integration:**
@@ -486,6 +533,17 @@ SOFTWARE.
 - ✅ Fixed: Popup messages appearing on mobile devices
 - ✅ Improved: Overall user experience with less visual clutter
 
+### v11.0 (Mobile Optimization)
+**Released:** January 2026
+
+**📱 Complete Mobile Overhaul:**
+- ✅ Triple-layer zoom prevention system
+- ✅ Landscape mode with desktop layout
+- ✅ Safari iOS orientation fixes
+- ✅ Touch control optimization
+- ✅ Auto-scroll on game start
+- ✅ Form input keyboard compatibility
+
 ## 🚀 Future Enhancements
 
 ### Planned Features
@@ -496,7 +554,8 @@ SOFTWARE.
 - [ ] **Sound Volume UI** — Sliders for SFX and music volume control
 - [ ] **Custom Themes** — User-created color schemes
 - [ ] **Tutorial Mode** — Interactive beginner's guide
-- [x] **Global Leaderboard** — ✅ COMPLETED with Firebase integration
+- [x] **Global Leaderboard** — ✅ COMPLETED with Firebase integration (v11.1)
+- [x] **Cache Management** — ✅ COMPLETED with version parameters (v11.2)
 
 ### Under Consideration
 - [ ] User accounts with Firebase Authentication
@@ -520,6 +579,7 @@ Want to see a feature? [Submit a request](mailto:marmolejo.ricardo@gmail.com?sub
 - ✅ Game saves and restores properly
 - ✅ **Global leaderboard syncs across devices**
 - ✅ **Firebase connectivity works online/offline**
+- ✅ **Updates load without hard refresh** (v11.2)
 - ✅ Audio plays without errors
 - ✅ Language switching works seamlessly
 - ✅ Accessibility with screen reader (NVDA/JAWS)
@@ -546,8 +606,14 @@ Want to see a feature? [Submit a request](mailto:marmolejo.ricardo@gmail.com?sub
 - ✅ Efficient DOM updates
 - ✅ Smooth animations on mobile
 - ✅ **Firebase queries optimized (indexed, limited)**
+- ✅ **Cache-busting works correctly** (v11.2)
 
 ## 🐛 Known Issues
+
+### Fixed in v11.2
+- ✅ **Browser Caching** — Users no longer need hard refresh (Cmd+Shift+R)
+- ✅ **Stale Content** — Cache-busting prevents outdated code
+- ✅ **Update Friction** — Seamless version updates
 
 ### Current Limitations
 1. **Formspree Free Tier** — Limited to 50 submissions/month
@@ -588,10 +654,21 @@ code .
 4. Replace the config in `index.html`
 5. Deploy Security Rules from `firestore.rules` (if provided)
 
+### Updating Version Numbers (v11.2)
+When making changes to CSS or JavaScript:
+1. Make your code changes
+2. Update version in `index.html`:
+```html
+<link rel="stylesheet" href="./assets/style.css?v=11.3" />
+<script src="./assets/script.js?v=11.3"></script>
+```
+3. Commit and push to GitHub
+4. Users automatically get the update on next visit (no hard refresh needed!)
+
 ### File Structure
 ```
 mini-project3/
-├── index.html           # Main HTML file (includes Firebase config)
+├── index.html           # Main HTML file (includes Firebase config + cache-busting)
 ├── assets/
 │   ├── style.css       # All styles (glassmorphism, responsive)
 │   └── script.js       # Game logic (ES6+, ~2800 lines)
@@ -612,6 +689,7 @@ mini-project3/
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/) — Security best practices
 - [Formspree Docs](https://help.formspree.io/) — Form submission service
 - [reCAPTCHA Docs](https://developers.google.com/recaptcha) — Bot protection
+- [HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching) — Cache strategies
 
 ### Learning Resources
 - [JavaScript.info](https://javascript.info/) — Modern JavaScript tutorial
@@ -619,6 +697,7 @@ mini-project3/
 - [A11y Project](https://www.a11yproject.com/) — Accessibility checklist
 - [Touch Events Guide](https://developer.mozilla.org/en-US/docs/Web/API/Touch_events) — Mobile touch API
 - [Firebase Web Codelab](https://firebase.google.com/codelabs/firebase-web) — Firebase tutorial
+- [Cache-Control Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) — HTTP caching
 
 ### Tools Used
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse) — Performance auditing
@@ -655,6 +734,7 @@ Contributions are welcome! Here's how you can help:
 - Ensure mobile compatibility
 - Maintain accessibility standards
 - Test Firebase integration
+- Update version numbers in HTML when modifying CSS/JS
 
 ### Code of Conduct
 - Be respectful and constructive
@@ -675,4 +755,4 @@ Contributions are welcome! Here's how you can help:
 
 *Falling Blocks + is not affiliated with or endorsed by The Tetris Company.*
 
-**Total lines of code: ~3,000+ | Technologies: 8+ | Features: 50+ | Security score: 10/10**
+**Total lines of code: ~3,000+ | Version: 11.2 | Technologies: 8+ | Features: 52+ | Security score: 10/10**
