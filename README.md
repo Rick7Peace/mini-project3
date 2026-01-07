@@ -43,6 +43,10 @@ A production-ready falling block puzzle game (v11.2) built with vanilla JavaScri
 
 **[▶️ Play Now](https://rick7peace.github.io/mini-project3/)** — Experience it on desktop, tablet, or mobile!
 
+## 🎓 Development Process
+
+Built independently after graduating from Columbia University's coding bootcamp as a professional portfolio piece. This project evolved significantly beyond the bootcamp curriculum, incorporating production-grade features like Firebase Firestore integration, enterprise security implementation, and comprehensive mobile optimization. Developed using modern AI-assisted workflows (Claude, ChatGPT) for debugging and technical research while maintaining full ownership of architecture, design, and implementation decisions.
+
 ## ✨ Features
 
 ### 🎯 Core Gameplay
@@ -400,9 +404,9 @@ Your leaderboard data is protected by Firebase Security Rules that:
 - ✅ Prevent updates or deletions (no cheating!)
 - ✅ Block malicious data submissions
 
-## 🎓 Project Overview
+## 🎓 Technical Demonstrations
 
-This project demonstrates professional-level web development skills with a focus on:
+This project showcases professional-level web development skills with a focus on:
 
 ### Technical Skills
 - ✅ Modern JavaScript (ES6+) development
