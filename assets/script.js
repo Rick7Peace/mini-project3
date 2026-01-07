@@ -1847,7 +1847,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isGameOver) {
           this.isFreezing = false;
-          this.gameOver();
+          await this.gameOver();
           return;
         }
 
@@ -2303,35 +2303,33 @@ document.addEventListener("DOMContentLoaded", () => {
         errorHandler.handleError(err, "quitGame");
       }
     }
-    gameOver() {
+    async gameOver() {
       try {
         this.stopLoop();
         this.isFreezing = false;
-
-        // ✅ FIX: Reset music to beginning
+    
         if (this.bgMusic) {
           this.bgMusic.pause();
-          this.bgMusic.currentTime = 0; // ← ADD THIS LINE
+          this.bgMusic.currentTime = 0;
         }
-
+    
         this.showPopup("💀 Game Over!");
         a11y.announce(`Game over! Final score: ${this.score}`, "assertive");
-
-        const entry = this.saveScore();
-        this.renderLeaderboard();
+    
+        const entry = await this.saveScore();  // ← Add await
+        await this.renderLeaderboard();  // ← Also await this
         this.updatePersonalBest();
-
+    
         setTimeout(() => {
           this.showPopup(`✅ ${entry.name} scored ${entry.score}!`, 4000);
         }, 2000);
-
+    
         this.clearState();
         this.reset();
       } catch (err) {
         errorHandler.handleError(err, "gameOver");
       }
-    }
-    reset() {
+    }    reset() {
       try {
         this.score = 0;
         this.updateScoreDisplay(0);
