@@ -11,12 +11,12 @@ const CONFIG = {
 
   // Gameplay speeds (ms)
   SPEEDS: {
-    EASY: 800,
-    MEDIUM: 500,
-    HARD: 350,
+    EASY: 600,
+    MEDIUM: 400,
+    HARD: 200,
   },
   MIN_SPEED: 120,
-  SPEED_REDUCTION_PER_LEVEL: 50,
+  SPEED_REDUCTION_PER_LEVEL: 80,
 
   // Rate limiting
   FEEDBACK_COOLDOWN: 60000, // 1 minute between submissions  MAX_MESSAGE_LENGTH: 1000,
@@ -1943,7 +1943,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     recalcLevel() {
       try {
-        const newLevel = Math.floor(this.score / 500) + 1;
+        const newLevel = Math.floor(this.score / 300) + 1;
 
         if (newLevel !== this.level) {
           this.level = newLevel;
