@@ -1944,48 +1944,73 @@ document.addEventListener("DOMContentLoaded", () => {
     recalcLevel() {
       try {
         const newLevel = Math.floor(this.score / 300) + 1;
-
+    
         if (newLevel !== this.level) {
           this.level = newLevel;
-
           this.updateLevelDisplay(this.level);
-
+    
           if (!a11y.shouldReduceMotion()) {
             document.body.classList.add("level-up");
             setTimeout(() => document.body.classList.remove("level-up"), 650);
           }
-
+    
           if (this.sound) this.sound.play("level", { vol: 0.9 });
           a11y.announce(`Level ${this.level}!`, "assertive");
         }
-
+    
         const diff = Number(this.diffSelect?.value || 1);
-        const diffBase =
-          diff === 1
-            ? CONFIG.SPEEDS.EASY
-            : diff === 2
-            ? CONFIG.SPEEDS.MEDIUM
-            : CONFIG.SPEEDS.HARD;
-
+        
+        // Difficulty-specific speed reduction
+        let diffBase, speedReduction;
+        
+        if (diff === 1) {
+          diffBase = CONFIG.SPEEDS.EASY;
+          speedReduction = 40;
+        } else if (diff === 2) {
+          diffBase = CONFIG.SPEEDS.MEDIUM;
+          speedReduction = 60;
+        } else {
+          diffBase = CONFIG.SPEEDS.HARD;
+          speedReduction = 80;
+        }
+    
         this.baseSpeed = diffBase;
         this.speed = Math.max(
           CONFIG.MIN_SPEED,
-          diffBase - (this.level - 1) * CONFIG.SPEED_REDUCTION_PER_LEVEL
+          diffBase - (this.level - 1) * speedReduction
         );
+        
         this.restartLoop();
-
+    
+        // ✅ CRITICAL FIX: Compensate volume for perceived loudness increase
         if (this.bgMusic) {
-          this.bgMusic.playbackRate = Math.min(
+          // Calculate playback rate (capped at 1.5x)
+          const playbackRate = Math.min(
             1.5,
             1 + (this.level - 1) * 0.05
           );
+          
+          // Apply playback rate
+          this.bgMusic.playbackRate = playbackRate;
+          
+          // ✅ NEW: Volume compensation formula
+          // As music speeds up, reduce volume slightly to compensate
+          // Formula: baseVolume * (1 / sqrt(playbackRate))
+          // This is based on psychoacoustic research (Fletcher-Munson curves)
+          const baseVolume = this.sound._musicVolume || 0.8;
+          const compensatedVolume = baseVolume * (1 / Math.sqrt(playbackRate));
+          
+          // Apply compensated volume (only if music isn't muted)
+          if (!this.sound._musicMuted) {
+            this.bgMusic.volume = Math.max(0.4, Math.min(1, compensatedVolume));
+          }
+          
+          console.log(`🎵 Level ${this.level}: Rate ${playbackRate.toFixed(2)}x, Volume ${this.bgMusic.volume.toFixed(2)}`);
         }
       } catch (err) {
         console.error("recalcLevel error:", err);
       }
-    }
-
-    /* ==== Game Flow ==== */
+    }    /* ==== Game Flow ==== */
     startLoop() {
       try {
         if (!this.timer) {
